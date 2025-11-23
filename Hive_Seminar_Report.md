@@ -687,6 +687,6 @@ ORDER BY total_sold DESC;
 
 ---
 
-**Report Generated**: November 2025
+**Date**: November 2025
 **System**: Apache Hive 3.1.2
 **Cluster Configuration**: 3-node Hadoop 3.1.0 cluster
