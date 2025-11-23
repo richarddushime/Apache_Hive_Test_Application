@@ -1,0 +1,36 @@
+# docker-compose.yaml
+# Docker Compose configuration for Apache Hive and a test application
+
+version: '3.8'
+
+services:
+  hive:
+    image: apache/hive:4.0.0
+    # container_name: Apache-Hive # I already set this in hive_manager.sh
+    ports:
+      - "10000:10000" # HiveServer2
+      - "10002:10002" # WebHCat
+      - "9083:9083"   # Metastore
+    environment:
+      HIVE_HOME: /opt/hive
+      HADOOP_HOME: /opt/hadoop
+      JAVA_HOME: /usr/local/openjdk-8
+    volumes:
+      - hive-data:/opt/hive/data # Optional: Persist Hive data
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile # Dockerfile in the same directory
+    depends_on:
+      hive:
+        condition: service_started # Hive must be started first
+    environment:
+      HIVE_CONNECTION_STRING: jdbc:hive2://Apache-Hive:10000/default
+    ports:
+      - "8080:8080" # Application port
+    volumes:
+      - ./src:/usr/src/app/src # Bind mount for live development (optional)
+
+volumes:
+  hive-data:
