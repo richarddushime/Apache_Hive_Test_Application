@@ -1,0 +1,15 @@
+Django
+djangorestframework
+PyHive
+pure-sasl
+thrift
+thrift-sasl
+django-filter
+drf-spectacular
+djangorestframework-simplejwt
+pandas
+openpyxl
+celery
+redis
+django-cors-headers
+python-decouple

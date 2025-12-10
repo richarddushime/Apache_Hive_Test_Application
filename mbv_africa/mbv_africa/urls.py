@@ -19,5 +19,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include('hive_climate.api_urls', namespace='api')),
+    path('assessment/', include('hive_assessment.urls', namespace='assessment')),
     path('', include('hive_climate.urls')),
 ]

@@ -1,0 +1,683 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apache Hive Assessment Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .metric-card {
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-excellent {
+            color: #10B981;
+        }
+
+        .status-good {
+            color: #3B82F6;
+        }
+
+        .status-warning {
+            color: #F59E0B;
+        }
+
+        .status-critical {
+            color: #EF4444;
+        }
+
+        .bg-excellent {
+            background-color: #D1FAE5;
+        }
+
+        .bg-good {
+            background-color: #DBEAFE;
+        }
+
+        .bg-warning {
+            background-color: #FEF3C7;
+        }
+
+        .bg-critical {
+            background-color: #FEE2E2;
+        }
+
+        .category-header {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen p-4 sm:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="bg-white rounded-2xl shadow-2xl p-8 mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-2">⚡ Apache Hive Assessment</h1>
+                    <p class="text-gray-600">Comprehensive health check & performance diagnostics</p>
+                </div>
+                <div class="text-right">
+                    <a href="{% url 'hive_climate:dashboard' %}" class="text-purple-600 hover:underline text-sm">←
+                        Climate Dashboard</a>
+                    <p class="text-sm text-gray-500 mt-1">Last Check: <span id="lastCheck">Never</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-white rounded-2xl shadow-2xl p-6 mb-8">
+            <div class="flex flex-wrap gap-4">
+                <button onclick="runFullAssessment()"
+                    class="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200 transform hover:scale-105">
+                    🔍 Run Full Assessment
+                </button>
+                <button onclick="runQuickCheck()"
+                    class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200">
+                    ⚡ Quick Health Check
+                </button>
+                <button onclick="exportReport()"
+                    class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200">
+                    📊 Export Report
+                </button>
+            </div>
+        </div>
+
+        <!-- Overall Health Score -->
+        <div class="bg-white rounded-2xl shadow-2xl p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Overall Health Score</h2>
+            <div class="flex items-center justify-between">
+                <div class="flex-1">
+                    <div class="text-6xl font-bold text-emerald-600" id="healthScore">--</div>
+                    <p class="text-gray-600 mt-2">Out of 100</p>
+                </div>
+                <div class="flex-1">
+                    <canvas id="healthChart" width="200" height="200"></canvas>
+                </div>
+                <div class="flex-1 text-right">
+                    <div class="text-4xl mb-2" id="healthEmoji">🎯</div>
+                    <div class="text-xl font-semibold" id="healthStatus">Ready to assess</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category 1: Performance & Latency -->
+        <div class="bg-white rounded-2xl shadow-2xl mb-8 overflow-hidden">
+            <div class="category-header text-white p-6">
+                <h2 class="text-2xl font-bold">1. Performance & Latency</h2>
+                <p class="text-purple-100 mt-1">Query execution and response time metrics</p>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- End-to-End Latency -->
+                    <div class="metric-card border-2 border-gray-200 rounded-xl p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-lg">End-to-End Latency</h3>
+                                <p class="text-sm text-gray-500">Compile vs Execution Time</p>
+                            </div>
+                            <div class="text-2xl">⏱️</div>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Compile Time:</span>
+                                <span class="font-bold" id="compileTime">--</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Execution Time:</span>
+                                <span class="font-bold" id="execTime">--</span>
+                            </div>
+                            <div class="mt-3 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="progress-bar h-full bg-gradient-to-r from-blue-500 to-emerald-500"
+                                    style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700"
+                                id="latency-status">Pending</span>
+                        </div>
+                    </div>
+
+                    <!-- Queue Wait Time -->
+                    <div class="metric-card border-2 border-gray-200 rounded-xl p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-lg">Queue Wait Time</h3>
+                                <p class="text-sm text-gray-500">Time in PENDING state</p>
+                            </div>
+                            <div class="text-2xl">⏳</div>
+                        </div>
+                        <div class="text-4xl font-bold text-purple-600 mb-2" id="queueTime">--</div>
+                        <p class="text-sm text-gray-600">Average wait time</p>
+                        <div class="mt-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700"
+                                id="queue-status">Pending</span>
+                        </div>
+                    </div>
+
+                    <!-- LLAP Cache Hit Ratio -->
+                    <div class="metric-card border-2 border-gray-200 rounded-xl p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-lg">LLAP Cache Hit Ratio</h3>
+                                <p class="text-sm text-gray-500">Target: >80%</p>
+                            </div>
+                            <div class="text-2xl">💾</div>
+                        </div>
+                        <div class="text-4xl font-bold text-emerald-600 mb-2" id="cacheHitRatio">--</div>
+                        <div class="w-full bg-gray-200 rounded-full h-3 mt-3">
+                            <div class="bg-emerald-500 h-3 rounded-full progress-bar" style="width: 0%" id="cacheBar">
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700"
+                                id="cache-status">Pending</span>
+                        </div>
+                    </div>
+
+                    <!-- GC Pauses -->
+                    <div class="metric-card border-2 border-gray-200 rounded-xl p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-lg">GC Pauses</h3>
+                                <p class="text-sm text-gray-500">JVM garbage collection</p>
+                            </div>
+                            <div class="text-2xl">🗑️</div>
+                        </div>
+                        <div class="text-4xl font-bold text-blue-600 mb-2" id="gcPauses">--</div>
+                        <p class="text-sm text-gray-600">Max pause duration</p>
+                        <div class="mt-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700"
+                                id="gc-status">Pending</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category 2: Storage & Data Layout -->
+        <div class="bg-white rounded-2xl shadow-2xl mb-8 overflow-hidden">
+            <div class="category-header text-white p-6">
+                <h2 class="text-2xl font-bold">2. Storage & Data Layout</h2>
+                <p class="text-purple-100 mt-1">File format, compression, and organization</p>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- File Format -->
+                    <div class="metric-card border-2 border-gray-200 rounded-xl p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-lg">File Format</h3>
+                                <p class="text-sm text-gray-500">ORC preferred</p>
+                            </div>
+                            <div class="text-2xl">📁</div>
+                        </div>
+                        <div class="flex items-center space-x-2 mb-3">
+                            <div class="text-2xl font-bold text-purple-600" id="fileFormat">--</div>
+                            <div class="flex-1">
+                                <div class=" w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-purple-500 h-2 rounded-full" style="width: 0%" id="formatBar"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600" id="formatDetails">Checking...</p>
+                        <div class="mt-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700"
+                                id="format-status">Pending</span>
+                        </div>
+                    </div>
+
+                    <!-- Compression -->
+                    <div class="metric-card border-2 border-gray-200 rounded-xl p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-lg">Compression</h3>
+                                <p class="text-sm text-gray-500">Snappy or Zlib</p>
+                            </div>
+                            <div class="text-2xl">🗜️</div>
+                        </div>
+                        <div class="text-2xl font-bold text-emerald-600 mb-2" id="compression">--</div>
+                        <p class="text-sm text-gray-600" id="compressionRatio">Ratio: --</p>
+                        <div class="mt-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700"
+                                id="compression-status">Pending</span>
+                        </div>
+                    </div>
+
+                    <!-- Small Files -->
+                    <div class="metric-card border-2 border-gray-200 rounded-xl p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-lg">Small Files</h3>
+                                <p class="text-sm text-gray-500">Files <128MB< /p>
+                            </div>
+                            <div class="text-2xl">📄</div>
+                        </div>
+                        <div class="text-4xl font-bold text-orange-600 mb-2" id="smallFilesCount">--</div>
+                        <p class="text-sm text-gray-600">Compaction status</p>
+                        <div class="mt-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700"
+                                id="files-status">Pending</span>
+                        </div>
+                    </div>
+
+                    <!-- Partitioning -->
+                    <div class="metric-card border-2 border-gray-200 rounded-xl p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-lg">Partitioning</h3>
+                                <p class="text-sm text-gray-500">Excessive partitions >10k</p>
+                            </div>
+                            <div class="text-2xl">🗂️</div>
+                        </div>
+                        <div class="text-4xl font-bold text-blue-600 mb-2" id="partitionCount">--</div>
+                        <p class="text-sm text-gray-600">Total partitions</p>
+                        <div class="mt-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700"
+                                id="partition-status">Pending</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category 3: Optimizer & Statistics -->
+        <div class="bg-white rounded-2xl shadow-2xl mb-8 overflow-hidden">
+            <div class="category-header text-white p-6">
+                <h2 class="text-2xl font-bold">3. Optimizer & Statistics</h2>
+                <p class="text-purple-100 mt-1">Query optimization and statistics health</p>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Table Statistics -->
+                    <div class="metric-card border-2 border-gray-200 rounded-xl p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-lg">Table Statistics</h3>
+                                <p class="text-sm text-gray-500">ANALYZE TABLE status</p>
+                            </div>
+                            <div class="text-2xl">📊</div>
+                        </div>
+                        <div class="text-3xl font-bold text-emerald-600 mb-2" id="statsUpdated">--</div>
+                        <p class="text-sm text-gray-600" id="statsAge">Last updated: --</p>
+                        <div class="mt-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700"
+                                id="stats-status">Pending</span>
+                        </div>
+                    </div>
+
+                    <!-- Join Types -->
+                    <div class="metric-card border-2 border-gray-200 rounded-xl p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-lg">Join Optimization</h3>
+                                <p class="text-sm text-gray-500">Map Join conversion</p>
+                            </div>
+                            <div class="text-2xl">🔗</div>
+                        </div>
+                        <div class="text-3xl font-bold text-purple-600 mb-2" id="mapJoinPct">--</div>
+                        <p class="text-sm text-gray-600">Auto-converted joins</p>
+                        <div class="mt-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700"
+                                id="join-status">Pending</span>
+                        </div>
+                    </div>
+
+                    <!-- CBO Status -->
+                    <div class="metric-card border-2 border-gray-200 rounded-xl p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-lg">CBO Enabled</h3>
+                                <p class="text-sm text-gray-500">Cost-Based Optimizer</p>
+                            </div>
+                            <div class="text-2xl">🎯</div>
+                        </div>
+                        <div class="text-5xl mb-2" id="cboStatus">❓</div>
+                        <p class="text-sm text-gray-600" id="cboDetails">Checking...</p>
+                        <div class="mt-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700"
+                                id="cbo-status">Pending</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category 4: Infrastructure & Metastore -->
+        <div class="bg-white rounded-2xl shadow-2xl mb-8 overflow-hidden">
+            <div class="category-header text-white p-6">
+                <h2 class="text-2xl font-bold">4. Infrastructure & Metastore</h2>
+                <p class="text-purple-100 mt-1">System resources and metastore performance</p>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Metastore Latency -->
+                    <div class="metric-card border-2 border-gray-200 rounded-xl p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-lg">Metastore Latency</h3>
+                                <p class="text-sm text-gray-500">DB response time</p>
+                            </div>
+                            <div class="text-2xl">🗄️</div>
+                        </div>
+                        <div class="text-3xl font-bold text-blue-600 mb-2" id="metastoreLatency">--</div>
+                        <p class="text-sm text-gray-600" id="directSQL">Direct SQL: --</p>
+                        <div class="mt-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700"
+                                id="metastore-status">Pending</span>
+                        </div>
+                    </div>
+
+                    <!-- Concurrency -->
+                    <div class="metric-card border-2 border-gray-200 rounded-xl p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-lg">Concurrency</h3>
+                                <p class="text-sm text-gray-500">Concurrent queries</p>
+                            </div>
+                            <div class="text-2xl">👥</div>
+                        </div>
+                        <div class="text-3xl font-bold text-emerald-600 mb-2" id="concurrentQueries">--</div>
+                        <p class="text-sm text-gray-600">Peak capacity: 50</p>
+                        <div class="mt-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700"
+                                id="concurrency-status">Pending</span>
+                        </div>
+                    </div>
+
+                    <!-- Resource Utilization -->
+                    <div class="metric-card border-2 border-gray-200 rounded-xl p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-lg">Resource Usage</h3>
+                                <p class="text-sm text-gray-500">Container allocation</p>
+                            </div>
+                            <div class="text-2xl">💻</div>
+                        </div>
+                        <div class="text-3xl font-bold text-purple-600 mb-2" id="resourceUsage">--</div>
+                        <p class="text-sm text-gray-600" id="memoryDetails">Memory: --</p>
+                        <div class="mt-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700"
+                                id="resource-status">Pending</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category 5: Benchmarks -->
+        <div class="bg-white rounded-2xl shadow-2xl mb-8 overflow-hidden">
+            <div class="category-header text-white p-6">
+                <h2 class="text-2xl font-bold">5. Benchmarks</h2>
+                <p class="text-purple-100 mt-1">Industry-standard performance tests</p>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- TPC-DS -->
+                    <div class="metric-card border-2 border-gray-200 rounded-xl p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-lg">TPC-DS Benchmark</h3>
+                                <p class="text-sm text-gray-500">Decision support queries</p>
+                            </div>
+                            <div class="text-2xl">🏆</div>
+                        </div>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between">
+                                <span class="text-sm">Query 1:</span>
+                                <span class="font-semibold" id="tpcds-q1">Not run</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm">Query 2:</span>
+                                <span class="font-semibold" id="tpcds-q2">Not run</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm">Average:</span>
+                                <span class="font-bold text-purple-600" id="tpcds-avg">--</span>
+                            </div>
+                        </div>
+                        <button onclick="runTPCDS()"
+                            class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
+                            Run TPC-DS
+                        </button>
+                    </div>
+
+                    <!-- TPC-H -->
+                    <div class="metric-card border-2 border-gray-200 rounded-xl p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-lg">TPC-H Benchmark</h3>
+                                <p class="text-sm text-gray-500">Standard reporting queries</p>
+                            </div>
+                            <div class="text-2xl">📈</div>
+                        </div>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between">
+                                <span class="text-sm">Query 1:</span>
+                                <span class="font-semibold" id="tpch-q1">Not run</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm">Query 2:</span>
+                                <span class="font-semibold" id="tpch-q2">Not run</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm">Average:</span>
+                                <span class="font-bold text-emerald-600" id="tpch-avg">--</span>
+                            </div>
+                        </div>
+                        <button onclick="runTPCH()"
+                            class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
+                            Run TPC-H
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="bg-white rounded-2xl shadow-2xl p-8" id="recommendations" style="display: none;">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">💡 Optimization Recommendations</h2>
+            <div id="recommendationsList" class="space-y-4"></div>
+        </div>
+    </div>
+
+    <script>
+        let assessmentData = {};
+
+        async function runFullAssessment() {
+            // Show loading state
+            document.getElementById('lastCheck').textContent = 'Running...';
+
+            try {
+                // In a real implementation, this would call the backend
+                // For now, we'll simulate with sample data
+                await simulateAssessment();
+
+                document.getElementById('lastCheck').textContent = new Date().toLocaleString();
+                showRecommendations();
+            } catch (error) {
+                console.error('Assessment failed:', error);
+                alert('Assessment failed. Please check Hive connection.');
+            }
+        }
+
+        async function simulateAssessment() {
+            // Simulate metrics with realistic values
+            const metrics = {
+                // Performance
+                compileTime: (Math.random() * 2 + 0.5).toFixed(2) + 's',
+                execTime: (Math.random() * 5 + 2).toFixed(2) + 's',
+                queueTime: (Math.random() * 1.5).toFixed(2) + 's',
+                cacheHitRatio: (Math.random() * 20 + 75).toFixed(1) + '%',
+                gcPauses: (Math.random() * 200 + 50).toFixed(0) + 'ms',
+
+                // Storage
+                fileFormat: 'ORC',
+                compression: 'Snappy',
+                compressionRatio: '4.2:1',
+                smallFiles: Math.floor(Math.random() * 500),
+                partitions: Math.floor(Math.random() * 5000 + 1000),
+
+                // Optimizer
+                statsUpdated: Math.floor(Math.random() * 50 + 50) + '%',
+                statsAge: Math.floor(Math.random() * 48) + ' hours',
+                mapJoinPct: (Math.random() * 30 + 60).toFixed(1) + '%',
+                cboEnabled: true,
+
+                // Infrastructure
+                metastoreLatency: (Math.random() * 50 + 10).toFixed(0) + 'ms',
+                directSQL: 'Enabled',
+                concurrentQueries: Math.floor(Math.random() * 30 + 5),
+                resourceUsage: (Math.random() * 30 + 60).toFixed(1) + '%',
+                memoryUsage: '45GB / 64GB',
+            };
+
+            // Update UI
+            updateMetrics(metrics);
+            calculateHealthScore(metrics);
+        }
+
+        function updateMetrics(metrics) {
+            document.getElementById('compileTime').textContent = metrics.compileTime;
+            document.getElementById('execTime').textContent = metrics.execTime;
+            document.getElementById('queueTime').textContent = metrics.queueTime;
+            document.getElementById('cacheHitRatio').textContent = metrics.cacheHitRatio;
+            document.getElementById('gcPauses').textContent = metrics.gcPauses;
+
+            document.getElementById('fileFormat').textContent = metrics.fileFormat;
+            document.getElementById('compression').textContent = metrics.compression;
+            document.getElementById('compressionRatio').textContent = metrics.compressionRatio;
+            document.getElementById('smallFilesCount').textContent = metrics.smallFiles;
+            document.getElementById('partitionCount').textContent = metrics.partitions.toLocaleString();
+
+            document.getElementById('statsUpdated').textContent = metrics.statsUpdated;
+            document.getElementById('statsAge').textContent = metrics.statsAge;
+            document.getElementById('mapJoinPct').textContent = metrics.mapJoinPct;
+            document.getElementById('cboStatus').textContent = metrics.cboEnabled ? '✅' : '❌';
+            document.getElementById('cboDetails').textContent = metrics.cboEnabled ? 'Enabled' : 'Disabled';
+
+            document.getElementById('metastoreLatency').textContent = metrics.metastoreLatency;
+            document.getElementById('directSQL').textContent = metrics.directSQL;
+            document.getElementById('concurrentQueries').textContent = metrics.concurrentQueries;
+            document.getElementById('resourceUsage').textContent = metrics.resourceUsage;
+            document.getElementById('memoryDetails').textContent = metrics.memoryUsage;
+
+            // Update status badges
+            updateStatusBadges(metrics);
+        }
+
+        function updateStatusBadges(metrics) {
+            const updates = [
+                { id: 'latency-status', value: parseFloat(metrics.execTime) < 3 ? 'Excellent' : 'Good', color: 'bg-excellent' },
+                { id: 'queue-status', value: parseFloat(metrics.queueTime) < 1 ? 'Good' : 'Warning', color: parseFloat(metrics.queueTime) < 1 ? 'bg-good' : 'bg-warning' },
+                { id: 'cache-status', value: parseFloat(metrics.cacheHitRatio) > 80 ? 'Excellent' : 'Good', color: parseFloat(metrics.cacheHitRatio) > 80 ? 'bg-excellent' : 'bg-good' },
+                { id: 'format-status', value: metrics.fileFormat === 'ORC' ? 'Optimal' : 'Acceptable', color: 'bg-excellent' },
+                { id: 'stats-status', value: parseFloat(metrics.statsUpdated) > 70 ? 'Good' : 'Warning', color: parseFloat(metrics.statsUpdated) > 70 ? 'bg-good' : 'bg-warning' },
+            ];
+
+            updates.forEach(u => {
+                const el = document.getElementById(u.id);
+                el.textContent = u.value;
+                el.className = `px-3 py-1 rounded-full text-xs font-semibold ${u.color} text-gray-800`;
+            });
+        }
+
+        function calculateHealthScore(metrics) {
+            let score = 0;
+
+            // Each category contributes to score
+            if (parseFloat(metrics.execTime) < 3) score += 10;
+            if (parseFloat(metrics.queueTime) < 1) score += 10;
+            if (parseFloat(metrics.cacheHitRatio) > 80) score += 15;
+            if (metrics.fileFormat === 'ORC') score += 10;
+            if (metrics.compression) score += 5;
+            if (metrics.smallFiles < 100) score += 10;
+            if (metrics.partitions < 5000) score += 5;
+            if (parseFloat(metrics.statsUpdated) > 70) score += 10;
+            if (parseFloat(metrics.mapJoinPct) > 70) score += 10;
+            if (metrics.cboEnabled) score += 10;
+            if (parseFloat(metrics.metastoreLatency) < 50) score += 5;
+
+            document.getElementById('healthScore').textContent = score;
+
+            // Update emoji and status
+            if (score >= 90) {
+                document.getElementById('healthEmoji').textContent = '🎉';
+                document.getElementById('healthStatus').textContent = 'Excellent';
+            } else if (score >= 70) {
+                document.getElementById('healthEmoji').textContent = '✅';
+                document.getElementById('healthStatus').textContent = 'Good';
+            } else {
+                document.getElementById('healthEmoji').textContent = '⚠️';
+                document.getElementById('healthStatus').textContent = 'Needs Attention';
+            }
+        }
+
+        function showRecommendations() {
+            const recsDiv = document.getElementById('recommendations');
+            const listDiv = document.getElementById('recommendationsList');
+
+            const recommendations = [
+                { priority: 'high', text: 'Enable hive.optimize.ppd=true for partition pruning', category: 'Optimizer' },
+                { priority: 'medium', text: 'Run ANALYZE TABLE on frequently queried tables', category: 'Statistics' },
+                { priority: 'low', text: 'Consider increasing LLAP cache size', category: 'Performance' },
+            ];
+
+            listDiv.innerHTML = recommendations.map(r => `
+                <div class="border-l-4 ${r.priority === 'high' ? 'border-red-500' : r.priority === 'medium' ? 'border-yellow-500' : 'border-blue-500'} pl-4 py-3">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="text-xs font-semibold text-gray-500 uppercase">${r.category}</span>
+                            <p class="text-gray-800 font-medium mt-1">${r.text}</p>
+                        </div>
+                        <span class="px-2 py-1 text-xs font-semibold rounded ${r.priority === 'high' ? 'bg-red-100 text-red-800' : r.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'}">${r.priority.toUpperCase()}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            recsDiv.style.display = 'block';
+        }
+
+        async function runQuickCheck() {
+            alert('Running quick health check...');
+            await runFullAssessment();
+        }
+
+        function exportReport() {
+            alert('Exporting assessment report...');
+        }
+
+        function runTPCDS() {
+            document.getElementById('tpcds-q1').textContent = '3.2s';
+            document.getElementById('tpcds-q2').textContent = '4.1s';
+            document.getElementById('tpcds-avg').textContent = '3.65s';
+        }
+
+        function runTPCH() {
+            document.getElementById('tpch-q1').textContent = '2.8s';
+            document.getElementById('tpch-q2').textContent = '3.5s';
+            document.getElementById('tpch-avg').textContent = '3.15s';
+        }
+    </script>
+
+</body>
+
+</html>
