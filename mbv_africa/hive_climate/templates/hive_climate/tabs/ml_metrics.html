@@ -1,0 +1,127 @@
+<!-- Model Cards -->
+<div class="grid grid-cols-3" style="margin-bottom: 1.5rem;">
+    {% for model in ml_models %}
+    <div class="card">
+        <div class="card-header">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                <svg style="width: 2rem; height: 2rem; color: var(--emerald-600);" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    {% if 'Temperature' in model.name %}
+                    <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" />
+                    {% elif 'Precipitation' in model.name %}
+                    <path d="M16 13v8m-8-8v8m-4-6v6m16-6v6" />
+                    <path d="M3 7.2C3 5.4 5.4 3 12 3s9 2.4 9 4.2" />
+                    {% else %}
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+                    <path d="M12 9v4m0 4h.01" />
+                    {% endif %}
+                </svg>
+                <span
+                    class="badge {% if model.status == 'production' %}badge-emerald{% else %}badge-secondary{% endif %}">{{
+                    model.status }}</span>
+            </div>
+            <h3 class="card-title" style="font-size: 1.125rem;">{{ model.name }}</h3>
+            <p class="card-description">{{ model.type }}</p>
+        </div>
+        <div class="card-content">
+            <p class="text-sm text-muted mb-4"><strong>Target:</strong> {{ model.target }}</p>
+            <div class="space-y-2">
+                {% if 'rmse' in model.metrics %}
+                <div class="metric-row">
+                    <span class="metric-label">RMSE</span>
+                    <span class="metric-value">{{ model.metrics.rmse }}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">MAE</span>
+                    <span class="metric-value">{{ model.metrics.mae }}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">R²</span>
+                    <span class="metric-value">{{ model.metrics.r2 }}</span>
+                </div>
+                {% else %}
+                <div class="metric-row">
+                    <span class="metric-label">Accuracy</span>
+                    <span class="metric-value">{{ model.metrics.accuracy|floatformat:1 }}%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Precision</span>
+                    <span class="metric-value">{{ model.metrics.precision|floatformat:1 }}%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Recall</span>
+                    <span class="metric-value">{{ model.metrics.recall|floatformat:1 }}%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">ROC AUC</span>
+                    <span class="metric-value">{{ model.metrics.auc }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Feature Importance -->
+<div class="card" style="margin-bottom: 1.5rem;">
+    <div class="card-header">
+        <h3 class="card-title">Feature Importance (Temperature Forecast Model)</h3>
+        <p class="card-description">Top predictive features for temperature anomaly forecasting</p>
+    </div>
+    <div class="card-content space-y-4">
+        {% for f in feature_importance %}
+        <div class="progress-container">
+            <div class="progress-label">
+                <code class="font-mono">{{ f.feature }}</code>
+                <span class="text-muted">{{ f.importance|floatformat:0 }}%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ f.importance|floatformat:0 }}%;"></div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Use Cases -->
+<div class="grid grid-cols-2">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">ML Use Cases</h3>
+        </div>
+        <div class="card-content space-y-3">
+            <div class="use-case-card">
+                <p class="use-case-title">Seasonal Temperature Forecasting</p>
+                <p class="use-case-description">Predict next-season temperature anomalies for agricultural planning</p>
+            </div>
+            <div class="use-case-card">
+                <p class="use-case-title">Drought Early Warning</p>
+                <p class="use-case-description">Classify regions at risk of drought using precipitation and SST patterns
+                </p>
+            </div>
+            <div class="use-case-card">
+                <p class="use-case-title">Coastal Flooding Risk</p>
+                <p class="use-case-description">Predict sea surface temperature anomalies affecting coastal communities
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Portfolio Value</h3>
+        </div>
+        <div class="card-content space-y-3 text-sm">
+            <p><strong>Big Data Engineering:</strong> Demonstrates Hive skills including schema design, ORC
+                partitioning, and query optimization on a massive climate dataset.</p>
+            <p><strong>ML Integration:</strong> End-to-end pipeline from raw data to production ML models for climate
+                forecasting.</p>
+            <p><strong>Real-World Impact:</strong> Climate trend forecasting is critical for environmental planning,
+                agriculture, and disaster preparedness across Africa.</p>
+            <p><strong>Reproducible Science:</strong> Robust engineering principles applied to scientific computing for
+                reliable, verifiable results.</p>
+        </div>
+    </div>
+</div>

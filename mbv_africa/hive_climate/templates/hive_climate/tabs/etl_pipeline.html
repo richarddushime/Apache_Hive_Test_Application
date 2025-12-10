@@ -1,0 +1,87 @@
+<!-- Pipeline Visualization -->
+<div class="card" style="margin-bottom: 1.5rem;">
+    <div class="card-header">
+        <h3 class="card-title">ETL Pipeline Stages</h3>
+        <p class="card-description">End-to-end data processing for African climate observations</p>
+    </div>
+    <div class="card-content">
+        <div class="pipeline-container">
+            {% for step in pipeline_steps %}
+            <div class="card pipeline-step {% if step.status == 'running' %}running{% endif %}">
+                <div class="card-content" style="padding: 1rem;">
+                    <div class="step-header">
+                        <span class="step-name">{{ step.name }}</span>
+                        {% if step.status == 'complete' %}
+                        <svg style="width: 1rem; height: 1rem; margin-left: auto;" class="status-complete"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
+                        </svg>
+                        {% elif step.status == 'running' %}
+                        <span class="badge badge-emerald" style="margin-left: auto;">Running</span>
+                        {% endif %}
+                    </div>
+                    <p class="step-description">{{ step.description }}</p>
+                    <ul class="step-details">
+                        {% for detail in step.details %}
+                        <li>{{ detail }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Optimizations -->
+<div class="grid grid-cols-2">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Hive Optimizations</h3>
+            <p class="card-description">Performance tuning for large-scale climate data</p>
+        </div>
+        <div class="card-content space-y-4">
+            {% for opt in optimizations %}
+            <div class="space-y-1">
+                <p class="font-medium text-sm">{{ opt.name }}</p>
+                <p class="text-xs text-muted">{{ opt.description }}</p>
+                <pre style="padding: 0.5rem; font-size: 0.75rem;">{{ opt.setting }}</pre>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Transform Operations</h3>
+            <p class="card-description">Monthly aggregation Hive SQL</p>
+        </div>
+        <div class="card-content">
+            <pre>-- Compute monthly climate summaries
+INSERT OVERWRITE TABLE africa_climate_monthly
+PARTITION (year, region)
+SELECT 
+  station_id,
+  country,
+  month,
+  AVG(temp_mean) as monthly_temp,
+  SUM(precipitation) as monthly_precip,
+  AVG(humidity) as monthly_humidity,
+  AVG(sea_surface_temp) as monthly_sst,
+  -- Temperature anomaly from 30-year baseline
+  AVG(temp_mean) - baseline.temp_norm as temp_anomaly,
+  year,
+  region
+FROM africa_climate_observations obs
+LEFT JOIN climate_baselines baseline
+  ON obs.station_id = baseline.station_id 
+  AND obs.month = baseline.month
+WHERE obs.year >= 2020
+GROUP BY 
+  station_id, country, month, 
+  baseline.temp_norm, year, region;</pre>
+        </div>
+    </div>
+</div>

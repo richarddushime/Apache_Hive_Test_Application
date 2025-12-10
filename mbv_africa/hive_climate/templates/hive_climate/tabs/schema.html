@@ -1,0 +1,103 @@
+<div class="grid grid-cols-2">
+    <!-- Table Info Card -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Table Configuration</h3>
+            <p class="card-description">Optimized Hive table for African climate and ocean data</p>
+        </div>
+        <div class="card-content space-y-4">
+            <div class="grid grid-cols-2">
+                <div>
+                    <p class="text-sm text-muted">Table Name</p>
+                    <p class="font-mono text-sm font-medium">{{ table_schema.name }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-muted">Storage Format</p>
+                    <span class="badge badge-secondary">{{ table_schema.format }}</span>
+                </div>
+                <div>
+                    <p class="text-sm text-muted">Compression</p>
+                    <span class="badge badge-outline">{{ table_schema.compression }}</span>
+                </div>
+                <div>
+                    <p class="text-sm text-muted">Bucketed By</p>
+                    <span class="badge badge-emerald">{{ table_schema.clustered_by }}</span>
+                </div>
+            </div>
+            <div>
+                <p class="text-sm text-muted mb-2">Partition Keys</p>
+                <div style="display: flex; gap: 0.5rem;">
+                    {% for key in table_schema.partitioned_by %}
+                    <span class="badge"
+                        style="border: 1px solid var(--emerald-600); color: var(--emerald-600); background: transparent;">{{
+                        key }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SQL Preview Card -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Hive DDL Statement</h3>
+            <p class="card-description">CREATE TABLE statement with optimizations</p>
+        </div>
+        <div class="card-content">
+            <pre>CREATE TABLE africa_climate_observations (
+  station_id STRING,
+  station_name STRING,
+  country STRING,
+  latitude DOUBLE,
+  longitude DOUBLE,
+  observation_date DATE,
+  month INT,
+  temp_max DOUBLE,
+  temp_min DOUBLE,
+  temp_mean DOUBLE,
+  precipitation DOUBLE,
+  humidity DOUBLE,
+  sea_surface_temp DOUBLE,
+  ocean_salinity DOUBLE
+)
+PARTITIONED BY (year INT, region STRING)
+CLUSTERED BY (station_id) INTO 32 BUCKETS
+STORED AS ORC
+TBLPROPERTIES (
+  'orc.compress'='SNAPPY',
+  'orc.create.index'='true'
+);</pre>
+        </div>
+    </div>
+</div>
+
+<!-- Column Schema Card -->
+<div class="card" style="margin-top: 1.5rem;">
+    <div class="card-header">
+        <h3 class="card-title">Column Schema</h3>
+        <p class="card-description">{{ table_schema.columns|length }} columns capturing climate and ocean measurements
+            across Africa</p>
+    </div>
+    <div class="card-content">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Column</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for col in table_schema.columns %}
+                    <tr>
+                        <td><code class="font-mono">{{ col.name }}</code></td>
+                        <td><span class="badge badge-secondary font-mono">{{ col.type }}</span></td>
+                        <td class="text-muted">{{ col.description }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

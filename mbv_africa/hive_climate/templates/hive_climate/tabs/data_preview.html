@@ -1,0 +1,105 @@
+<!-- Stats Row -->
+<div class="grid grid-cols-4" style="margin-bottom: 1.5rem;">
+    <div class="card">
+        <div class="card-content" style="padding-top: 1.5rem;">
+            <p class="stat-value">{{ stats.total_records }}</p>
+            <p class="stat-label">Total Records</p>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-content" style="padding-top: 1.5rem;">
+            <p class="stat-value">{{ stats.stations }}</p>
+            <p class="stat-label">Weather Stations</p>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-content" style="padding-top: 1.5rem;">
+            <p class="stat-value">{{ stats.countries }}</p>
+            <p class="stat-label">African Countries</p>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-content" style="padding-top: 1.5rem;">
+            <p class="stat-value">{{ stats.date_range }}</p>
+            <p class="stat-label">Date Range</p>
+        </div>
+    </div>
+</div>
+
+<!-- Data Table -->
+<div class="card" style="margin-bottom: 1.5rem;">
+    <div class="card-header">
+        <h3 class="card-title">Sample Climate Observations</h3>
+        <p class="card-description">Representative data from weather stations across African regions</p>
+    </div>
+    <div class="card-content">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Station</th>
+                        <th>Region</th>
+                        <th>Date</th>
+                        <th style="text-align: right;">Temp Max</th>
+                        <th style="text-align: right;">Temp Min</th>
+                        <th style="text-align: right;">Precip</th>
+                        <th style="text-align: right;">Humidity</th>
+                        <th style="text-align: right;">SST</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in sample_data %}
+                    <tr>
+                        <td>
+                            <p class="font-medium">{{ row.station_name }}</p>
+                            <p class="text-xs text-muted font-mono">{{ row.station_id }}</p>
+                        </td>
+                        <td><span class="badge badge-outline">{{ row.region }}</span></td>
+                        <td class="font-mono text-muted">{{ row.observation_date }}</td>
+                        <td class="font-mono" style="text-align: right;">{{ row.temp_max }}°C</td>
+                        <td class="font-mono" style="text-align: right;">{{ row.temp_min }}°C</td>
+                        <td class="font-mono" style="text-align: right;">{{ row.precipitation }}mm</td>
+                        <td class="font-mono" style="text-align: right;">{{ row.humidity }}%</td>
+                        <td class="font-mono" style="text-align: right;">
+                            {% if row.sea_surface_temp %}{{ row.sea_surface_temp }}°C{% else %}—{% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Query Examples -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Sample Hive Queries</h3>
+        <p class="card-description">Analytical queries for climate intelligence</p>
+    </div>
+    <div class="card-content space-y-4">
+        <div>
+            <p class="text-sm font-medium mb-2">Monthly Average Temperature by Region</p>
+            <pre>SELECT region, month, 
+       AVG(temp_mean) as avg_temp,
+       AVG(precipitation) as avg_precip
+FROM africa_climate_observations
+WHERE year = 2024
+GROUP BY region, month
+ORDER BY region, month;</pre>
+        </div>
+        <div>
+            <p class="text-sm font-medium mb-2">Coastal Ocean Temperature Anomalies</p>
+            <pre>SELECT station_name, observation_date,
+       sea_surface_temp,
+       sea_surface_temp - AVG(sea_surface_temp) OVER (
+         PARTITION BY station_id 
+         ORDER BY observation_date 
+         ROWS BETWEEN 365 PRECEDING AND 1 PRECEDING
+       ) as sst_anomaly
+FROM africa_climate_observations
+WHERE sea_surface_temp IS NOT NULL
+  AND year >= 2020;</pre>
+        </div>
+    </div>
+</div>

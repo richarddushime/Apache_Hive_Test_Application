@@ -1,0 +1,252 @@
+<!-- Temperature Anomalies Chart -->
+<div class="card" style="margin-bottom: 1.5rem;">
+    <div class="card-header">
+        <h3 class="card-title">Temperature Anomalies by Region (°C above baseline)</h3>
+        <p class="card-description">10-year trend of temperature deviations from 1961-1990 climatological baseline</p>
+    </div>
+    <div class="card-content">
+        <div class="chart-container">
+            <canvas id="temperatureChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-2">
+    <!-- Precipitation Comparison -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Annual Precipitation Comparison (mm)</h3>
+            <p class="card-description">Actual vs Predicted vs Historical Baseline</p>
+        </div>
+        <div class="card-content">
+            <div class="chart-container-small">
+                <canvas id="precipitationChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ocean Data -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Coastal Ocean Conditions (2024)</h3>
+            <p class="card-description">Sea Surface Temperature & Salinity - West African Coast</p>
+        </div>
+        <div class="card-content">
+            <div class="chart-container-small">
+                <canvas id="oceanChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Key Insights -->
+<div class="card" style="margin-top: 1.5rem;">
+    <div class="card-header">
+        <h3 class="card-title">Climate Intelligence Insights</h3>
+        <p class="card-description">Data-driven findings from Hive analytics</p>
+    </div>
+    <div class="card-content">
+        <div class="grid grid-cols-3">
+            <div class="insight-card insight-emerald">
+                <p class="insight-value">+1.7°C</p>
+                <p class="insight-description">Average temperature anomaly across Africa (2024)</p>
+            </div>
+            <div class="insight-card insight-amber">
+                <p class="insight-value">-12%</p>
+                <p class="insight-description">Precipitation decline vs 30-year baseline</p>
+            </div>
+            <div class="insight-card insight-blue">
+                <p class="insight-value">+0.8°C</p>
+                <p class="insight-description">Sea surface temperature increase (coastal)</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function initializeTrendsCharts() {
+        // Don't reinitialize if charts already exist
+        if (window.trendsChartsInitialized) return;
+        window.trendsChartsInitialized = true;
+
+        // Temperature Trends Data
+        const temperatureData = {{ temperature_trends| safe
+    }};
+
+    // Temperature Anomalies Chart
+    const tempCtx = document.getElementById('temperatureChart');
+    if (tempCtx) {
+        new Chart(tempCtx, {
+            type: 'line',
+            data: {
+                labels: temperatureData.map(d => d.year),
+                datasets: [
+                    {
+                        label: 'East Africa',
+                        data: temperatureData.map(d => d.east),
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'West Africa',
+                        data: temperatureData.map(d => d.west),
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'North Africa',
+                        data: temperatureData.map(d => d.north),
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'South Africa',
+                        data: temperatureData.map(d => d.south),
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Central Africa',
+                        data: temperatureData.map(d => d.central),
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    // Precipitation Data
+    const precipitationData = {{ precipitation_data| safe }};
+
+    // Precipitation Chart
+    const precipCtx = document.getElementById('precipitationChart');
+    if (precipCtx) {
+        new Chart(precipCtx, {
+            type: 'bar',
+            data: {
+                labels: precipitationData.map(d => d.region),
+                datasets: [
+                    {
+                        label: 'Actual 2024',
+                        data: precipitationData.map(d => d.actual),
+                        backgroundColor: '#10b981'
+                    },
+                    {
+                        label: 'ML Predicted',
+                        data: precipitationData.map(d => d.predicted),
+                        backgroundColor: '#3b82f6'
+                    },
+                    {
+                        label: '30-yr Baseline',
+                        data: precipitationData.map(d => d.baseline),
+                        backgroundColor: '#6b7280'
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    }
+
+    // Ocean Data
+    const oceanData = {{ ocean_data| safe }};
+
+    // Ocean Chart
+    const oceanCtx = document.getElementById('oceanChart');
+    if (oceanCtx) {
+        new Chart(oceanCtx, {
+            type: 'line',
+            data: {
+                labels: oceanData.map(d => d.month),
+                datasets: [
+                    {
+                        label: 'SST (°C)',
+                        data: oceanData.map(d => d.sst),
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        yAxisID: 'y',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Salinity (PSU)',
+                        data: oceanData.map(d => d.salinity),
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        yAxisID: 'y1',
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left'
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    }
+                }
+            }
+        });
+    }
+}
+
+    // Initialize charts when tab becomes visible
+    document.addEventListener('DOMContentLoaded', function () {
+        // Observer to detect when trends tab is shown
+        const observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if (mutation.target.id === 'trends' && mutation.target.classList.contains('active')) {
+                    setTimeout(initializeTrendsCharts, 100);
+                }
+            });
+        });
+
+        const trendsTab = document.getElementById('trends');
+        if (trendsTab) {
+            observer.observe(trendsTab, { attributes: true, attributeFilter: ['class'] });
+        }
+    });
+</script>
