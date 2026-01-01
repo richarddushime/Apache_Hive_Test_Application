@@ -1,11 +1,53 @@
 #!/bin/bash
+# Hive Data Ingestion Script
+# This script creates the database, tables, and loads CSV data into Hive
 
-# Create database and tables using beeline
-docker exec hive-server beeline -u jdbc:hive2://localhost:10000 -e "
+set -e
+
+HIVE_CONTAINER="hive-server"
+HIVE_URL="jdbc:hive2://localhost:10000"
+DATA_DIR="/data"
+
+echo "=============================================="
+echo "MBV Africa - Hive Data Ingestion"
+echo "=============================================="
+
+# Function to run beeline command
+run_hive() {
+    docker exec $HIVE_CONTAINER beeline -u "$HIVE_URL" --silent=true -e "$1"
+}
+
+# Function to check if Hive is ready
+wait_for_hive() {
+    echo "Checking HiveServer2 health..."
+    
+    # First check if container health is good
+    local health=$(docker inspect --format='{{.State.Health.Status}}' $HIVE_CONTAINER 2>/dev/null || echo "unknown")
+    
+    if [ "$health" != "healthy" ]; then
+        echo "HiveServer2 container is not healthy yet (status: $health)"
+        echo "Run 'docker-compose up -d' and wait for services to be healthy"
+        echo "Check with: docker-compose ps"
+        exit 1
+    fi
+    
+    echo "HiveServer2 is healthy!"
+}
+
+# Check Hive readiness
+wait_for_hive
+
+# Create database and tables
+echo ""
+echo "Creating database and tables..."
+run_hive "
 CREATE DATABASE IF NOT EXISTS mbv_africa;
+
 USE mbv_africa;
 
-CREATE TABLE IF NOT EXISTS climate_data (
+-- Climate data table
+DROP TABLE IF EXISTS climate_data;
+CREATE TABLE climate_data (
     date_col STRING,
     region STRING,
     temperature FLOAT,
@@ -17,7 +59,9 @@ FIELDS TERMINATED BY ','
 STORED AS TEXTFILE
 TBLPROPERTIES ('skip.header.line.count'='1');
 
-CREATE TABLE IF NOT EXISTS ocean_data (
+-- Ocean data table
+DROP TABLE IF EXISTS ocean_data;
+CREATE TABLE ocean_data (
     date_col STRING,
     region STRING,
     sea_surface_temp FLOAT,
@@ -28,19 +72,86 @@ ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 STORED AS TEXTFILE
 TBLPROPERTIES ('skip.header.line.count'='1');
+
+-- Portfolio stations table
+DROP TABLE IF EXISTS portfolio_stations;
+CREATE TABLE portfolio_stations (
+    station_id STRING,
+    station_name STRING,
+    country STRING,
+    region STRING,
+    latitude DOUBLE,
+    longitude DOUBLE,
+    elevation DOUBLE,
+    is_coastal BOOLEAN
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+TBLPROPERTIES ('skip.header.line.count'='1');
+
+-- Portfolio observations table (partitioned by region for better query performance)
+DROP TABLE IF EXISTS portfolio_observations;
+CREATE TABLE portfolio_observations (
+    station_id STRING,
+    observation_date STRING,
+    year INT,
+    month INT,
+    temp_max FLOAT,
+    temp_min FLOAT,
+    temp_mean FLOAT,
+    precipitation FLOAT,
+    humidity FLOAT,
+    sea_surface_temp FLOAT,
+    ocean_salinity FLOAT,
+    region STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+TBLPROPERTIES ('skip.header.line.count'='1');
+"
+echo "Tables created!"
+
+# Load data from CSV files
+echo ""
+echo "Loading data from CSV files..."
+
+if docker exec $HIVE_CONTAINER test -f "$DATA_DIR/climate_data.csv"; then
+    echo "  Loading climate_data.csv..."
+    run_hive "LOAD DATA LOCAL INPATH '$DATA_DIR/climate_data.csv' OVERWRITE INTO TABLE mbv_africa.climate_data;"
+fi
+
+if docker exec $HIVE_CONTAINER test -f "$DATA_DIR/ocean_data.csv"; then
+    echo "  Loading ocean_data.csv..."
+    run_hive "LOAD DATA LOCAL INPATH '$DATA_DIR/ocean_data.csv' OVERWRITE INTO TABLE mbv_africa.ocean_data;"
+fi
+
+if docker exec $HIVE_CONTAINER test -f "$DATA_DIR/portfolio_stations.csv"; then
+    echo "  Loading portfolio_stations.csv..."
+    run_hive "LOAD DATA LOCAL INPATH '$DATA_DIR/portfolio_stations.csv' OVERWRITE INTO TABLE mbv_africa.portfolio_stations;"
+fi
+
+if docker exec $HIVE_CONTAINER test -f "$DATA_DIR/portfolio_observations.csv"; then
+    echo "  Loading portfolio_observations.csv..."
+    run_hive "LOAD DATA LOCAL INPATH '$DATA_DIR/portfolio_observations.csv' OVERWRITE INTO TABLE mbv_africa.portfolio_observations;"
+fi
+
+# Verify data loaded
+echo ""
+echo "Verifying data..."
+run_hive "
+USE mbv_africa;
+SELECT 'climate_data' as table_name, COUNT(*) as row_count FROM climate_data
+UNION ALL
+SELECT 'ocean_data', COUNT(*) FROM ocean_data
+UNION ALL
+SELECT 'portfolio_stations', COUNT(*) FROM portfolio_stations
+UNION ALL
+SELECT 'portfolio_observations', COUNT(*) FROM portfolio_observations;
 "
 
-echo "Tables created successfully!"
-
-# Load data
-echo "Loading climate data..."
-docker exec hive-server beeline -u jdbc:hive2://localhost:10000/mbv_africa -e "
-LOAD DATA LOCAL INPATH '/Apache_Hive_Test_Application/mbv_africa/scripts/climate_data.csv' OVERWRITE INTO TABLE climate_data;
-"
-
-echo "Loading ocean data..."
-docker exec hive-server beeline -u jdbc:hive2://localhost:10000/mbv_africa -e "
-LOAD DATA LOCAL INPATH '/Apache_Hive_Test_Application/mbv_africa/scripts/ocean_data.csv' OVERWRITE INTO TABLE ocean_data;
-"
-
-echo "Data loaded successfully!"
+echo ""
+echo "=============================================="
+echo "Data ingestion complete!"
+echo "=============================================="
