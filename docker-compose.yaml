@@ -1,50 +1,50 @@
 version: '3'
 
 services:
-  namenode:
+  master-node:
     image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
-    container_name: namenode
+    container_name: master-node
     volumes:
       - ./hadoop_conf/core-site.xml:/etc/hadoop/core-site.xml
       - ./hadoop_conf/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
-      - namenode_data:/hadoop/dfs/name
+      - master_node_data:/hadoop/dfs/name
     environment:
-      - CLUSTER_NAME=test
+      - CLUSTER_NAME=mbv-africa-cluster
     env_file:
       - ./hadoop.env
     ports:
       - "9870:9870"
       - "9000:9000"
 
-  datanode1:
+  slave-node-1:
     image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
-    container_name: datanode1
+    container_name: slave-node-1
     volumes:
       - ./hadoop_conf/core-site.xml:/etc/hadoop/core-site.xml
       - ./hadoop_conf/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
-      - datanode1_data:/hadoop/dfs/data
+      - slave_node_1_data:/hadoop/dfs/data
     env_file:
       - ./hadoop.env
     environment:
-      - SERVICE_PRECONDITION=namenode:9870
+      - SERVICE_PRECONDITION=master-node:9870
     depends_on:
-      - namenode
+      - master-node
     ports:
       - "9864:9864"
 
-  datanode2:
+  slave-node-2:
     image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
-    container_name: datanode2
+    container_name: slave-node-2
     volumes:
       - ./hadoop_conf/core-site.xml:/etc/hadoop/core-site.xml
       - ./hadoop_conf/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
-      - datanode2_data:/hadoop/dfs/data
+      - slave_node_2_data:/hadoop/dfs/data
     env_file:
       - ./hadoop.env
     environment:
-      - SERVICE_PRECONDITION=namenode:9870
+      - SERVICE_PRECONDITION=master-node:9870
     depends_on:
-      - namenode
+      - master-node
     ports:
       - "9865:9864"
 
@@ -73,7 +73,7 @@ services:
       - ./hadoop_conf/hive-site.xml:/opt/hive/conf/hive-site.xml
     depends_on:
       - hive-metastore-db
-      - namenode
+      - master-node
     command: /opt/hive/bin/hive --service metastore
 
   hive-server:
@@ -92,7 +92,7 @@ services:
       - ./hadoop_conf/hive-site.xml:/opt/hive/conf/hive-site.xml
     depends_on:
       - hive-metastore
-      - namenode
+      - master-node
     command: /opt/hive/bin/hive --service hiveserver2
 
   app:
@@ -109,7 +109,7 @@ services:
       - ./mbv_africa:/Apache_Hive_Test_Application/mbv_africa
 
 volumes:
-  namenode_data:
-  datanode1_data:
-  datanode2_data:
+  master_node_data:
+  slave_node_1_data:
+  slave_node_2_data:
   hive-db-data:

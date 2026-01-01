@@ -21,7 +21,6 @@ logger = logging.getLogger(__name__)
 def assessment_dashboard(request):
     """
     Main assessment dashboard view
-    Based on the index.html benchmark template
     """
     scenarios = AssessmentScenario.objects.filter(is_active=True)
     recent_benchmarks = QueryBenchmark.objects.select_related('scenario').order_by('-executed_at')[:10]

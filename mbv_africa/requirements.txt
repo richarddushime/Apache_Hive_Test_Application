@@ -13,3 +13,4 @@ celery
 redis
 django-cors-headers
 python-decouple
+hive-metastore-client
