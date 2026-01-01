@@ -176,3 +176,13 @@ import os
 HIVE_HOST = os.getenv('HIVE_HOST', 'localhost')
 HIVE_PORT = int(os.getenv('HIVE_PORT', 10000))
 HIVE_DATABASE = os.getenv('HIVE_DATABASE', 'default')
+
+# Hive Fallback Settings
+# Set HIVE_ENABLED=false to run in SQLite-only mode (no Hive connection required)
+HIVE_ENABLED = os.getenv('HIVE_ENABLED', 'true').lower() == 'true'
+
+# When True, the app gracefully falls back to SQLite when Hive is unavailable
+USE_SQLITE_FALLBACK = os.getenv('USE_SQLITE_FALLBACK', 'true').lower() == 'true'
+
+# Data directory for CSV files (used for sample data loading)
+DATA_DIR = BASE_DIR / 'data'

@@ -82,12 +82,12 @@ def generate_observations(stations_df, rows_per_station=100):
 if __name__ == "__main__":
     print(f"Generating {STATIONS_COUNT} stations...")
     stations_df = generate_stations()
-    stations_df.to_csv('mbv_africa/scripts/portfolio_stations.csv', index=False)
+    stations_df.to_csv('mbv_africa/data/portfolio_stations.csv', index=False)
     
     print("Generating observations (this may take a moment)...")
     observations_df = generate_observations(stations_df)
-    observations_df.to_csv('mbv_africa/scripts/portfolio_observations.csv', index=False)
+    observations_df.to_csv('mbv_africa/data/portfolio_observations.csv', index=False)
     
     print("Portfolio data generation complete.")
-    print(f"Stations saved to mbv_africa/scripts/portfolio_stations.csv")
-    print(f"Observations saved to mbv_africa/scripts/portfolio_observations.csv")
+    print(f"Stations saved to mbv_africa/data/portfolio_stations.csv")
+    print(f"Observations saved to mbv_africa/data/portfolio_observations.csv")
