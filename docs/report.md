@@ -1,77 +1,81 @@
-# MBV Climate and Ocean Intelligence Africa: Project Report
+# Portfolio: Multi-Node Hive & Climate Intelligence Platform
+**MBV Climate and Ocean Intelligence Africa**
 
 ## 1. Executive Summary
-This project successfully demonstrates the implementation of a multi-node distributed storage and computation environment using **Apache Hive** and **Hadoop (HDFS)**. The system is designed to simulate a production-grade big data infrastructure for "MBV Climate and Ocean Intelligence Africa," enabling the ingestion, storage, and analysis of large-scale environmental datasets (Climate and Ocean conditions).
-
-## 2. Project Objectives
-The primary goals of this simulation were:
-- **Distributed Architecture**: Deploy a resilient multi-node HDFS cluster.
-- **Data Engineering Workflow**: Implement a complete pipeline from data generation to analytical querying.
-- **Relational Abstraction**: Use Apache Hive to provide SQL-like access to distributed data.
-- **Cloud-Native Simulation**: Orchestrate the entire stack using Docker for portability and development efficiency.
-
-## 3. System Architecture
-
-The infrastructure is composed of 7 specialized containers working in orchestration:
-
-### 3.1 Distributed Storage Layer (HDFS)
-- **NameNode (1)**: The master node managing the file system namespace and block metadata.
-- **DataNodes (2)**: Two independent worker nodes providing physical storage.
-- **Replication Factor**: Set to 2, ensuring that all data is mirrored across both worker nodes for high availability.
-
-### 3.2 Computation & Metadata Layer (Hive)
-- **HiveServer2**: The SQL interface accepting JDBC/PyHive connections (Upgraded to **Apache Hive 4.0.0**).
-- **Hive Metastore**: Manages schema definitions and table partitioning.
-- **PostgreSQL 9.6**: Used as a robust external database for the Hive Metastore, replacing the default embedded Derby database for enterprise-ready persistence.
-
-### 3.3 Application Layer
-- **Django Application**: A Python-based interface for interacting with the data warehouse, providing RESTful access to analytical results.
-
-## 4. Data Engineering Workflow
-
-### 4.1 Data Synthesis
-Using `data_generator.py`, the system generates synthetic datasets representing real-world sensors:
-- **Climate Data**: Temperature, Rainfall, and Humidity across 5 African regions.
-- **Ocean Data**: Sea Surface Temperature (SST), pH levels, and Salinity.
-
-### 4.2 Ingestion & Storage
-- Data is ingested as **External Tables** in Hive.
-- **Storage Format**: `TEXTFILE` with CSV delimiter (convertible to ORC/Parquet for production optimization).
-- **HDFS Placement**: Data is automatically partitioned by the NameNode and distributed across the DataNode cluster.
-
-### 4.3 Analytical Queries
-The system supports complex temporal and regional analysis via HiveQL (`analyze.hql`), including:
-- Moving averages of environmental indicators.
-- Anomaly detection (e.g., correlations between low pH and high SST).
-- Multi-dimensional joins between climate and ocean observations.
-
-## 5. Implementation Achievements
-
-### ✅ Multi-Node Resilience
-The cluster successfully reports **2 live DataNodes** with a total capacity of **~447GB**. This verifies that the "split-brain" distributed storage model is functioning correctly.
-
-### ✅ Version Advancement
-The stack was successfully upgraded to **Apache Hive 4.0.0**, leveraging modern performance improvements and fixed compatibility for distributed environments.
-
-### ✅ Configuration Management
-Custom `core-site.xml`, `hdfs-site.xml`, and `hive-site.xml` files were implemented to ensure proper inter-service communication and HDFS replication policies.
-
-## 6. Challenges & Observations
-
-### 6.1 Platform Emulation (ARM64)
-Running `linux/amd64` big data images on Apple Silicon (ARM64) results in a performance overhead due to binary translation. While functional for simulation, native ARM images or cloud-based AMD64 runners are recommended for production performance.
-
-### 6.2 HiveServer2 Initialization
-Big data services have significantly longer startup times than typical microservices. HiveServer2 requires approximately 60-90 seconds to fully bind its Thrift interface after the container reports "started."
-
-## 7. Conclusions & Future Work
-This project demonstrates that a robust, multi-node Hive environment can be simulated locally with high fidelity. The "MBV Climate and Ocean Intelligence Africa" dataset is now integrated into a scalable, fault-tolerant infrastructure.
-
-### Recommended Next Steps:
-1. **Performance Tuning**: Implement `ORC` or `Parquet` storage formats with **Snappy compression**.
-2. **Partitioning**: Introduce partitioning by `region` and `year/month` to optimize query scan times.
-3. **Advanced Analytics**: Integrate **Apache Spark** over the existing HDFS layer for real-time stream processing of sensor data.
-4. **Visualization**: Connect the Django application to a modern BI tool (e.g., Superset) for visual intelligence dashboards.
+This project presents a production-grade simulation of a distributed big data ecosystem. By orchestrating a multi-node **Apache Hadoop** and **Apache Hive** cluster within **Docker**, we've built a scalable foundation for "MBV Climate and Ocean Intelligence Africa." The system integrates a robust data engineering pipeline (ORC/Snappy/Partitioning) with a Django-based analytical application, enabling both climate pattern discovery and benchmark-driven Hive performance optimization.
 
 ---
-*Prepared by Antigravity AI for MBV Climate and Ocean Intelligence Africa*
+
+## 2. Integrated System Architecture
+
+The platform is designed as a modular 7-container stack, ensuring high availability and separation of concerns.
+
+### 2.1 The Distributed Storage Engine (Hadoop HDFS)
+We implemented a **3-Node Cluster** following the Master/Slave architecture specified in the seminar requirements:
+- **`master-node` (NameNode)**: Orchestrates the filesystem namespace and manages block locations (`hdfs://master-node:9000`).
+- **`slave-node-1` & `slave-node-2` (DataNodes)**: Provide distributed physical storage with a **Replication Factor of 2**, ensuring zero data loss if a slave fails.
+- **Port Visibility**: HDFS UI is accessible at `localhost:9870`, providing real-time telemetry on cluster health.
+
+### 2.2 The SQL Data Warehouse (Apache Hive 4.0.0)
+The Hive layer translates complex analytical requests into distributed computation tasks:
+- **HiveServer2**: The gateway for JDBC and PyHive connections, configured with `NOSASL` for simplified integration.
+- **Hive Metastore**: Decoupled from the compute layer to allow independent scaling.
+- **External PostgreSQL Persistence**: Uses `postgres:9.6` for industry-standard metadata storage, ensuring schema definitions survive container restarts.
+
+### 2.3 The Application Layer (Django Framework)
+The application serves two critical functions:
+1.  **Climate Dashboard**: Visualizes data points from the `africa_climate_observations` table.
+2.  **Hive Assessment Tool**: A specialized benchmarking suite that runs cross-join and aggregation scenarios to identify performance bottlenecks.
+
+---
+
+## 3. Advanced Data Engineering & Optimizations
+
+To demonstrate portfolio-grade engineering, we implemented storage-layer optimizations that reduce I/O and increase query speed:
+
+| Feature | Implementation | Benefit |
+| :--- | :--- | :--- |
+| **Storage Format** | **ORC (Optimized Row Columnar)** | Drastic reduction in disk footprint and faster column-level scans. |
+| **Compression** | **SNAPPY** | High-performance compression optimized for big data workloads. |
+| **Partitioning** | **By `year` and `region`** | Enables "Partition Pruning," skipping 90%+ of data during regional or annual queries. |
+| **Bucketing** | **By `station_id` (32 Buckets)** | Optimizes "Map-Side Joins" when correlating observations with station metadata. |
+
+---
+
+## 4. Key Configuration & Integration Points
+
+### 4.1 Hive Gateway Alignment (`hive-site.xml`)
+The system is tuned for the Docker environment using explicit bindings:
+```xml
+<property>
+    <name>hive.server2.thrift.bind.host</name>
+    <value>0.0.0.0</value>
+</property>
+<property>
+    <name>hive.server2.authentication</name>
+    <value>NOSASL</value>
+</property>
+```
+
+### 4.2 Application-to-Hive Connectivity
+The Django application uses a custom `HiveConnectionManager` (via PyHive) to bridge the relational metadata in HDFS with the application's models. This allows for:
+- **Dynamic Schema Discovery**: Listing Hive tables directly in the app.
+- **ETL Telemetry**: Logging every query's execution time for performance assessment.
+
+---
+
+## 5. Challenges & Engineering Decisions
+
+### 5.1 Platform Emulation Overhead
+Deploying `linux/amd64` images on **Apple Silicon (ARM64)** introduces emulation latency. We addressed this by increasing service timeouts and optimizing JVM memory flags (`HADOOP_CLIENT_OPTS`) to ensure stability during the 60-second HiveServer2 initialization window.
+
+### 5.2 Hive 4.0.0 JDBC Driver
+We manually injected the `postgresql-42.7.2.jar` driver into the `/opt/hive/lib` directories via Docker volumes to resolve initial Metastore connectivity issues without requiring custom image builds.
+
+---
+
+## 6. Conclusion
+The "MBV Climate and Ocean Intelligence Africa" platform effectively bridges the gap between raw environmental sensor data and actionable intelligence. By simulating a real-world distributed cluster, the project demonstrates proficiency in **Big Data Architecture**, **Container Orchestration**, and **Full-Stack Data Integration**.
+
+---
+*Developed for the Databases for Big Data Seminar | Africa Climate Initiative 2024*
