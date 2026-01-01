@@ -369,3 +369,86 @@ class DataImportLogViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = DataImportLogSerializer
     permission_classes = [IsAuthenticated]
     ordering = ['-start_time']
+
+
+class HealthViewSet(viewsets.ViewSet):
+    """
+    ViewSet for health checks and system status
+    """
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    
+    @extend_schema(
+        summary="System health check",
+        description="Get system health status including Hive connection status and database stats"
+    )
+    @action(detail=False, methods=['get'], url_path='')
+    def health(self, request):
+        """Get system health status"""
+        from hive_climate.hive_connector import is_hive_enabled, is_hive_available
+        from hive_climate.services.data_sync import DataSyncService
+        
+        sync_service = DataSyncService()
+        status_info = sync_service.get_status()
+        
+        return Response({
+            'status': 'healthy',
+            'timestamp': timezone.now().isoformat(),
+            'hive': {
+                'enabled': status_info['hive_enabled'],
+                'available': status_info['hive_available'],
+            },
+            'mode': status_info['mode'],
+            'database': {
+                'type': 'sqlite',
+                'regions': status_info['regions_count'],
+                'stations': status_info['stations_count'],
+                'observations': status_info['observations_count'],
+            }
+        })
+    
+    @extend_schema(
+        summary="Test Hive connection",
+        description="Test the connection to Apache Hive"
+    )
+    @action(detail=False, methods=['get'])
+    def hive_test(self, request):
+        """Test Hive connection"""
+        from hive_climate.hive_connector import get_hive_manager, is_hive_enabled, is_hive_available
+        
+        if not is_hive_enabled():
+            return Response({
+                'success': False,
+                'message': 'Hive integration is disabled',
+                'hive_enabled': False,
+            })
+        
+        try:
+            hive = get_hive_manager()
+            is_connected = hive.is_available()
+            
+            if is_connected:
+                # Get additional info
+                databases = hive.get_databases()
+                return Response({
+                    'success': True,
+                    'message': 'Successfully connected to Hive',
+                    'hive_enabled': True,
+                    'host': hive.host,
+                    'port': hive.port,
+                    'databases': databases,
+                })
+            else:
+                return Response({
+                    'success': False,
+                    'message': 'Could not connect to Hive',
+                    'hive_enabled': True,
+                    'host': hive.host,
+                    'port': hive.port,
+                })
+                
+        except Exception as e:
+            return Response({
+                'success': False,
+                'message': f'Hive connection failed: {str(e)}',
+                'hive_enabled': True,
+            })

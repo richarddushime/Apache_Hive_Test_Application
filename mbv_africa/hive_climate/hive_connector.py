@@ -1,16 +1,25 @@
 """
 Hive Connection Manager
 Handles connections to Apache Hive via PyHive
+With SQLite fallback support when Hive is unavailable
 """
 import logging
 from contextlib import contextmanager
 from typing import List, Dict, Any, Optional
-from pyhive import hive
-from thrift.transport import TSocket, TTransport
-from thrift.protocol import TBinaryProtocol
+
 import pandas as pd
 
 logger = logging.getLogger(__name__)
+
+# Lazy imports to handle missing dependencies gracefully
+_pyhive_available = False
+try:
+    from pyhive import hive
+    from thrift.transport import TSocket, TTransport
+    from thrift.protocol import TBinaryProtocol
+    _pyhive_available = True
+except ImportError:
+    logger.warning("PyHive not available - Hive connections disabled")
 
 
 class HiveConnectionManager:
@@ -43,7 +52,13 @@ class HiveConnectionManager:
         
         Returns:
             hive.Connection object
+            
+        Raises:
+            RuntimeError: If PyHive is not available
         """
+        if not _pyhive_available:
+            raise RuntimeError("PyHive library is not installed - cannot connect to Hive")
+        
         try:
             logger.info(f"Connecting to Hive at {self.host}:{self.port}/{self.database}")
             connection = hive.Connection(
@@ -197,6 +212,23 @@ class HiveConnectionManager:
             logger.error(f"Connection test failed: {str(e)}")
             return False
     
+    def is_available(self) -> bool:
+        """
+        Check if Hive connection is available without raising exceptions
+        
+        Returns:
+            True if Hive is reachable and responding, False otherwise
+        """
+        if not _pyhive_available:
+            logger.debug("PyHive library not available")
+            return False
+        
+        try:
+            return self.test_connection()
+        except Exception as e:
+            logger.debug(f"Hive not available: {str(e)}")
+            return False
+    
     def get_databases(self) -> List[str]:
         """
         Get list of all databases
@@ -247,19 +279,72 @@ class HiveConnectionManager:
 _hive_manager = None
 
 
-def get_hive_manager(host='localhost', port=10000, database='default') -> HiveConnectionManager:
+def get_hive_manager(host=None, port=None, database=None) -> HiveConnectionManager:
     """
     Get singleton instance of HiveConnectionManager
+    Uses Django settings if available, falls back to defaults
     
     Args:
-        host: Hive server host
-        port: HiveServer2 port
-        database: Default database
+        host: Hive server host (optional, uses settings.HIVE_HOST)
+        port: HiveServer2 port (optional, uses settings.HIVE_PORT)
+        database: Default database (optional, uses settings.HIVE_DATABASE)
         
     Returns:
         HiveConnectionManager instance
     """
     global _hive_manager
     if _hive_manager is None:
+        # Try to get settings from Django
+        try:
+            from django.conf import settings
+            host = host or getattr(settings, 'HIVE_HOST', 'localhost')
+            port = port or getattr(settings, 'HIVE_PORT', 10000)
+            database = database or getattr(settings, 'HIVE_DATABASE', 'default')
+        except (ImportError, Exception):
+            # Fallback defaults if Django not configured
+            host = host or 'localhost'
+            port = port or 10000
+            database = database or 'default'
+        
         _hive_manager = HiveConnectionManager(host=host, port=port, database=database)
     return _hive_manager
+
+
+def reset_hive_manager():
+    """Reset the singleton instance (useful for testing)"""
+    global _hive_manager
+    _hive_manager = None
+
+
+def is_hive_enabled() -> bool:
+    """
+    Check if Hive integration is enabled in settings
+    
+    Returns:
+        True if HIVE_ENABLED setting is True, False otherwise
+    """
+    try:
+        from django.conf import settings
+        return getattr(settings, 'HIVE_ENABLED', True)
+    except (ImportError, Exception):
+        return True  # Default to enabled if settings unavailable
+
+
+def is_hive_available() -> bool:
+    """
+    Check if Hive is both enabled and actually reachable
+    
+    Returns:
+        True if Hive is enabled and connection works, False otherwise
+    """
+    if not is_hive_enabled():
+        return False
+    
+    if not _pyhive_available:
+        return False
+    
+    try:
+        manager = get_hive_manager()
+        return manager.is_available()
+    except Exception:
+        return False

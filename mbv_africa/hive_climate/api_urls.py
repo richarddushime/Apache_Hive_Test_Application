@@ -8,7 +8,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from hive_climate.api_views import (
     RegionViewSet, WeatherStationViewSet, ClimateObservationViewSet,
-    AnalyticsViewSet, HiveQueryViewSet, DataImportLogViewSet
+    AnalyticsViewSet, HiveQueryViewSet, DataImportLogViewSet, HealthViewSet
 )
 
 # Create router and register viewsets
@@ -19,6 +19,7 @@ router.register(r'observations', ClimateObservationViewSet, basename='climateobs
 router.register(r'analytics', AnalyticsViewSet, basename='analytics')
 router.register(r'hive', HiveQueryViewSet, basename='hive')
 router.register(r'import-logs', DataImportLogViewSet, basename='importlog')
+router.register(r'health', HealthViewSet, basename='health')
 
 app_name = 'api'
 
