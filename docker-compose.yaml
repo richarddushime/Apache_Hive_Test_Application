@@ -1,36 +1,115 @@
-# docker-compose.yaml
-# Docker Compose configuration for Apache Hive and a test application
-
-version: '3.8'
+version: '3'
 
 services:
-  hive:
-    image: apache/hive:4.0.0
-    # container_name: Apache-Hive # I already set this in hive_manager.sh
-    ports:
-      - "10000:10000" # HiveServer2
-      - "10002:10002" # WebHCat
-      - "9083:9083"   # Metastore
-    environment:
-      HIVE_HOME: /opt/hive
-      HADOOP_HOME: /opt/hadoop
-      JAVA_HOME: /usr/local/openjdk-8
+  namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    container_name: namenode
     volumes:
-      - hive-data:/opt/hive/data # Optional: Persist Hive data
+      - ./hadoop_conf/core-site.xml:/etc/hadoop/core-site.xml
+      - ./hadoop_conf/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+      - namenode_data:/hadoop/dfs/name
+    environment:
+      - CLUSTER_NAME=test
+    env_file:
+      - ./hadoop.env
+    ports:
+      - "9870:9870"
+      - "9000:9000"
+
+  datanode1:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: datanode1
+    volumes:
+      - ./hadoop_conf/core-site.xml:/etc/hadoop/core-site.xml
+      - ./hadoop_conf/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+      - datanode1_data:/hadoop/dfs/data
+    env_file:
+      - ./hadoop.env
+    environment:
+      - SERVICE_PRECONDITION=namenode:9870
+    depends_on:
+      - namenode
+    ports:
+      - "9864:9864"
+
+  datanode2:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: datanode2
+    volumes:
+      - ./hadoop_conf/core-site.xml:/etc/hadoop/core-site.xml
+      - ./hadoop_conf/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+      - datanode2_data:/hadoop/dfs/data
+    env_file:
+      - ./hadoop.env
+    environment:
+      - SERVICE_PRECONDITION=namenode:9870
+    depends_on:
+      - namenode
+    ports:
+      - "9865:9864"
+
+  hive-metastore-db:
+    image: postgres:9.6
+    container_name: hive-metastore-db
+    environment:
+      POSTGRES_DB: metastore
+      POSTGRES_USER: hive
+      POSTGRES_PASSWORD: hive
+    volumes:
+      - hive-db-data:/var/lib/postgresql/data
+
+  hive-metastore:
+    image: apache/hive:4.0.0
+    container_name: hive-metastore
+    environment:
+      SERVICE_NAME: metastore
+      DB_DRIVER: postgres
+      SERVICE_OPTS: "-Djavax.jdo.option.ConnectionDriverName=org.postgresql.Driver -Djavax.jdo.option.ConnectionURL=jdbc:postgresql://hive-metastore-db:5432/metastore -Djavax.jdo.option.ConnectionUserName=hive -Djavax.jdo.option.ConnectionPassword=hive"
+    ports:
+      - "9083:9083"
+    volumes:
+      - ./hadoop_conf/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
+      - ./hadoop_conf/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
+      - ./hadoop_conf/hive-site.xml:/opt/hive/conf/hive-site.xml
+    depends_on:
+      - hive-metastore-db
+      - namenode
+    command: /opt/hive/bin/hive --service metastore
+
+  hive-server:
+    image: apache/hive:4.0.0
+    container_name: hive-server
+    environment:
+      SERVICE_NAME: hiveserver2
+      HIVE_SERVER2_THRIFT_PORT: 10000
+      IS_RESUME: "true"
+    ports:
+      - "10000:10000"
+      - "10002:10002"
+    volumes:
+      - ./hadoop_conf/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
+      - ./hadoop_conf/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
+      - ./hadoop_conf/hive-site.xml:/opt/hive/conf/hive-site.xml
+    depends_on:
+      - hive-metastore
+      - namenode
+    command: /opt/hive/bin/hive --service hiveserver2
 
   app:
     build:
       context: .
-      dockerfile: Dockerfile # Dockerfile in the same directory
+      dockerfile: Dockerfile
     depends_on:
-      hive:
-        condition: service_started # Hive must be started first
+      - hive-server
     environment:
-      HIVE_CONNECTION_STRING: jdbc:hive2://Apache-Hive:10000/default
+      HIVE_CONNECTION_STRING: jdbc:hive2://hive-server:10000/default
     ports:
-      - "8080:8080" # Application port
+      - "8080:8080"
     volumes:
-      - ./src:/usr/src/app/src # Bind mount for live development (optional)
+      - ./mbv_africa:/Apache_Hive_Test_Application/mbv_africa
 
 volumes:
-  hive-data:
+  namenode_data:
+  datanode1_data:
+  datanode2_data:
+  hive-db-data:
