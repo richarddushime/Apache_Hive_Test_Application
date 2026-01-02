@@ -15,7 +15,7 @@ Analysis of a novel DBMS.
 
 Research paper [here](./Hive%20-%20A%20warehousing%20Solution%20Over%20a%20Map-reduce%20Framework.pdf)
 
-Test application [dajngo app](../mbv_africa/)
+Test application [django app](../mbv_africa/)
 
 Report (in progress)
 
@@ -37,3 +37,10 @@ Experiment with the system.
 Describe the architecture and the implemented application in a short paper (6-10 pages).
 
 Give a presentation (10-15min) of the work to the class.
+
+
+Extra.
+
+ETL functionalities in django and model implementation for analysis 
+
+extra layer of receiving data and inject in database 
