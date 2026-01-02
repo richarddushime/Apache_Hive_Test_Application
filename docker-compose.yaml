@@ -1,15 +1,18 @@
 services:
   master-node:
-    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    image: apache/hadoop:3
+    platform: linux/amd64
     container_name: master-node
+    hostname: master-node
+    user: root
+    command: ["bash", "-c", "mkdir -p /hadoop/dfs/name && chown -R hadoop:hadoop /hadoop && su hadoop -c 'if [ ! -d /hadoop/dfs/name/current ]; then hdfs namenode -format -force; fi && hdfs namenode'"]
     volumes:
-      - ./hadoop_conf/core-site.xml:/etc/hadoop/core-site.xml
-      - ./hadoop_conf/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+      - ./hadoop_conf/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
+      - ./hadoop_conf/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
       - master_node_data:/hadoop/dfs/name
     environment:
-      - CLUSTER_NAME=mbv-africa-cluster
-    env_file:
-      - ./hadoop.env
+      HADOOP_HOME: /opt/hadoop
+      ENSURE_NAMENODE_DIR: /hadoop/dfs/name
     ports:
       - "9870:9870"
       - "9000:9000"
@@ -17,19 +20,22 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:9870"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 60s
 
   slave-node-1:
-    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    image: apache/hadoop:3
+    platform: linux/amd64
     container_name: slave-node-1
+    hostname: slave-node-1
+    user: root
+    command: ["bash", "-c", "mkdir -p /hadoop/dfs/data && chown -R hadoop:hadoop /hadoop && su hadoop -c 'hdfs datanode'"]
     volumes:
-      - ./hadoop_conf/core-site.xml:/etc/hadoop/core-site.xml
-      - ./hadoop_conf/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+      - ./hadoop_conf/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
+      - ./hadoop_conf/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
       - slave_node_1_data:/hadoop/dfs/data
-    env_file:
-      - ./hadoop.env
     environment:
-      - SERVICE_PRECONDITION=master-node:9870
+      HADOOP_HOME: /opt/hadoop
     depends_on:
       master-node:
         condition: service_healthy
@@ -37,16 +43,18 @@ services:
       - "9864:9864"
 
   slave-node-2:
-    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    image: apache/hadoop:3
+    platform: linux/amd64
     container_name: slave-node-2
+    hostname: slave-node-2
+    user: root
+    command: ["bash", "-c", "mkdir -p /hadoop/dfs/data && chown -R hadoop:hadoop /hadoop && su hadoop -c 'hdfs datanode'"]
     volumes:
-      - ./hadoop_conf/core-site.xml:/etc/hadoop/core-site.xml
-      - ./hadoop_conf/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+      - ./hadoop_conf/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
+      - ./hadoop_conf/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
       - slave_node_2_data:/hadoop/dfs/data
-    env_file:
-      - ./hadoop.env
     environment:
-      - SERVICE_PRECONDITION=master-node:9870
+      HADOOP_HOME: /opt/hadoop
     depends_on:
       master-node:
         condition: service_healthy
@@ -54,7 +62,7 @@ services:
       - "9865:9864"
 
   hive-metastore-db:
-    image: postgres:9.6
+    image: postgres:9.6-alpine
     container_name: hive-metastore-db
     environment:
       POSTGRES_DB: metastore
@@ -69,23 +77,24 @@ services:
       retries: 5
 
   hive-metastore:
-    image: apache/hive:4.0.0
+    image: bde2020/hive:2.3.2-postgresql-metastore
+    platform: linux/amd64
     container_name: hive-metastore
     environment:
-      SERVICE_NAME: metastore
-      DB_DRIVER: postgres
-      SERVICE_OPTS: >-
-        -Djavax.jdo.option.ConnectionDriverName=org.postgresql.Driver
-        -Djavax.jdo.option.ConnectionURL=jdbc:postgresql://hive-metastore-db:5432/metastore
-        -Djavax.jdo.option.ConnectionUserName=hive
-        -Djavax.jdo.option.ConnectionPassword=hive
+      SERVICE_PRECONDITION: "master-node:9870 hive-metastore-db:5432"
+      HIVE_SITE_CONF_javax_jdo_option_ConnectionURL: "jdbc:postgresql://hive-metastore-db:5432/metastore"
+      HIVE_SITE_CONF_javax_jdo_option_ConnectionDriverName: "org.postgresql.Driver"
+      HIVE_SITE_CONF_javax_jdo_option_ConnectionUserName: "hive"
+      HIVE_SITE_CONF_javax_jdo_option_ConnectionPassword: "hive"
+      HIVE_SITE_CONF_datanucleus_autoCreateSchema: "true"
+      HIVE_SITE_CONF_datanucleus_autoCreateTables: "true"
+      HIVE_SITE_CONF_datanucleus_fixedDatastore: "false"
+      HIVE_SITE_CONF_hive_metastore_schema_verification: "false"
+      HIVE_SITE_CONF_hive_metastore_uris: "thrift://hive-metastore:9083"
     ports:
       - "9083:9083"
     volumes:
-      - ./hadoop_conf/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
-      - ./hadoop_conf/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
-      - ./hadoop_conf/hive-site.xml:/opt/hive/conf/hive-site.xml
-      - ./jar/postgresql-42.7.2.jar:/opt/hive/lib/postgresql-jdbc.jar
+      - ./hadoop_conf/core-site.xml:/opt/hive/conf/core-site.xml
       - warehouse:/user/hive/warehouse
     depends_on:
       hive-metastore-db:
@@ -97,24 +106,23 @@ services:
       test: ["CMD", "bash", "-c", "cat < /dev/null > /dev/tcp/localhost/9083"]
       interval: 10s
       timeout: 10s
-      retries: 10
-      start_period: 60s
+      retries: 15
+      start_period: 120s
 
   hive-server:
-    image: apache/hive:4.0.0
+    image: bde2020/hive:2.3.2-postgresql-metastore
+    platform: linux/amd64
     container_name: hive-server
     environment:
-      SERVICE_NAME: hiveserver2
-      HIVE_SERVER2_THRIFT_PORT: 10000
-      IS_RESUME: "true"
+      SERVICE_PRECONDITION: "hive-metastore:9083"
+      HIVE_SITE_CONF_hive_metastore_uris: "thrift://hive-metastore:9083"
+      HIVE_SITE_CONF_hive_server2_authentication: "NOSASL"
+      HIVE_SITE_CONF_hive_server2_enable_doAs: "false"
     ports:
       - "10000:10000"
       - "10002:10002"
     volumes:
-      - ./hadoop_conf/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
-      - ./hadoop_conf/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
-      - ./hadoop_conf/hive-site.xml:/opt/hive/conf/hive-site.xml
-      - ./postgresql-42.7.2.jar:/opt/hive/lib/postgresql-jdbc.jar
+      - ./hadoop_conf/core-site.xml:/opt/hive/conf/core-site.xml
       - ./mbv_africa/data:/data
       - warehouse:/user/hive/warehouse
     depends_on:
@@ -123,10 +131,10 @@ services:
     command: /opt/hive/bin/hive --service hiveserver2
     healthcheck:
       test: ["CMD", "bash", "-c", "cat < /dev/null > /dev/tcp/localhost/10000"]
-      interval: 10s
-      timeout: 10s
+      interval: 30s
+      timeout: 30s
       retries: 15
-      start_period: 90s
+      start_period: 120s
 
   django-app:
     build:
@@ -135,7 +143,7 @@ services:
     container_name: django-app
     depends_on:
       hive-server:
-        condition: service_healthy
+        condition: service_started
     environment:
       HIVE_HOST: hive-server
       HIVE_PORT: 10000

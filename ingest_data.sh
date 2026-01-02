@@ -5,7 +5,7 @@
 set -e
 
 HIVE_CONTAINER="hive-server"
-HIVE_URL="jdbc:hive2://localhost:10000"
+HIVE_URL="jdbc:hive2://localhost:10000/;auth=noSasl"
 DATA_DIR="/data"
 
 echo "=============================================="
@@ -40,77 +40,24 @@ wait_for_hive
 # Create database and tables
 echo ""
 echo "Creating database and tables..."
-run_hive "
-CREATE DATABASE IF NOT EXISTS mbv_africa;
+run_hive "CREATE DATABASE IF NOT EXISTS mbv_africa;"
 
-USE mbv_africa;
+echo "  Creating climate_data table..."
+run_hive "DROP TABLE IF EXISTS mbv_africa.climate_data;"
+run_hive "CREATE TABLE mbv_africa.climate_data (date_col STRING, region STRING, temperature FLOAT, rainfall FLOAT, humidity FLOAT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE TBLPROPERTIES ('skip.header.line.count'='1');"
 
--- Climate data table
-DROP TABLE IF EXISTS climate_data;
-CREATE TABLE climate_data (
-    date_col STRING,
-    region STRING,
-    temperature FLOAT,
-    rainfall FLOAT,
-    humidity FLOAT
-)
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ','
-STORED AS TEXTFILE
-TBLPROPERTIES ('skip.header.line.count'='1');
+echo "  Creating ocean_data table..."
+run_hive "DROP TABLE IF EXISTS mbv_africa.ocean_data;"
+run_hive "CREATE TABLE mbv_africa.ocean_data (date_col STRING, region STRING, sea_surface_temp FLOAT, ph_level FLOAT, salinity FLOAT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE TBLPROPERTIES ('skip.header.line.count'='1');"
 
--- Ocean data table
-DROP TABLE IF EXISTS ocean_data;
-CREATE TABLE ocean_data (
-    date_col STRING,
-    region STRING,
-    sea_surface_temp FLOAT,
-    ph_level FLOAT,
-    salinity FLOAT
-)
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ','
-STORED AS TEXTFILE
-TBLPROPERTIES ('skip.header.line.count'='1');
+echo "  Creating portfolio_stations table..."
+run_hive "DROP TABLE IF EXISTS mbv_africa.portfolio_stations;"
+run_hive "CREATE TABLE mbv_africa.portfolio_stations (station_id STRING, station_name STRING, country STRING, region STRING, latitude DOUBLE, longitude DOUBLE, elevation DOUBLE, is_coastal BOOLEAN) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE TBLPROPERTIES ('skip.header.line.count'='1');"
 
--- Portfolio stations table
-DROP TABLE IF EXISTS portfolio_stations;
-CREATE TABLE portfolio_stations (
-    station_id STRING,
-    station_name STRING,
-    country STRING,
-    region STRING,
-    latitude DOUBLE,
-    longitude DOUBLE,
-    elevation DOUBLE,
-    is_coastal BOOLEAN
-)
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ','
-STORED AS TEXTFILE
-TBLPROPERTIES ('skip.header.line.count'='1');
+echo "  Creating portfolio_observations table..."
+run_hive "DROP TABLE IF EXISTS mbv_africa.portfolio_observations;"
+run_hive "CREATE TABLE mbv_africa.portfolio_observations (station_id STRING, observation_date STRING, year INT, month INT, temp_max FLOAT, temp_min FLOAT, temp_mean FLOAT, precipitation FLOAT, humidity FLOAT, sea_surface_temp FLOAT, ocean_salinity FLOAT, region STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE TBLPROPERTIES ('skip.header.line.count'='1');"
 
--- Portfolio observations table (partitioned by region for better query performance)
-DROP TABLE IF EXISTS portfolio_observations;
-CREATE TABLE portfolio_observations (
-    station_id STRING,
-    observation_date STRING,
-    year INT,
-    month INT,
-    temp_max FLOAT,
-    temp_min FLOAT,
-    temp_mean FLOAT,
-    precipitation FLOAT,
-    humidity FLOAT,
-    sea_surface_temp FLOAT,
-    ocean_salinity FLOAT,
-    region STRING
-)
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ','
-STORED AS TEXTFILE
-TBLPROPERTIES ('skip.header.line.count'='1');
-"
 echo "Tables created!"
 
 # Load data from CSV files
@@ -141,14 +88,13 @@ fi
 echo ""
 echo "Verifying data..."
 run_hive "
-USE mbv_africa;
-SELECT 'climate_data' as table_name, COUNT(*) as row_count FROM climate_data
+SELECT 'climate_data' as table_name, COUNT(*) as row_count FROM mbv_africa.climate_data
 UNION ALL
-SELECT 'ocean_data', COUNT(*) FROM ocean_data
+SELECT 'ocean_data', COUNT(*) FROM mbv_africa.ocean_data
 UNION ALL
-SELECT 'portfolio_stations', COUNT(*) FROM portfolio_stations
+SELECT 'portfolio_stations', COUNT(*) FROM mbv_africa.portfolio_stations
 UNION ALL
-SELECT 'portfolio_observations', COUNT(*) FROM portfolio_observations;
+SELECT 'portfolio_observations', COUNT(*) FROM mbv_africa.portfolio_observations;
 "
 
 echo ""
