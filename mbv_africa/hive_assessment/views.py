@@ -483,6 +483,243 @@ def api_recommendations(request):
     })
 
 
+def api_full_metrics(request):
+    """
+    API endpoint for fetching all available metrics from Hive and HDFS.
+    Returns comprehensive data for the dashboard.
+    """
+    import subprocess
+    
+    metrics = {
+        'timestamp': timezone.now().isoformat(),
+        'hive': {'available': False, 'databases': [], 'tables': {}},
+        'hdfs': {'available': False, 'capacity': {}, 'datanodes': []},
+        'performance': {},
+        'storage': {},
+        'optimizer': {},
+        'infrastructure': {},
+        'climate_data': get_climate_data_stats(),
+        'assessment': get_assessment_stats(),
+    }
+    
+    # Check Hive availability and get metrics
+    if is_hive_enabled() and is_hive_available():
+        try:
+            hive = get_hive_manager()
+            metrics['hive']['available'] = True
+            
+            # Get databases
+            try:
+                dbs = hive.execute_query("SHOW DATABASES")
+                metrics['hive']['databases'] = [db[0] for db in dbs] if dbs else []
+            except Exception as e:
+                logger.warning(f"Could not fetch databases: {e}")
+            
+            # Get tables for mbv_africa database
+            try:
+                tables = hive.execute_query("SHOW TABLES IN mbv_africa")
+                metrics['hive']['tables']['mbv_africa'] = [t[0] for t in tables] if tables else []
+            except Exception as e:
+                logger.warning(f"Could not fetch tables: {e}")
+            
+            # Get table row counts
+            table_counts = {}
+            for table in metrics['hive']['tables'].get('mbv_africa', []):
+                try:
+                    result = hive.execute_query(f"SELECT COUNT(*) FROM mbv_africa.{table}")
+                    table_counts[table] = result[0][0] if result else 0
+                except Exception:
+                    table_counts[table] = 'N/A'
+            metrics['hive']['table_counts'] = table_counts
+            
+            # Get Hive configurations
+            try:
+                configs = {}
+                config_keys = [
+                    'hive.cbo.enable',
+                    'hive.auto.convert.join',
+                    'hive.optimize.ppd',
+                    'hive.map.aggr',
+                    'hive.exec.parallel',
+                    'hive.vectorized.execution.enabled',
+                ]
+                for key in config_keys:
+                    try:
+                        result = hive.execute_query(f"SET {key}")
+                        configs[key] = result[0][0].split('=')[1] if result else 'unknown'
+                    except:
+                        configs[key] = 'unknown'
+                metrics['optimizer']['hive_configs'] = configs
+            except Exception as e:
+                logger.warning(f"Could not fetch Hive configs: {e}")
+            
+            # Test query execution time
+            try:
+                start = time.time()
+                hive.execute_query("SELECT 1")
+                metrics['performance']['hive_ping_ms'] = round((time.time() - start) * 1000, 2)
+            except Exception:
+                metrics['performance']['hive_ping_ms'] = None
+                
+        except Exception as e:
+            logger.error(f"Hive metrics collection failed: {e}")
+            metrics['hive']['error'] = str(e)
+    
+    # Get HDFS metrics via docker exec
+    try:
+        # HDFS report
+        result = subprocess.run(
+            ['docker', 'exec', 'master-node', 'hdfs', 'dfsadmin', '-report'],
+            capture_output=True, text=True, timeout=30
+        )
+        if result.returncode == 0:
+            metrics['hdfs']['available'] = True
+            hdfs_output = result.stdout
+            
+            # Parse HDFS report
+            metrics['hdfs']['raw_report'] = hdfs_output[:2000]  # Truncate for JSON
+            
+            # Extract key metrics
+            import re
+            capacity_match = re.search(r'Configured Capacity:\s*(\d+)', hdfs_output)
+            used_match = re.search(r'DFS Used:\s*(\d+)', hdfs_output)
+            remaining_match = re.search(r'DFS Remaining:\s*(\d+)', hdfs_output)
+            live_nodes_match = re.search(r'Live datanodes \((\d+)\)', hdfs_output)
+            under_replicated = re.search(r'Under replicated blocks:\s*(\d+)', hdfs_output)
+            missing_blocks = re.search(r'Missing blocks:\s*(\d+)', hdfs_output)
+            
+            if capacity_match:
+                cap_bytes = int(capacity_match.group(1))
+                metrics['hdfs']['capacity']['total_gb'] = round(cap_bytes / (1024**3), 2)
+            if used_match:
+                used_bytes = int(used_match.group(1))
+                metrics['hdfs']['capacity']['used_gb'] = round(used_bytes / (1024**3), 2)
+            if remaining_match:
+                rem_bytes = int(remaining_match.group(1))
+                metrics['hdfs']['capacity']['remaining_gb'] = round(rem_bytes / (1024**3), 2)
+            if live_nodes_match:
+                metrics['hdfs']['live_datanodes'] = int(live_nodes_match.group(1))
+            if under_replicated:
+                metrics['hdfs']['under_replicated_blocks'] = int(under_replicated.group(1))
+            if missing_blocks:
+                metrics['hdfs']['missing_blocks'] = int(missing_blocks.group(1))
+            
+            # Calculate usage percentage
+            if metrics['hdfs']['capacity'].get('total_gb') and metrics['hdfs']['capacity'].get('used_gb'):
+                metrics['hdfs']['capacity']['used_pct'] = round(
+                    (metrics['hdfs']['capacity']['used_gb'] / metrics['hdfs']['capacity']['total_gb']) * 100, 2
+                )
+                
+    except subprocess.TimeoutExpired:
+        metrics['hdfs']['error'] = 'Timeout fetching HDFS metrics'
+    except Exception as e:
+        metrics['hdfs']['error'] = str(e)
+    
+    # Get container stats
+    try:
+        result = subprocess.run(
+            ['docker', 'stats', '--no-stream', '--format', 
+             '{"container":"{{.Name}}","cpu":"{{.CPUPerc}}","mem":"{{.MemUsage}}","mem_pct":"{{.MemPerc}}"}'],
+            capture_output=True, text=True, timeout=30
+        )
+        if result.returncode == 0:
+            container_stats = []
+            for line in result.stdout.strip().split('\n'):
+                if line:
+                    try:
+                        import json
+                        stat = json.loads(line)
+                        container_stats.append(stat)
+                    except:
+                        pass
+            metrics['infrastructure']['containers'] = container_stats
+    except Exception as e:
+        metrics['infrastructure']['containers_error'] = str(e)
+    
+    # Get container health status
+    try:
+        containers = ['hive-server', 'hive-metastore', 'master-node', 'django-app']
+        health_status = {}
+        for container in containers:
+            result = subprocess.run(
+                ['docker', 'inspect', '--format', '{{.State.Health.Status}}', container],
+                capture_output=True, text=True, timeout=10
+            )
+            health_status[container] = result.stdout.strip() if result.returncode == 0 else 'unknown'
+        metrics['infrastructure']['health'] = health_status
+    except Exception as e:
+        metrics['infrastructure']['health_error'] = str(e)
+    
+    # Performance benchmarks from database
+    recent_benchmarks = QueryBenchmark.objects.filter(
+        status='success'
+    ).order_by('-executed_at')[:10]
+    
+    metrics['performance']['recent_benchmarks'] = [
+        {
+            'scenario': b.scenario.name,
+            'type': b.scenario.scenario_type,
+            'execution_time': b.execution_time,
+            'rows_processed': b.rows_processed,
+            'executed_at': b.executed_at.isoformat(),
+        }
+        for b in recent_benchmarks
+    ]
+    
+    # Calculate average execution times by scenario type
+    from django.db.models import Avg
+    avg_times = QueryBenchmark.objects.filter(
+        status='success'
+    ).values('scenario__scenario_type').annotate(
+        avg_time=Avg('execution_time')
+    )
+    metrics['performance']['avg_by_type'] = {
+        item['scenario__scenario_type']: round(item['avg_time'], 3)
+        for item in avg_times
+    }
+    
+    return JsonResponse(metrics)
+
+
+def api_hive_query(request):
+    """
+    API endpoint to execute arbitrary Hive queries (for admin/testing)
+    """
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST required'}, status=400)
+    
+    query = request.POST.get('query', '').strip()
+    if not query:
+        return JsonResponse({'error': 'Query is required'}, status=400)
+    
+    # Basic security: prevent dangerous queries
+    dangerous_keywords = ['DROP', 'DELETE', 'TRUNCATE', 'ALTER', 'CREATE', 'INSERT']
+    if any(kw in query.upper() for kw in dangerous_keywords):
+        return JsonResponse({'error': 'Dangerous query not allowed'}, status=403)
+    
+    if not is_hive_enabled() or not is_hive_available():
+        return JsonResponse({'error': 'Hive is not available'}, status=503)
+    
+    try:
+        hive = get_hive_manager()
+        start = time.time()
+        results = hive.execute_query(query)
+        execution_time = time.time() - start
+        
+        return JsonResponse({
+            'success': True,
+            'query': query,
+            'execution_time': round(execution_time, 3),
+            'row_count': len(results) if results else 0,
+            'results': results[:100] if results else [],  # Limit results
+        })
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': str(e),
+        }, status=500)
+
+
 def load_sample_scenarios(request):
     """Load sample assessment scenarios if none exist"""
     if AssessmentScenario.objects.exists():

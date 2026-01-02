@@ -19,4 +19,6 @@ urlpatterns = [
     path('api/quick-check/', views.api_quick_check, name='api_quick_check'),
     path('api/recommendations/', views.api_recommendations, name='api_recommendations'),
     path('api/load-scenarios/', views.load_sample_scenarios, name='load_scenarios'),
+    path('api/metrics/', views.api_full_metrics, name='api_full_metrics'),
+    path('api/query/', views.api_hive_query, name='api_hive_query'),
 ]
