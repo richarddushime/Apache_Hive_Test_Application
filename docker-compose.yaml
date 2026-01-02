@@ -85,7 +85,7 @@ services:
       - ./hadoop_conf/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
       - ./hadoop_conf/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
       - ./hadoop_conf/hive-site.xml:/opt/hive/conf/hive-site.xml
-      - ./postgresql-42.7.2.jar:/opt/hive/lib/postgresql-jdbc.jar
+      - ./jar/postgresql-42.7.2.jar:/opt/hive/lib/postgresql-jdbc.jar
       - warehouse:/user/hive/warehouse
     depends_on:
       hive-metastore-db:
