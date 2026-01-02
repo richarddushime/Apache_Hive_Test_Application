@@ -2,3 +2,4 @@
 *.pyc
 hive-climate-data/
 mbv_africa/.venvn
+mbv_africa/db.sqlite3
