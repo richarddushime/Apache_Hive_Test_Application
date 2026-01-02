@@ -1,6 +1,6 @@
 """
 Django management command to sync data from Hive
-Usage: python manage.py sync_hive_data [options]
+Usage: python manage.py sync_hive_data [--full | --regions | --stations | --observations] [options]
 """
 from django.core.management.base import BaseCommand
 from django.utils import timezone

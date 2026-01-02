@@ -1,6 +1,7 @@
 """
 Django management command to load sample data from CSV files into SQLite
 Use this when Hive is unavailable for development/demo purposes
+python manage.py load_sample_data --data-dir=data/
 """
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
