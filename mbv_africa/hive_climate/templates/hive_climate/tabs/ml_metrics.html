@@ -1,127 +1,263 @@
-<!-- Model Cards -->
+<!-- ML Model Header -->
+<div class="card" style="margin-bottom: 1.5rem; background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(16, 185, 129, 0.1));">
+    <div class="card-content" style="padding: 1.5rem;">
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <svg style="width: 2.5rem; height: 2.5rem; color: #8b5cf6;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+            </svg>
+            <div>
+                <h2 style="margin: 0; font-size: 1.5rem;">Linear Regression Temperature Model</h2>
+                <p class="text-muted" style="margin: 0;">Simple, interpretable regression for climate temperature prediction</p>
+            </div>
+            <span class="badge {% if ml_result.status == 'trained' %}badge-emerald{% else %}badge-secondary{% endif %}" style="margin-left: auto; padding: 0.5rem 1rem;">
+                {{ ml_result.status|title }}
+            </span>
+        </div>
+        {% if ml_result.message %}
+        <p class="text-sm" style="margin: 0; padding: 0.75rem; background: rgba(0,0,0,0.2); border-radius: 0.375rem;">
+            ℹ️ {{ ml_result.message }}
+        </p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Model Metrics Cards -->
 <div class="grid grid-cols-3" style="margin-bottom: 1.5rem;">
-    {% for model in ml_models %}
+    <div class="card">
+        <div class="card-content" style="padding: 1.5rem; text-align: center;">
+            <p class="stat-value" style="font-size: 2rem; color: #10b981;">{{ ml_result.metrics.r2 }}</p>
+            <p class="stat-label">R² Score</p>
+            <p class="text-xs text-muted">Variance explained by model</p>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-content" style="padding: 1.5rem; text-align: center;">
+            <p class="stat-value" style="font-size: 2rem; color: #3b82f6;">{{ ml_result.metrics.rmse }}°C</p>
+            <p class="stat-label">RMSE</p>
+            <p class="text-xs text-muted">Root Mean Square Error</p>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-content" style="padding: 1.5rem; text-align: center;">
+            <p class="stat-value" style="font-size: 2rem; color: #f59e0b;">{{ ml_result.metrics.mae }}°C</p>
+            <p class="stat-label">MAE</p>
+            <p class="text-xs text-muted">Mean Absolute Error</p>
+        </div>
+    </div>
+</div>
+
+<!-- Prediction Chart and Feature Importance -->
+<div class="grid grid-cols-2" style="margin-bottom: 1.5rem;">
+    <!-- Prediction vs Actual Chart -->
     <div class="card">
         <div class="card-header">
-            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
-                <svg style="width: 2rem; height: 2rem; color: var(--emerald-600);" xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    {% if 'Temperature' in model.name %}
-                    <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" />
-                    {% elif 'Precipitation' in model.name %}
-                    <path d="M16 13v8m-8-8v8m-4-6v6m16-6v6" />
-                    <path d="M3 7.2C3 5.4 5.4 3 12 3s9 2.4 9 4.2" />
-                    {% else %}
-                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
-                    <path d="M12 9v4m0 4h.01" />
-                    {% endif %}
-                </svg>
-                <span
-                    class="badge {% if model.status == 'production' %}badge-emerald{% else %}badge-secondary{% endif %}">{{
-                    model.status }}</span>
-            </div>
-            <h3 class="card-title" style="font-size: 1.125rem;">{{ model.name }}</h3>
-            <p class="card-description">{{ model.type }}</p>
+            <h3 class="card-title">Monthly Temperature: Predicted vs Actual</h3>
+            <p class="card-description">Model predictions compared to observed values</p>
         </div>
         <div class="card-content">
-            <p class="text-sm text-muted mb-4"><strong>Target:</strong> {{ model.target }}</p>
-            <div class="space-y-2">
-                {% if 'rmse' in model.metrics %}
-                <div class="metric-row">
-                    <span class="metric-label">RMSE</span>
-                    <span class="metric-value">{{ model.metrics.rmse }}</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">MAE</span>
-                    <span class="metric-value">{{ model.metrics.mae }}</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">R²</span>
-                    <span class="metric-value">{{ model.metrics.r2 }}</span>
-                </div>
-                {% else %}
-                <div class="metric-row">
-                    <span class="metric-label">Accuracy</span>
-                    <span class="metric-value">{{ model.metrics.accuracy|floatformat:1 }}%</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">Precision</span>
-                    <span class="metric-value">{{ model.metrics.precision|floatformat:1 }}%</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">Recall</span>
-                    <span class="metric-value">{{ model.metrics.recall|floatformat:1 }}%</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">ROC AUC</span>
-                    <span class="metric-value">{{ model.metrics.auc }}</span>
-                </div>
-                {% endif %}
+            <div class="chart-container-small">
+                <canvas id="predictionChart"></canvas>
             </div>
         </div>
     </div>
-    {% endfor %}
+
+    <!-- Feature Importance -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Feature Coefficients</h3>
+            <p class="card-description">Linear regression weights for each predictor</p>
+        </div>
+        <div class="card-content space-y-4">
+            {% for f in feature_importance %}
+            <div class="progress-container">
+                <div class="progress-label">
+                    <code class="font-mono">{{ f.feature }}</code>
+                    <span class="text-muted">{{ f.importance }}% (β={{ f.coefficient }})</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ f.importance }}%; background: {% if f.coefficient >= 0 %}#10b981{% else %}#ef4444{% endif %};"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 
-<!-- Feature Importance -->
-<div class="card" style="margin-bottom: 1.5rem;">
+<!-- Model Equation and Scatter Plot -->
+<div class="grid grid-cols-2" style="margin-bottom: 1.5rem;">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Model Equation</h3>
+            <p class="card-description">Ordinary Least Squares (OLS) linear regression</p>
+        </div>
+        <div class="card-content">
+            {% if ml_result.model_equation %}
+            <pre style="padding: 1rem; font-size: 0.875rem; overflow-x: auto;">{{ ml_result.model_equation }}</pre>
+            {% else %}
+            <pre style="padding: 1rem; font-size: 0.875rem;">temp_mean = β₀ + β₁×month_sin + β₂×month_cos + β₃×humidity + β₄×precipitation</pre>
+            {% endif %}
+            <div style="margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 0.375rem;">
+                <p class="text-sm font-medium" style="margin-bottom: 0.5rem;">Why Linear Regression?</p>
+                <ul class="text-sm text-muted" style="margin: 0; padding-left: 1.25rem;">
+                    <li>Interpretable coefficients show feature impact direction</li>
+                    <li>Fast training on large Hive datasets via SQL</li>
+                    <li>Baseline model for comparing complex approaches</li>
+                    <li>No external dependencies (pure NumPy)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Actual vs Predicted Scatter</h3>
+            <p class="card-description">Perfect predictions would lie on the diagonal line</p>
+        </div>
+        <div class="card-content">
+            <div class="chart-container-small">
+                <canvas id="scatterChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- How It Works -->
+<div class="card">
     <div class="card-header">
-        <h3 class="card-title">Feature Importance (Temperature Forecast Model)</h3>
-        <p class="card-description">Top predictive features for temperature anomaly forecasting</p>
+        <h3 class="card-title">How the Model Works</h3>
+        <p class="card-description">From Hive data to predictions</p>
     </div>
-    <div class="card-content space-y-4">
-        {% for f in feature_importance %}
-        <div class="progress-container">
-            <div class="progress-label">
-                <code class="font-mono">{{ f.feature }}</code>
-                <span class="text-muted">{{ f.importance|floatformat:0 }}%</span>
+    <div class="card-content">
+        <div class="grid grid-cols-4" style="gap: 1rem;">
+            <div style="text-align: center; padding: 1rem;">
+                <div style="width: 3rem; height: 3rem; margin: 0 auto 0.5rem; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">1</div>
+                <p class="font-medium text-sm">Extract Features</p>
+                <p class="text-xs text-muted">Query Hive for month, humidity, precipitation</p>
             </div>
-            <div class="progress-bar">
-                <div class="progress-fill" style="width: {{ f.importance|floatformat:0 }}%;"></div>
+            <div style="text-align: center; padding: 1rem;">
+                <div style="width: 3rem; height: 3rem; margin: 0 auto 0.5rem; background: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">2</div>
+                <p class="font-medium text-sm">Transform Month</p>
+                <p class="text-xs text-muted">Convert to cyclical: sin(2π×m/12), cos(2π×m/12)</p>
             </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
-<!-- Use Cases -->
-<div class="grid grid-cols-2">
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">ML Use Cases</h3>
-        </div>
-        <div class="card-content space-y-3">
-            <div class="use-case-card">
-                <p class="use-case-title">Seasonal Temperature Forecasting</p>
-                <p class="use-case-description">Predict next-season temperature anomalies for agricultural planning</p>
+            <div style="text-align: center; padding: 1rem;">
+                <div style="width: 3rem; height: 3rem; margin: 0 auto 0.5rem; background: #8b5cf6; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">3</div>
+                <p class="font-medium text-sm">Fit OLS Model</p>
+                <p class="text-xs text-muted">Solve β = (X'X)⁻¹X'y normal equation</p>
             </div>
-            <div class="use-case-card">
-                <p class="use-case-title">Drought Early Warning</p>
-                <p class="use-case-description">Classify regions at risk of drought using precipitation and SST patterns
-                </p>
+            <div style="text-align: center; padding: 1rem;">
+                <div style="width: 3rem; height: 3rem; margin: 0 auto 0.5rem; background: #f59e0b; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">4</div>
+                <p class="font-medium text-sm">Predict & Evaluate</p>
+                <p class="text-xs text-muted">Calculate R², RMSE, MAE on test set</p>
             </div>
-            <div class="use-case-card">
-                <p class="use-case-title">Coastal Flooding Risk</p>
-                <p class="use-case-description">Predict sea surface temperature anomalies affecting coastal communities
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Portfolio Value</h3>
-        </div>
-        <div class="card-content space-y-3 text-sm">
-            <p><strong>Big Data Engineering:</strong> Demonstrates Hive skills including schema design, ORC
-                partitioning, and query optimization on a massive climate dataset.</p>
-            <p><strong>ML Integration:</strong> End-to-end pipeline from raw data to production ML models for climate
-                forecasting.</p>
-            <p><strong>Real-World Impact:</strong> Climate trend forecasting is critical for environmental planning,
-                agriculture, and disaster preparedness across Africa.</p>
-            <p><strong>Reproducible Science:</strong> Robust engineering principles applied to scientific computing for
-                reliable, verifiable results.</p>
         </div>
     </div>
 </div>
+
+<script>
+function initializeMLCharts() {
+    if (window.mlChartsInitialized) return;
+    window.mlChartsInitialized = true;
+
+    // Monthly Predictions Data
+    const monthlyPredictions = {{ monthly_predictions|safe }};
+    
+    // Prediction vs Actual Line Chart
+    const predCtx = document.getElementById('predictionChart');
+    if (predCtx && monthlyPredictions.length > 0) {
+        new Chart(predCtx, {
+            type: 'line',
+            data: {
+                labels: monthlyPredictions.map(d => d.month),
+                datasets: [
+                    {
+                        label: 'Actual Temperature',
+                        data: monthlyPredictions.map(d => d.actual),
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    },
+                    {
+                        label: 'Predicted Temperature',
+                        data: monthlyPredictions.map(d => d.predicted),
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderDash: [5, 5],
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    y: {
+                        title: { display: true, text: 'Temperature (°C)' }
+                    }
+                }
+            }
+        });
+    }
+
+    // Scatter Plot - Actual vs Predicted
+    const scatterCtx = document.getElementById('scatterChart');
+    const actuals = {{ ml_result.actuals|safe }};
+    const predictions = {{ ml_result.predictions|safe }};
+    
+    if (scatterCtx && actuals.length > 0) {
+        const scatterData = actuals.map((a, i) => ({ x: a, y: predictions[i] }));
+        
+        // Calculate min/max for diagonal line
+        const allVals = [...actuals, ...predictions];
+        const minVal = Math.min(...allVals) - 2;
+        const maxVal = Math.max(...allVals) + 2;
+        
+        new Chart(scatterCtx, {
+            type: 'scatter',
+            data: {
+                datasets: [
+                    {
+                        label: 'Predictions',
+                        data: scatterData,
+                        backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                        pointRadius: 4
+                    },
+                    {
+                        label: 'Perfect Prediction',
+                        data: [{ x: minVal, y: minVal }, { x: maxVal, y: maxVal }],
+                        type: 'line',
+                        borderColor: '#10b981',
+                        borderDash: [5, 5],
+                        pointRadius: 0,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    x: { title: { display: true, text: 'Actual Temperature (°C)' } },
+                    y: { title: { display: true, text: 'Predicted Temperature (°C)' } }
+                }
+            }
+        });
+    }
+}
+
+// Initialize when tab is shown
+document.addEventListener('DOMContentLoaded', function() {
+    const mlTab = document.querySelector('[data-tab="ml"]');
+    if (mlTab) {
+        mlTab.addEventListener('click', () => setTimeout(initializeMLCharts, 100));
+    }
+});
+</script>

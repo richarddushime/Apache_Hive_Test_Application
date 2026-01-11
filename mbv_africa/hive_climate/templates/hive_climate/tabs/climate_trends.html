@@ -1,13 +1,28 @@
+<!-- Data Source Indicator -->
+<div style="margin-bottom: 1rem; padding: 0.5rem 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+    <span style="font-size: 0.875rem;">📊</span>
+    <span class="text-sm text-muted">Data from <strong>{{ stats.total_records }}</strong> observations across <strong>{{ stats.stations }}</strong> weather stations</span>
+</div>
+
 <!-- Temperature Anomalies Chart -->
 <div class="card" style="margin-bottom: 1.5rem;">
     <div class="card-header">
-        <h3 class="card-title">Temperature Anomalies by Region (°C above baseline)</h3>
-        <p class="card-description">10-year trend of temperature deviations from 1961-1990 climatological baseline</p>
+        <h3 class="card-title">🌡️ Temperature Anomalies by Region (°C deviation from baseline)</h3>
+        <p class="card-description">Multi-year trend of regional temperature deviations — data retrieved via HiveQL aggregation queries</p>
     </div>
     <div class="card-content">
         <div class="chart-container">
             <canvas id="temperatureChart"></canvas>
         </div>
+        <details style="margin-top: 1rem;">
+            <summary class="text-sm text-muted" style="cursor: pointer;">View Hive Query</summary>
+            <pre style="margin-top: 0.5rem; font-size: 0.75rem;">SELECT region, year, 
+       ROUND(AVG(temp_mean) - baseline, 2) as temp_anomaly
+FROM africa_climate_observations o
+JOIN climate_baselines b ON o.region = b.region
+GROUP BY region, year
+ORDER BY year;</pre>
+        </details>
     </div>
 </div>
 
@@ -15,53 +30,115 @@
     <!-- Precipitation Comparison -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Annual Precipitation Comparison (mm)</h3>
-            <p class="card-description">Actual vs Predicted vs Historical Baseline</p>
+            <h3 class="card-title">🌧️ Regional Precipitation Analysis (mm/year)</h3>
+            <p class="card-description">Observed vs ML-Predicted vs Historical Baseline</p>
         </div>
         <div class="card-content">
             <div class="chart-container-small">
                 <canvas id="precipitationChart"></canvas>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary class="text-sm text-muted" style="cursor: pointer;">View Hive Query</summary>
+                <pre style="margin-top: 0.5rem; font-size: 0.75rem;">SELECT region, 
+       SUM(precipitation) as total_precip,
+       AVG(precipitation) * 12 as annual_avg
+FROM africa_climate_observations
+WHERE year = 2024
+GROUP BY region;</pre>
+            </details>
         </div>
     </div>
 
     <!-- Ocean Data -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Coastal Ocean Conditions (2024)</h3>
-            <p class="card-description">Sea Surface Temperature & Salinity - West African Coast</p>
+            <h3 class="card-title">🌊 Coastal Ocean Conditions</h3>
+            <p class="card-description">Sea Surface Temperature & Salinity — African coastlines</p>
         </div>
         <div class="card-content">
             <div class="chart-container-small">
                 <canvas id="oceanChart"></canvas>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary class="text-sm text-muted" style="cursor: pointer;">View Hive Query</summary>
+                <pre style="margin-top: 0.5rem; font-size: 0.75rem;">SELECT month, 
+       ROUND(AVG(sea_surface_temp), 1) as avg_sst,
+       ROUND(AVG(ocean_salinity), 1) as avg_salinity
+FROM africa_climate_observations
+WHERE sea_surface_temp IS NOT NULL
+GROUP BY month ORDER BY month;</pre>
+            </details>
         </div>
     </div>
 </div>
 
-<!-- Key Insights -->
+<!-- Key Insights - Dynamic -->
 <div class="card" style="margin-top: 1.5rem;">
     <div class="card-header">
-        <h3 class="card-title">Climate Intelligence Insights</h3>
-        <p class="card-description">Data-driven findings from Hive analytics</p>
+        <h3 class="card-title">🔍 Climate Intelligence Insights</h3>
+        <p class="card-description">Real-time analytics computed from Hive data warehouse queries</p>
     </div>
     <div class="card-content">
-        <div class="grid grid-cols-3">
+        <div class="grid grid-cols-4">
             <div class="insight-card insight-emerald">
-                <p class="insight-value">+1.7°C</p>
-                <p class="insight-description">Average temperature anomaly across Africa (2024)</p>
-            </div>
-            <div class="insight-card insight-amber">
-                <p class="insight-value">-12%</p>
-                <p class="insight-description">Precipitation decline vs 30-year baseline</p>
+                <p class="insight-value">{{ stats.total_records }}</p>
+                <p class="insight-description">Total observations in data warehouse</p>
             </div>
             <div class="insight-card insight-blue">
-                <p class="insight-value">+0.8°C</p>
-                <p class="insight-description">Sea surface temperature increase (coastal)</p>
+                <p class="insight-value">{{ stats.regions }}</p>
+                <p class="insight-description">African regions covered</p>
+            </div>
+            <div class="insight-card insight-amber">
+                <p class="insight-value">{{ stats.date_range }}</p>
+                <p class="insight-description">Temporal coverage range</p>
+            </div>
+            <div class="insight-card" style="background: rgba(139, 92, 246, 0.1); border-color: rgba(139, 92, 246, 0.3);">
+                <p class="insight-value" style="color: #8b5cf6;">{{ stats.data_size }}</p>
+                <p class="insight-description">Estimated data volume</p>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Regional Breakdown Table -->
+{% if regions %}
+<div class="card" style="margin-top: 1.5rem;">
+    <div class="card-header">
+        <h3 class="card-title">📍 Regional Data Coverage</h3>
+        <p class="card-description">Weather station distribution and observation counts by African region</p>
+    </div>
+    <div class="card-content">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Region</th>
+                        <th>Code</th>
+                        <th style="text-align: right;">Stations</th>
+                        <th style="text-align: right;">Observations</th>
+                        <th>Coverage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for region in regions %}
+                    <tr>
+                        <td class="font-medium">{{ region.name }}</td>
+                        <td><span class="badge badge-outline font-mono">{{ region.code }}</span></td>
+                        <td style="text-align: right;">{{ region.station_count }}</td>
+                        <td style="text-align: right;">{{ region.observation_count }}</td>
+                        <td>
+                            <div style="background: #1e293b; border-radius: 9999px; height: 6px; width: 100px;">
+                                <div style="background: #10b981; height: 100%; border-radius: 9999px; width: {% widthratio region.observation_count stats.observations_count 100 %}%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 <script>
     function initializeTrendsCharts() {

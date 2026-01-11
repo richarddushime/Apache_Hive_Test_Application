@@ -1,25 +1,65 @@
-<!-- Pipeline Visualization -->
+<!-- ETL Pipeline Header -->
+<div class="card" style="margin-bottom: 1.5rem; background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1));">
+    <div class="card-content" style="padding: 1.5rem;">
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <div style="display: flex; gap: 0.5rem;">
+                <span class="badge" style="background: #10b981; color: white; padding: 0.5rem 1rem; font-size: 1rem;">E</span>
+                <span class="badge" style="background: #3b82f6; color: white; padding: 0.5rem 1rem; font-size: 1rem;">T</span>
+                <span class="badge" style="background: #8b5cf6; color: white; padding: 0.5rem 1rem; font-size: 1rem;">L</span>
+            </div>
+            <div>
+                <h2 style="margin: 0; font-size: 1.5rem;">Extract → Transform → Load Pipeline</h2>
+                <p class="text-muted" style="margin: 0;">End-to-end data processing for African climate observations using Apache Hive</p>
+            </div>
+        </div>
+        <div class="grid grid-cols-4" style="gap: 1rem;">
+            <div style="text-align: center;">
+                <p class="stat-value" style="font-size: 1.5rem; margin: 0;">{{ stats.total_records }}</p>
+                <p class="text-muted" style="margin: 0; font-size: 0.875rem;">Records Processed</p>
+            </div>
+            <div style="text-align: center;">
+                <p class="stat-value" style="font-size: 1.5rem; margin: 0;">{{ stats.stations }}</p>
+                <p class="text-muted" style="margin: 0; font-size: 0.875rem;">Weather Stations</p>
+            </div>
+            <div style="text-align: center;">
+                <p class="stat-value" style="font-size: 1.5rem; margin: 0;">{{ stats.regions }}</p>
+                <p class="text-muted" style="margin: 0; font-size: 0.875rem;">Regions</p>
+            </div>
+            <div style="text-align: center;">
+                <p class="stat-value" style="font-size: 1.5rem; margin: 0;">{{ stats.data_size }}</p>
+                <p class="text-muted" style="margin: 0; font-size: 0.875rem;">Est. Data Size</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pipeline Stages Visualization -->
 <div class="card" style="margin-bottom: 1.5rem;">
     <div class="card-header">
         <h3 class="card-title">ETL Pipeline Stages</h3>
-        <p class="card-description">End-to-end data processing for African climate observations</p>
+        <p class="card-description">Click on each stage to view the Hive query</p>
     </div>
     <div class="card-content">
         <div class="pipeline-container">
             {% for step in pipeline_steps %}
-            <div class="card pipeline-step {% if step.status == 'running' %}running{% endif %}">
+            <div class="card pipeline-step {% if step.status == 'running' %}running{% endif %}" 
+                 style="cursor: pointer; border-left: 4px solid {% if step.phase == 'E' %}#10b981{% elif step.phase == 'T' %}#3b82f6{% else %}#8b5cf6{% endif %};"
+                 onclick="toggleQuery({{ step.id }})">
                 <div class="card-content" style="padding: 1rem;">
                     <div class="step-header">
-                        <span class="step-name">{{ step.name }}</span>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="badge" style="background: {% if step.phase == 'E' %}#10b981{% elif step.phase == 'T' %}#3b82f6{% else %}#8b5cf6{% endif %}; color: white; min-width: 24px; text-align: center;">{{ step.phase }}</span>
+                            <span class="step-name">{{ step.name }}</span>
+                        </div>
                         {% if step.status == 'complete' %}
-                        <svg style="width: 1rem; height: 1rem; margin-left: auto;" class="status-complete"
-                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                            <polyline points="22 4 12 14.01 9 11.01" />
+                        <svg style="width: 1.25rem; height: 1.25rem; color: #10b981;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
                         </svg>
                         {% elif step.status == 'running' %}
-                        <span class="badge badge-emerald" style="margin-left: auto;">Running</span>
+                        <span class="badge badge-emerald">Running</span>
+                        {% else %}
+                        <span class="badge badge-secondary">Pending</span>
                         {% endif %}
                     </div>
                     <p class="step-description">{{ step.description }}</p>
@@ -28,6 +68,11 @@
                         <li>{{ detail }}</li>
                         {% endfor %}
                     </ul>
+                    <!-- Collapsible Query Section -->
+                    <div id="query-{{ step.id }}" class="query-section" style="display: none; margin-top: 1rem;">
+                        <p class="text-sm font-medium" style="margin-bottom: 0.5rem;">Hive Query:</p>
+                        <pre style="padding: 0.75rem; font-size: 0.75rem; background: var(--slate-900); border-radius: 0.375rem;">{{ step.hive_query }}</pre>
+                    </div>
                 </div>
             </div>
             {% endfor %}
@@ -35,19 +80,24 @@
     </div>
 </div>
 
-<!-- Optimizations -->
+<!-- Optimizations and Transform Query -->
 <div class="grid grid-cols-2">
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Hive Optimizations</h3>
-            <p class="card-description">Performance tuning for large-scale climate data</p>
+            <h3 class="card-title">Hive Query Optimizations</h3>
+            <p class="card-description">Performance tuning for large-scale ETL</p>
         </div>
         <div class="card-content space-y-4">
             {% for opt in optimizations %}
             <div class="space-y-1">
-                <p class="font-medium text-sm">{{ opt.name }}</p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <p class="font-medium text-sm">{{ opt.name }}</p>
+                    <svg style="width: 1rem; height: 1rem; color: #10b981;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                </div>
                 <p class="text-xs text-muted">{{ opt.description }}</p>
-                <pre style="padding: 0.5rem; font-size: 0.75rem;">{{ opt.setting }}</pre>
+                <pre style="padding: 0.5rem; font-size: 0.7rem;">{{ opt.setting }}</pre>
             </div>
             {% endfor %}
         </div>
@@ -55,33 +105,58 @@
 
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Transform Operations</h3>
-            <p class="card-description">Monthly aggregation Hive SQL</p>
+            <h3 class="card-title">Monthly Aggregation Transform</h3>
+            <p class="card-description">Example HiveQL for climate summary computation</p>
         </div>
         <div class="card-content">
-            <pre>-- Compute monthly climate summaries
-INSERT OVERWRITE TABLE africa_climate_monthly
+            <pre style="font-size: 0.75rem;">-- Monthly Climate Summary ETL
+-- Phase: Transform (Aggregation)
+
+INSERT OVERWRITE TABLE climate_monthly_summary
 PARTITION (year, region)
 SELECT 
   station_id,
   country,
   month,
-  AVG(temp_mean) as monthly_temp,
-  SUM(precipitation) as monthly_precip,
-  AVG(humidity) as monthly_humidity,
-  AVG(sea_surface_temp) as monthly_sst,
-  -- Temperature anomaly from 30-year baseline
-  AVG(temp_mean) - baseline.temp_norm as temp_anomaly,
+  
+  -- Temperature metrics
+  AVG(temp_mean) as avg_temperature,
+  MAX(temp_max) as max_temperature,
+  MIN(temp_min) as min_temperature,
+  
+  -- Precipitation
+  SUM(precipitation) as total_precipitation,
+  COUNT(CASE WHEN precipitation > 0 
+        THEN 1 END) as rainy_days,
+  
+  -- Ocean metrics (coastal stations)
+  AVG(sea_surface_temp) as avg_sst,
+  AVG(ocean_salinity) as avg_salinity,
+  
+  -- Metadata
+  COUNT(*) as observation_count,
   year,
   region
-FROM africa_climate_observations obs
-LEFT JOIN climate_baselines baseline
-  ON obs.station_id = baseline.station_id 
-  AND obs.month = baseline.month
-WHERE obs.year >= 2020
+FROM africa_climate_observations
+WHERE year >= 2020
+  AND temp_mean IS NOT NULL
 GROUP BY 
-  station_id, country, month, 
-  baseline.temp_norm, year, region;</pre>
+  station_id, country, month, year, region
+DISTRIBUTE BY region
+SORT BY station_id, month;</pre>
         </div>
     </div>
 </div>
+
+<script>
+function toggleQuery(stepId) {
+    const queryDiv = document.getElementById('query-' + stepId);
+    if (queryDiv.style.display === 'none') {
+        // Hide all other queries first
+        document.querySelectorAll('.query-section').forEach(q => q.style.display = 'none');
+        queryDiv.style.display = 'block';
+    } else {
+        queryDiv.style.display = 'none';
+    }
+}
+</script>

@@ -1,38 +1,58 @@
+<!-- Data Source Banner -->
+<div style="margin-bottom: 1rem; padding: 0.75rem 1rem; background: linear-gradient(90deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1)); border-radius: 0.5rem; display: flex; align-items: center; justify-content: space-between;">
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.25rem;">🗄️</span>
+        <span class="font-medium">Apache Hive Data Warehouse Schema</span>
+    </div>
+    <div style="display: flex; gap: 1rem;">
+        <span class="text-sm text-muted">Format: <strong>{{ table_schema.format }}</strong></span>
+        <span class="text-sm text-muted">Records: <strong>{{ stats.total_records }}</strong></span>
+        <span class="text-sm text-muted">Size: <strong>{{ stats.data_size }}</strong></span>
+    </div>
+</div>
+
 <div class="grid grid-cols-2">
     <!-- Table Info Card -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Table Configuration</h3>
+            <h3 class="card-title">📋 Table Configuration</h3>
             <p class="card-description">Optimized Hive table for African climate and ocean data</p>
         </div>
         <div class="card-content space-y-4">
             <div class="grid grid-cols-2">
                 <div>
                     <p class="text-sm text-muted">Table Name</p>
-                    <p class="font-mono text-sm font-medium">{{ table_schema.name }}</p>
+                    <p class="font-mono text-sm font-medium" style="color: #10b981;">{{ table_schema.name }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-muted">Storage Format</p>
                     <span class="badge badge-secondary">{{ table_schema.format }}</span>
+                    <span class="text-xs text-muted" style="display: block; margin-top: 0.25rem;">Columnar, vectorized reads</span>
                 </div>
                 <div>
                     <p class="text-sm text-muted">Compression</p>
                     <span class="badge badge-outline">{{ table_schema.compression }}</span>
+                    <span class="text-xs text-muted" style="display: block; margin-top: 0.25rem;">~75% size reduction</span>
                 </div>
                 <div>
                     <p class="text-sm text-muted">Bucketed By</p>
                     <span class="badge badge-emerald">{{ table_schema.clustered_by }}</span>
+                    <span class="text-xs text-muted" style="display: block; margin-top: 0.25rem;">32 buckets for joins</span>
                 </div>
             </div>
             <div>
-                <p class="text-sm text-muted mb-2">Partition Keys</p>
-                <div style="display: flex; gap: 0.5rem;">
+                <p class="text-sm text-muted mb-2">Partition Keys (for query optimization)</p>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
                     {% for key in table_schema.partitioned_by %}
-                    <span class="badge"
-                        style="border: 1px solid var(--emerald-600); color: var(--emerald-600); background: transparent;">{{
-                        key }}</span>
+                    <span class="badge" style="border: 1px solid var(--emerald-600); color: var(--emerald-600); background: transparent;">
+                        <span style="margin-right: 0.25rem;">🔑</span>{{ key }}
+                    </span>
                     {% endfor %}
                 </div>
+            </div>
+            <div style="padding: 0.75rem; background: rgba(59, 130, 246, 0.1); border-radius: 0.5rem; margin-top: 1rem;">
+                <p class="text-xs font-medium" style="color: #3b82f6; margin-bottom: 0.25rem;">Why This Design?</p>
+                <p class="text-xs text-muted">Partitioning by <code>year</code> and <code>region</code> enables efficient pruning for time-series and regional queries. Bucketing by <code>station_id</code> optimizes joins with station metadata.</p>
             </div>
         </div>
     </div>
@@ -40,32 +60,39 @@
     <!-- SQL Preview Card -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Hive DDL Statement</h3>
-            <p class="card-description">CREATE TABLE statement with optimizations</p>
+            <h3 class="card-title">💻 Hive DDL Statement</h3>
+            <p class="card-description">CREATE TABLE statement with storage optimizations</p>
         </div>
         <div class="card-content">
-            <pre>CREATE TABLE africa_climate_observations (
-  station_id STRING,
-  station_name STRING,
-  country STRING,
-  latitude DOUBLE,
-  longitude DOUBLE,
+            <pre>CREATE TABLE {{ table_schema.name }} (
+  -- Station Identification
+  station_id STRING COMMENT 'Unique station ID',
+  station_name STRING COMMENT 'Station name',
+  country STRING COMMENT 'ISO country code',
+  latitude DOUBLE, longitude DOUBLE,
+  
+  -- Temporal Fields  
   observation_date DATE,
-  month INT,
-  temp_max DOUBLE,
-  temp_min DOUBLE,
-  temp_mean DOUBLE,
-  precipitation DOUBLE,
-  humidity DOUBLE,
-  sea_surface_temp DOUBLE,
-  ocean_salinity DOUBLE
+  month INT COMMENT '1-12',
+  
+  -- Climate Measurements
+  temp_max DOUBLE COMMENT 'Max temp (°C)',
+  temp_min DOUBLE COMMENT 'Min temp (°C)',
+  temp_mean DOUBLE COMMENT 'Mean temp (°C)',
+  precipitation DOUBLE COMMENT 'Rainfall (mm)',
+  humidity DOUBLE COMMENT 'Relative humidity (%)',
+  
+  -- Ocean Data (coastal stations)
+  sea_surface_temp DOUBLE COMMENT 'SST (°C)',
+  ocean_salinity DOUBLE COMMENT 'Salinity (PSU)'
 )
 PARTITIONED BY (year INT, region STRING)
 CLUSTERED BY (station_id) INTO 32 BUCKETS
 STORED AS ORC
 TBLPROPERTIES (
   'orc.compress'='SNAPPY',
-  'orc.create.index'='true'
+  'orc.create.index'='true',
+  'transactional'='false'
 );</pre>
         </div>
     </div>
@@ -73,31 +100,76 @@ TBLPROPERTIES (
 
 <!-- Column Schema Card -->
 <div class="card" style="margin-top: 1.5rem;">
-    <div class="card-header">
-        <h3 class="card-title">Column Schema</h3>
-        <p class="card-description">{{ table_schema.columns|length }} columns capturing climate and ocean measurements
-            across Africa</p>
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h3 class="card-title">📊 Column Schema</h3>
+            <p class="card-description">{{ table_schema.columns|length }} columns capturing climate and ocean measurements across {{ stats.countries }} African countries</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+            <span class="badge badge-secondary">{{ stats.stations }} stations</span>
+            <span class="badge badge-outline">{{ stats.regions }} regions</span>
+        </div>
     </div>
     <div class="card-content">
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Column</th>
-                        <th>Type</th>
+                        <th>Hive Type</th>
                         <th>Description</th>
+                        <th>Category</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for col in table_schema.columns %}
                     <tr>
-                        <td><code class="font-mono">{{ col.name }}</code></td>
+                        <td class="text-muted text-sm">{{ forloop.counter }}</td>
+                        <td><code class="font-mono" style="color: #10b981;">{{ col.name }}</code></td>
                         <td><span class="badge badge-secondary font-mono">{{ col.type }}</span></td>
                         <td class="text-muted">{{ col.description }}</td>
+                        <td>
+                            {% if 'station' in col.name or 'country' in col.name or 'region' in col.name %}
+                            <span class="badge" style="background: rgba(139, 92, 246, 0.2); color: #8b5cf6;">Location</span>
+                            {% elif 'temp' in col.name %}
+                            <span class="badge" style="background: rgba(239, 68, 68, 0.2); color: #ef4444;">Temperature</span>
+                            {% elif 'precip' in col.name or 'humid' in col.name %}
+                            <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3b82f6;">Weather</span>
+                            {% elif 'sea' in col.name or 'ocean' in col.name %}
+                            <span class="badge" style="background: rgba(6, 182, 212, 0.2); color: #06b6d4;">Ocean</span>
+                            {% elif 'date' in col.name or 'year' in col.name or 'month' in col.name %}
+                            <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;">Temporal</span>
+                            {% else %}
+                            <span class="badge badge-outline">General</span>
+                            {% endif %}
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<!-- Optimization Settings -->
+<div class="card" style="margin-top: 1.5rem;">
+    <div class="card-header">
+        <h3 class="card-title">⚡ Hive Query Optimizations</h3>
+        <p class="card-description">Performance settings enabled for climate data analytics</p>
+    </div>
+    <div class="card-content">
+        <div class="grid grid-cols-2" style="gap: 1rem;">
+            {% for opt in optimizations %}
+            <div style="padding: 0.75rem; background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 0.5rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                    <span style="color: #10b981;">✓</span>
+                    <span class="font-medium text-sm">{{ opt.name }}</span>
+                </div>
+                <p class="text-xs text-muted" style="margin-bottom: 0.5rem;">{{ opt.description }}</p>
+                <code class="text-xs font-mono" style="color: #3b82f6;">{{ opt.setting }}</code>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
