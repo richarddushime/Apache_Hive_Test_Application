@@ -5,3 +5,7 @@ mbv_africa/.venvn
 mbv_africa/db.sqlite3
 mbv_africa/data/portfolio_observations.csv
 __pycache__/
+.DS_Store
+.vscode/
+.idea/
+mbv_africa/.DS_Store/
