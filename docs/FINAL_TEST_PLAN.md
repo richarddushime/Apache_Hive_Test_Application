@@ -1,8 +1,5 @@
 # Final Test Plan: Apache Hive Seminar Validation
 
-## Overview
-This plan validates all seminar requirements with 5+ million records on the multi-node Hive/Hadoop cluster.
-
 ---
 
 ## Pre-Test Checklist

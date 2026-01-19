@@ -48,7 +48,7 @@
 }
 
 % Title Information
-\title[Apache Hive Seminar]{\textbf{Apache Hive: SQL Data Warehousing}\\\textbf{Over a MapReduce Framework}}
+\title[Apache Hive Seminar]{\textbf{Apache Hive: A Petabyte-Scale Data Warehouse System }\\\textbf{Over a MapReduce Framework}}
 \subtitle{Test Application: MBV Climate and Ocean Intelligence Africa}
 \author{Dushime Mudahera Richard}
 \institute{Databases for Big Data Seminar -- Prof.\ Iztok Savnik}
@@ -183,7 +183,7 @@
 %==============================================================================
 % SLIDE 4: HIVE & DJANGO APPLICATION
 %==============================================================================
-\begin{frame}{Apache Hive 2.3.2 \& Query Optimization}
+\begin{frame}{Apache Hive \& Query Optimization}
     \begin{columns}[T]
         \column{0.5\textwidth}
         \begin{block}{Hive Architecture}
@@ -279,61 +279,6 @@
 \end{frame}
 
 %==============================================================================
-% SLIDE 6: DATA SCALE AND COVERAGE
-%==============================================================================
-\begin{frame}{Data Scale \& Coverage Statistics}
-    \begin{columns}[T]
-        \column{0.48\textwidth}
-        \begin{block}{Table Record Counts}
-            \small
-            \begin{tabular}{@{}lr@{}}
-                \toprule
-                \textbf{Table} & \textbf{Records} \\
-                \midrule
-                portfolio\_observations & \textbf{4,750,000} \\
-                climate\_data & 100,000 \\
-                ocean\_data & 100,000 \\
-                portfolio\_stations & 5,000 \\
-                \midrule
-                \textbf{Total} & \textbf{4,955,000} \\
-                \bottomrule
-            \end{tabular}
-        \end{block}
-        \begin{alertblock}{Storage Statistics}
-            \begin{itemize}
-                \item Raw Data: \textbf{304.2 MB}
-                \item With Replication: 912.6 MB
-                \item HDFS Capacity: 447.26 GB
-                \item DFS Remaining: 386.94 GB
-            \end{itemize}
-        \end{alertblock}
-        
-        \column{0.52\textwidth}
-        \begin{block}{Data Coverage Metrics}
-            \small
-            \begin{tabular}{@{}ll@{}}
-                \toprule
-                \textbf{Metric} & \textbf{Value} \\
-                \midrule
-                Unique Stations & 5,000 \\
-                Years Covered & 45 (1980--2024) \\
-                African Regions & 5 \\
-                Countries & 44 \\
-                \bottomrule
-            \end{tabular}
-        \end{block}
-        \begin{exampleblock}{HDFS Cluster Health}
-            \begin{itemize}
-                \item Live DataNodes: \textbf{2} (healthy)
-                \item Replication Factor: 2
-                \item Under-replicated Blocks: 6
-                \item Corrupt/Missing Blocks: 0
-            \end{itemize}
-        \end{exampleblock}
-    \end{columns}
-\end{frame}
-
-%==============================================================================
 % SLIDE 7: QUERY PERFORMANCE BENCHMARKS
 %==============================================================================
 \begin{frame}{Query Performance Benchmarks}
@@ -349,16 +294,16 @@
                 Complex Monthly Aggregation & 14.88 \\
                 Statistical Analysis & 16.13 \\
                 Yearly Analysis & 15.24 \\
-                Map-Side Join & 21.26 \\
-                Reduce-Side Join & 25.76 \\
+                Map-Side Join & 15.30 \\
+                Reduce-Side Join & 42.70 \\
                 Data Coverage Query & 13.37 \\
                 \bottomrule
             \end{tabular}
         \end{block}
         \begin{alertblock}{Join Algorithm Comparison}
             \begin{itemize}
-                \item Map-Side: \textbf{21.26s} (1.21× faster)
-                \item Reduce-Side: 25.76s (baseline)
+                \item Map-Side: \textbf{15.30s} (2.8x faster)
+                \item Reduce-Side: 42.70s (baseline)
             \end{itemize}
         \end{alertblock}
         
@@ -383,115 +328,6 @@
                 \item Uniform variance (σ ≈ 2.45)
                 \item 2-stage MapReduce for ORDER BY
                 \item 28--35 GB HDFS reads per query
-            \end{itemize}
-        \end{exampleblock}
-    \end{columns}
-\end{frame}
-
-%==============================================================================
-% SLIDE 8: COUNTRY-LEVEL ANALYSIS
-%==============================================================================
-\begin{frame}{Country-Level Climate Analysis (44 Countries)}
-    \begin{columns}[T]
-        \column{0.5\textwidth}
-        \begin{block}{Top 10 Countries by Observations}
-            \tiny
-            \begin{tabular}{@{}llrc@{}}
-                \toprule
-                \textbf{Rank} & \textbf{Country} & \textbf{Obs} & \textbf{°C} \\
-                \midrule
-                1 & Sudan & 151,050 & 24.50 \\
-                2 & Egypt & 136,800 & 24.51 \\
-                3 & Morocco & 136,800 & 24.51 \\
-                4 & Cameroon & 133,950 & 30.49 \\
-                5 & Algeria & 133,950 & 24.51 \\
-                6 & Libya & 133,950 & 24.51 \\
-                7 & Tunisia & 133,000 & 24.50 \\
-                8 & Congo & 131,100 & 30.48 \\
-                9 & Gabon & 128,250 & 30.49 \\
-                10 & Burundi & 127,300 & 26.51 \\
-                \bottomrule
-            \end{tabular}
-        \end{block}
-        \begin{alertblock}{Station Distribution}
-            \begin{itemize}
-                \item Central: 1,009 stations
-                \item West: 1,036 stations
-                \item East: 983 stations
-                \item North: 990 stations
-                \item South: 982 stations
-            \end{itemize}
-        \end{alertblock}
-        
-        \column{0.5\textwidth}
-        \begin{block}{Regional Precipitation Totals}
-            \small
-            \begin{tabular}{@{}lr@{}}
-                \toprule
-                \textbf{Region} & \textbf{Total (mm)} \\
-                \midrule
-                Central & 31,961,325 \\
-                East & 31,114,971 \\
-                West & 9,827,773 \\
-                North & 9,403,739 \\
-                South & 9,338,969 \\
-                \bottomrule
-            \end{tabular}
-        \end{block}
-        \begin{exampleblock}{Climate Insights}
-            \begin{itemize}
-                \item Central \& East: 3× more precipitation
-                \item Humidity uniform (~67.5\% all regions)
-                \item Join query: 44 country-region pairs
-                \item 45 years temporal coverage
-            \end{itemize}
-        \end{exampleblock}
-    \end{columns}
-\end{frame}
-
-%==============================================================================
-% SLIDE 9: CONFIGURATION & INTEGRATION
-%==============================================================================
-\section{Configuration \& Integration}
-
-\begin{frame}[fragile]{Configuration \& Django Integration}
-    \begin{columns}[T]
-        \column{0.48\textwidth}
-        \begin{block}{Hive Configuration}
-            \begin{lstlisting}[language=XML,basicstyle=\tiny\ttfamily]
-<!-- hive-site.xml -->
-<property>
-  <name>hive.server2.authentication</name>
-  <value>NOSASL</value>
-</property>
-<property>
-  <name>hive.metastore.uris</name>
-  <value>thrift://hive-metastore:9083</value>
-</property>
-            \end{lstlisting}
-        \end{block}
-        \begin{alertblock}{Docker Networking}
-            \begin{itemize}
-                \item All containers on shared network
-                \item Service discovery via hostnames
-                \item Health checks ensure startup order
-            \end{itemize}
-        \end{alertblock}
-        
-        \column{0.52\textwidth}
-        \begin{block}{Django HiveConnectionManager}
-            \begin{itemize}
-                \item PyHive JDBC bridge (port 10000)
-                \item Dynamic schema discovery
-                \item Query execution telemetry
-                \item Graceful SQLite fallback for dev
-            \end{itemize}
-        \end{block}
-        \begin{exampleblock}{Dual-Database Strategy}
-            \begin{itemize}
-                \item \textbf{Production}: Hive for analytics
-                \item \textbf{Development}: SQLite fallback
-                \item DataSyncService for offline access
             \end{itemize}
         \end{exampleblock}
     \end{columns}
@@ -562,7 +398,7 @@
                 \end{itemize}
                 \item \textcolor{sunsetorange}{\faChartLine~\textbf{Performance}}
                 \begin{itemize}
-                    \item 1.21× speedup with Map-Side joins
+                    \item 2.8x speedup with Map-Side joins
                     \item 88\% compression with ORC
                     \item 9--26s query latency
                 \end{itemize}
@@ -575,8 +411,6 @@
                 \item \faCheckCircle~CBO requires fresh statistics
                 \item \faCheckCircle~Join algorithm choice is critical
                 \item \faCheckCircle~ORC format essential for analytics
-                \item \faCheckCircle~ARM emulation viable for dev
-                \item \faCheckCircle~Dual-DB strategy adds resilience
             \end{enumerate}
         \end{block}
         \begin{exampleblock}{Conclusion}
