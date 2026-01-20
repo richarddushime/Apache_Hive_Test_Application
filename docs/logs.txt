@@ -1,0 +1,1579 @@
+2026-01-02 16:29:04.895 | Configuring core
+2026-01-02 16:29:05.060 |  - Setting fs.defaultFS=hdfs://ef0cd96e0979:8020
+2026-01-02 16:29:05.147 | Configuring hdfs
+2026-01-02 16:29:05.240 | Configuring yarn
+2026-01-02 16:29:05.315 | Configuring httpfs
+2026-01-02 16:29:05.397 | Configuring kms
+2026-01-02 16:29:05.456 | Configuring mapred
+2026-01-02 16:29:05.518 | Configuring hive
+2026-01-02 16:29:05.639 |  - Setting hive.metastore.uris=thrift://hive-metastore:9083
+2026-01-02 16:29:05.744 |  - Setting hive.server2.authentication=NOSASL
+2026-01-02 16:29:05.850 |  - Setting hive.server2.enable.doAs=false
+2026-01-02 16:29:05.908 | Configuring for multihomed network
+2026-01-02 16:29:06.516 | [1/100] hive-metastore:9083 is available.
+2026-01-02 16:29:06.787 | 2026-01-02 15:29:06: Starting HiveServer2
+2026-01-02 16:29:09.755 | SLF4J: Class path contains multiple SLF4J bindings.
+2026-01-02 16:29:09.755 | SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.6.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+2026-01-02 16:29:09.755 | SLF4J: Found binding in [jar:file:/opt/hadoop-2.7.4/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+2026-01-02 16:29:09.755 | SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+2026-01-02 16:29:09.757 | SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+2026-01-02 16:34:31.747 | OK
+2026-01-02 16:34:50.891 | OK
+2026-01-02 16:34:51.007 | OK
+2026-01-02 16:36:26.287 | OK
+2026-01-02 16:36:26.409 | OK
+2026-01-02 16:36:30.270 | FAILED: SemanticException [Error 10001]: Line 1:69 Table not found 'climate_data'
+2026-01-02 16:38:43.613 | OK
+2026-01-02 16:38:43.802 | OK
+2026-01-02 16:38:47.876 | OK
+2026-01-02 16:38:48.080 | FAILED: SemanticException [Error 10001]: Line 1:64 Table not found 'climate_data'
+2026-01-02 16:40:03.042 | OK
+2026-01-02 16:40:03.159 | OK
+2026-01-02 16:40:06.935 | FAILED: SemanticException [Error 10001]: Line 1:69 Table not found 'climate_data'
+2026-01-02 16:40:19.601 | OK
+2026-01-02 16:40:19.799 | OK
+2026-01-02 16:40:50.948 | OK
+2026-01-02 16:40:58.378 | FAILED: SemanticException [Error 10001]: Line 1:69 Table not found 'climate_data'
+2026-01-02 16:41:09.698 | OK
+2026-01-02 16:41:26.992 | OK
+2026-01-02 16:41:37.949 | OK
+2026-01-02 16:42:06.236 | OK
+2026-01-02 16:42:10.020 | OK
+2026-01-02 16:42:13.891 | OK
+2026-01-02 16:42:17.722 | OK
+2026-01-02 16:42:21.611 | OK
+2026-01-02 16:42:25.490 | OK
+2026-01-02 16:42:29.461 | OK
+2026-01-02 16:42:33.380 | OK
+2026-01-02 16:42:37.200 | OK
+2026-01-02 16:42:41.377 | Loading data to table mbv_africa.climate_data
+2026-01-02 16:42:43.683 | OK
+2026-01-02 16:42:47.568 | Loading data to table mbv_africa.ocean_data
+2026-01-02 16:42:48.414 | OK
+2026-01-02 16:42:52.172 | Loading data to table mbv_africa.portfolio_stations
+2026-01-02 16:42:53.303 | OK
+2026-01-02 16:42:57.173 | Loading data to table mbv_africa.portfolio_observations
+2026-01-02 16:42:57.998 | OK
+2026-01-02 16:43:05.044 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-02 16:43:05.045 | Query ID = root_20260102154301_570eeaf6-fa14-4c09-9085-12b9341c6842
+2026-01-02 16:43:05.045 | Total jobs = 5
+2026-01-02 16:43:05.065 | Launching Job 1 out of 5
+2026-01-02 16:43:05.068 | Number of reduce tasks determined at compile time: 1
+2026-01-02 16:43:05.068 | In order to change the average load for a reducer (in bytes):
+2026-01-02 16:43:05.068 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-02 16:43:05.069 | In order to limit the maximum number of reducers:
+2026-01-02 16:43:05.069 |   set hive.exec.reducers.max=<number>
+2026-01-02 16:43:05.069 | In order to set a constant number of reducers:
+2026-01-02 16:43:05.069 |   set mapreduce.job.reduces=<number>
+2026-01-02 16:43:06.020 | Job running in-process (local Hadoop)
+2026-01-02 16:43:07.111 | 2026-01-02 15:43:07,096 Stage-1 map = 100%,  reduce = 0%
+2026-01-02 16:43:08.150 | 2026-01-02 15:43:08,145 Stage-1 map = 100%,  reduce = 100%
+2026-01-02 16:43:08.178 | Ended Job = job_local350403872_0001
+2026-01-02 16:43:08.204 | Launching Job 2 out of 5
+2026-01-02 16:43:08.211 | Number of reduce tasks determined at compile time: 1
+2026-01-02 16:43:08.211 | In order to change the average load for a reducer (in bytes):
+2026-01-02 16:43:08.211 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-02 16:43:08.211 | In order to limit the maximum number of reducers:
+2026-01-02 16:43:08.211 |   set hive.exec.reducers.max=<number>
+2026-01-02 16:43:08.211 | In order to set a constant number of reducers:
+2026-01-02 16:43:08.211 |   set mapreduce.job.reduces=<number>
+2026-01-02 16:43:08.741 | Job running in-process (local Hadoop)
+2026-01-02 16:43:09.777 | 2026-01-02 15:43:09,773 Stage-3 map = 100%,  reduce = 100%
+2026-01-02 16:43:09.798 | Ended Job = job_local1626052733_0002
+2026-01-02 16:43:09.834 | Launching Job 3 out of 5
+2026-01-02 16:43:09.839 | Number of reduce tasks determined at compile time: 1
+2026-01-02 16:43:09.839 | In order to change the average load for a reducer (in bytes):
+2026-01-02 16:43:09.839 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-02 16:43:09.839 | In order to limit the maximum number of reducers:
+2026-01-02 16:43:09.839 |   set hive.exec.reducers.max=<number>
+2026-01-02 16:43:09.839 | In order to set a constant number of reducers:
+2026-01-02 16:43:09.840 |   set mapreduce.job.reduces=<number>
+2026-01-02 16:43:10.335 | Job running in-process (local Hadoop)
+2026-01-02 16:43:11.375 | 2026-01-02 15:43:11,372 Stage-4 map = 100%,  reduce = 100%
+2026-01-02 16:43:11.386 | Ended Job = job_local804378610_0003
+2026-01-02 16:43:11.407 | Launching Job 4 out of 5
+2026-01-02 16:43:11.414 | Number of reduce tasks determined at compile time: 1
+2026-01-02 16:43:11.415 | In order to change the average load for a reducer (in bytes):
+2026-01-02 16:43:11.415 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-02 16:43:11.415 | In order to limit the maximum number of reducers:
+2026-01-02 16:43:11.415 |   set hive.exec.reducers.max=<number>
+2026-01-02 16:43:11.415 | In order to set a constant number of reducers:
+2026-01-02 16:43:11.415 |   set mapreduce.job.reduces=<number>
+2026-01-02 16:43:11.713 | Job running in-process (local Hadoop)
+2026-01-02 16:43:12.755 | 2026-01-02 15:43:12,753 Stage-5 map = 100%,  reduce = 100%
+2026-01-02 16:43:12.765 | Ended Job = job_local37545482_0004
+2026-01-02 16:43:12.771 | Launching Job 5 out of 5
+2026-01-02 16:43:12.776 | Number of reduce tasks is set to 0 since there's no reduce operator
+2026-01-02 16:43:13.377 | Job running in-process (local Hadoop)
+2026-01-02 16:43:14.406 | 2026-01-02 15:43:14,403 Stage-2 map = 100%,  reduce = 0%
+2026-01-02 16:43:14.413 | Ended Job = job_local1983897666_0005
+2026-01-02 16:43:14.426 | MapReduce Jobs Launched: 
+2026-01-02 16:43:14.427 | Stage-Stage-1:  HDFS Read: 71062 HDFS Write: 17076574 SUCCESS
+2026-01-02 16:43:14.427 | Stage-Stage-3:  HDFS Read: 140490 HDFS Write: 17076574 SUCCESS
+2026-01-02 16:43:14.428 | Stage-Stage-4:  HDFS Read: 325350 HDFS Write: 17076574 SUCCESS
+2026-01-02 16:43:14.428 | Stage-Stage-5:  HDFS Read: 17076574 HDFS Write: 17076574 SUCCESS
+2026-01-02 16:43:14.428 | Stage-Stage-2:  HDFS Read: 34153148 HDFS Write: 34153148 SUCCESS
+2026-01-02 16:43:14.429 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-02 16:43:14.430 | OK
+2026-01-02 16:59:08.834 | OK
+2026-01-02 16:59:09.426 | OK
+2026-01-02 16:59:09.713 | OK
+2026-01-02 16:59:09.763 | OK
+2026-01-02 17:01:28.353 | OK
+2026-01-02 17:01:28.775 | OK
+2026-01-02 17:01:29.130 | OK
+2026-01-02 17:01:29.159 | OK
+2026-01-02 18:46:23.951 | OK
+2026-01-02 18:46:29.796 | OK
+2026-01-02 18:46:34.016 | OK
+2026-01-02 18:46:37.911 | OK
+2026-01-02 18:46:41.685 | OK
+2026-01-02 18:46:45.541 | OK
+2026-01-02 18:46:49.710 | OK
+2026-01-02 18:46:53.943 | OK
+2026-01-02 18:46:58.022 | OK
+2026-01-02 18:47:01.866 | Loading data to table mbv_africa.climate_data
+2026-01-02 18:47:02.875 | OK
+2026-01-02 18:47:06.834 | Loading data to table mbv_africa.ocean_data
+2026-01-02 18:47:07.483 | OK
+2026-01-02 18:47:11.404 | Loading data to table mbv_africa.portfolio_stations
+2026-01-02 18:47:12.094 | OK
+2026-01-02 18:47:15.956 | Loading data to table mbv_africa.portfolio_observations
+2026-01-02 18:47:17.158 | OK
+2026-01-02 18:47:22.704 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-02 18:47:22.705 | Query ID = root_20260102174721_3c8ccda3-518a-4c35-a872-2b877f22a1f6
+2026-01-02 18:47:22.705 | Total jobs = 5
+2026-01-02 18:47:22.707 | Launching Job 1 out of 5
+2026-01-02 18:47:22.711 | Number of reduce tasks determined at compile time: 1
+2026-01-02 18:47:22.711 | In order to change the average load for a reducer (in bytes):
+2026-01-02 18:47:22.711 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-02 18:47:22.711 | In order to limit the maximum number of reducers:
+2026-01-02 18:47:22.711 |   set hive.exec.reducers.max=<number>
+2026-01-02 18:47:22.711 | In order to set a constant number of reducers:
+2026-01-02 18:47:22.711 |   set mapreduce.job.reduces=<number>
+2026-01-02 18:47:23.154 | Job running in-process (local Hadoop)
+2026-01-02 18:47:24.190 | 2026-01-02 17:47:24,186 Stage-1 map = 100%,  reduce = 100%
+2026-01-02 18:47:24.209 | Ended Job = job_local1853116550_0006
+2026-01-02 18:47:24.220 | Launching Job 2 out of 5
+2026-01-02 18:47:24.224 | Number of reduce tasks determined at compile time: 1
+2026-01-02 18:47:24.224 | In order to change the average load for a reducer (in bytes):
+2026-01-02 18:47:24.224 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-02 18:47:24.224 | In order to limit the maximum number of reducers:
+2026-01-02 18:47:24.225 |   set hive.exec.reducers.max=<number>
+2026-01-02 18:47:24.225 | In order to set a constant number of reducers:
+2026-01-02 18:47:24.225 |   set mapreduce.job.reduces=<number>
+2026-01-02 18:47:24.623 | Job running in-process (local Hadoop)
+2026-01-02 18:47:25.647 | 2026-01-02 17:47:25,645 Stage-3 map = 100%,  reduce = 100%
+2026-01-02 18:47:25.657 | Ended Job = job_local1626442895_0007
+2026-01-02 18:47:25.667 | Launching Job 3 out of 5
+2026-01-02 18:47:25.670 | Number of reduce tasks determined at compile time: 1
+2026-01-02 18:47:25.671 | In order to change the average load for a reducer (in bytes):
+2026-01-02 18:47:25.671 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-02 18:47:25.671 | In order to limit the maximum number of reducers:
+2026-01-02 18:47:25.671 |   set hive.exec.reducers.max=<number>
+2026-01-02 18:47:25.671 | In order to set a constant number of reducers:
+2026-01-02 18:47:25.671 |   set mapreduce.job.reduces=<number>
+2026-01-02 18:47:25.977 | Job running in-process (local Hadoop)
+2026-01-02 18:47:27.019 | 2026-01-02 17:47:27,018 Stage-4 map = 100%,  reduce = 100%
+2026-01-02 18:47:27.026 | Ended Job = job_local1929369658_0008
+2026-01-02 18:47:27.039 | Launching Job 4 out of 5
+2026-01-02 18:47:27.045 | Number of reduce tasks determined at compile time: 1
+2026-01-02 18:47:27.045 | In order to change the average load for a reducer (in bytes):
+2026-01-02 18:47:27.045 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-02 18:47:27.046 | In order to limit the maximum number of reducers:
+2026-01-02 18:47:27.046 |   set hive.exec.reducers.max=<number>
+2026-01-02 18:47:27.046 | In order to set a constant number of reducers:
+2026-01-02 18:47:27.046 |   set mapreduce.job.reduces=<number>
+2026-01-02 18:47:27.399 | Job running in-process (local Hadoop)
+2026-01-02 18:47:28.433 | 2026-01-02 17:47:28,430 Stage-5 map = 100%,  reduce = 100%
+2026-01-02 18:47:28.438 | Ended Job = job_local1748177900_0009
+2026-01-02 18:47:28.455 | Launching Job 5 out of 5
+2026-01-02 18:47:28.460 | Number of reduce tasks is set to 0 since there's no reduce operator
+2026-01-02 18:47:29.078 | Job running in-process (local Hadoop)
+2026-01-02 18:47:30.108 | 2026-01-02 17:47:30,103 Stage-2 map = 100%,  reduce = 0%
+2026-01-02 18:47:30.111 | Ended Job = job_local793874984_0010
+2026-01-02 18:47:30.116 | MapReduce Jobs Launched: 
+2026-01-02 18:47:30.116 | Stage-Stage-1:  HDFS Read: 18833810 HDFS Write: 146569904 SUCCESS
+2026-01-02 18:47:30.116 | Stage-Stage-3:  HDFS Read: 20517946 HDFS Write: 146569904 SUCCESS
+2026-01-02 18:47:30.116 | Stage-Stage-4:  HDFS Read: 20898198 HDFS Write: 146569904 SUCCESS
+2026-01-02 18:47:30.116 | Stage-Stage-5:  HDFS Read: 146569904 HDFS Write: 146569904 SUCCESS
+2026-01-02 18:47:30.116 | Stage-Stage-2:  HDFS Read: 293139808 HDFS Write: 293139808 SUCCESS
+2026-01-02 18:47:30.116 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-02 18:47:30.117 | OK
+2026-01-02 18:49:17.870 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-02 18:49:17.870 | Query ID = root_20260102174916_acf7479a-99e2-4ffb-8c96-5cb885f0f905
+2026-01-02 18:49:17.870 | Total jobs = 1
+2026-01-02 18:49:17.872 | Launching Job 1 out of 1
+2026-01-02 18:49:17.954 | Number of reduce tasks not specified. Estimated from input data size: 1
+2026-01-02 18:49:17.954 | In order to change the average load for a reducer (in bytes):
+2026-01-02 18:49:17.954 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-02 18:49:17.954 | In order to limit the maximum number of reducers:
+2026-01-02 18:49:17.954 |   set hive.exec.reducers.max=<number>
+2026-01-02 18:49:17.954 | In order to set a constant number of reducers:
+2026-01-02 18:49:17.954 |   set mapreduce.job.reduces=<number>
+2026-01-02 18:49:18.432 | Job running in-process (local Hadoop)
+2026-01-02 18:49:19.485 | 2026-01-02 17:49:19,472 Stage-1 map = 0%,  reduce = 0%
+2026-01-02 18:49:20.507 | 2026-01-02 17:49:20,506 Stage-1 map = 100%,  reduce = 100%
+2026-01-02 18:49:20.512 | Ended Job = job_local612818385_0011
+2026-01-02 18:49:20.528 | MapReduce Jobs Launched: 
+2026-01-02 18:49:20.530 | Stage-Stage-1:  HDFS Read: 272241610 HDFS Write: 146569904 SUCCESS
+2026-01-02 18:49:20.530 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-02 18:49:20.531 | OK
+2026-01-02 18:49:57.960 | OK
+2026-01-02 18:49:58.399 | OK
+2026-01-02 18:49:58.631 | OK
+2026-01-02 18:49:58.660 | OK
+2026-01-02 19:34:53.782 | OK
+2026-01-02 19:34:54.205 | OK
+2026-01-02 19:34:54.418 | OK
+2026-01-02 19:34:54.447 | OK
+2026-01-02 19:35:06.391 | OK
+2026-01-02 19:35:06.704 | OK
+2026-01-02 19:35:07.126 | OK
+2026-01-02 19:35:07.192 | OK
+2026-01-02 19:35:09.295 | OK
+2026-01-02 19:35:09.666 | OK
+2026-01-02 19:35:09.830 | OK
+2026-01-02 19:35:09.877 | OK
+2026-01-02 19:35:11.939 | OK
+2026-01-02 19:35:12.269 | OK
+2026-01-02 19:35:12.453 | OK
+2026-01-02 19:35:12.491 | OK
+2026-01-02 19:35:13.705 | OK
+2026-01-02 19:35:14.027 | OK
+2026-01-02 19:35:14.228 | OK
+2026-01-02 19:35:14.280 | OK
+2026-01-02 19:35:21.766 | OK
+2026-01-02 19:35:22.086 | OK
+2026-01-02 19:51:32.457 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-02 19:51:32.458 | Query ID = root_20260102185131_12a0bbd6-c447-4ce7-95e1-6ded42bad518
+2026-01-02 19:51:32.458 | Total jobs = 1
+2026-01-02 19:51:32.461 | Launching Job 1 out of 1
+2026-01-02 19:51:32.494 | Number of reduce tasks not specified. Estimated from input data size: 1
+2026-01-02 19:51:32.494 | In order to change the average load for a reducer (in bytes):
+2026-01-02 19:51:32.494 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-02 19:51:32.494 | In order to limit the maximum number of reducers:
+2026-01-02 19:51:32.494 |   set hive.exec.reducers.max=<number>
+2026-01-02 19:51:32.494 | In order to set a constant number of reducers:
+2026-01-02 19:51:32.494 |   set mapreduce.job.reduces=<number>
+2026-01-02 19:51:33.037 | Job running in-process (local Hadoop)
+2026-01-02 19:51:34.121 | 2026-01-02 18:51:34,092 Stage-1 map = 0%,  reduce = 0%
+2026-01-02 19:51:35.141 | 2026-01-02 18:51:35,138 Stage-1 map = 100%,  reduce = 100%
+2026-01-02 19:51:35.147 | Ended Job = job_local666825367_0012
+2026-01-02 19:51:35.151 | MapReduce Jobs Launched: 
+2026-01-02 19:51:35.151 | Stage-Stage-1:  HDFS Read: 397913316 HDFS Write: 146569904 SUCCESS
+2026-01-02 19:51:35.151 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-02 19:51:35.152 | OK
+2026-01-02 20:04:54.222 | OK
+2026-01-02 20:04:54.639 | OK
+2026-01-02 20:11:40.347 | OK
+2026-01-02 20:11:40.757 | OK
+2026-01-02 20:13:37.370 | OK
+2026-01-02 20:13:37.699 | OK
+2026-01-02 20:18:25.171 | OK
+2026-01-02 20:18:25.508 | OK
+2026-01-11 18:59:34.937 | Configuring core
+2026-01-11 18:59:35.056 |  - Setting fs.defaultFS=hdfs://ef0cd96e0979:8020
+2026-01-11 18:59:35.110 | Configuring hdfs
+2026-01-11 18:59:35.170 | Configuring yarn
+2026-01-11 18:59:35.233 | Configuring httpfs
+2026-01-11 18:59:35.292 | Configuring kms
+2026-01-11 18:59:35.347 | Configuring mapred
+2026-01-11 18:59:35.403 | Configuring hive
+2026-01-11 18:59:35.518 |  - Setting hive.metastore.uris=thrift://hive-metastore:9083
+2026-01-11 18:59:35.619 |  - Setting hive.server2.authentication=NOSASL
+2026-01-11 18:59:35.720 |  - Setting hive.server2.enable.doAs=false
+2026-01-11 18:59:35.767 | Configuring for multihomed network
+2026-01-11 18:59:36.291 | [1/100] hive-metastore:9083 is available.
+2026-01-11 18:59:36.549 | 2026-01-11 17:59:36: Starting HiveServer2
+2026-01-11 18:59:39.383 | SLF4J: Class path contains multiple SLF4J bindings.
+2026-01-11 18:59:39.383 | SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.6.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+2026-01-11 18:59:39.383 | SLF4J: Found binding in [jar:file:/opt/hadoop-2.7.4/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+2026-01-11 18:59:39.383 | SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+2026-01-11 18:59:39.384 | SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+2026-01-11 19:07:14.972 | OK
+2026-01-11 19:07:21.671 | OK
+2026-01-11 19:07:26.169 | OK
+2026-01-11 19:07:30.156 | OK
+2026-01-11 19:07:34.576 | OK
+2026-01-11 19:07:38.842 | OK
+2026-01-11 19:07:44.046 | OK
+2026-01-11 19:07:48.297 | OK
+2026-01-11 19:07:52.127 | OK
+2026-01-11 19:07:56.339 | Loading data to table mbv_africa.climate_data
+2026-01-11 19:07:58.494 | OK
+2026-01-11 19:08:03.089 | Loading data to table mbv_africa.ocean_data
+2026-01-11 19:08:04.143 | OK
+2026-01-11 19:08:08.172 | Loading data to table mbv_africa.portfolio_stations
+2026-01-11 19:08:08.880 | OK
+2026-01-11 19:08:12.671 | Loading data to table mbv_africa.portfolio_observations
+2026-01-11 19:08:15.610 | OK
+2026-01-11 19:08:22.811 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-11 19:08:22.812 | Query ID = root_20260111180819_f10324ee-2c02-40c0-835b-0aa806ee06a4
+2026-01-11 19:08:22.812 | Total jobs = 5
+2026-01-11 19:08:22.825 | Launching Job 1 out of 5
+2026-01-11 19:08:22.830 | Number of reduce tasks determined at compile time: 1
+2026-01-11 19:08:22.830 | In order to change the average load for a reducer (in bytes):
+2026-01-11 19:08:22.830 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-11 19:08:22.830 | In order to limit the maximum number of reducers:
+2026-01-11 19:08:22.830 |   set hive.exec.reducers.max=<number>
+2026-01-11 19:08:22.830 | In order to set a constant number of reducers:
+2026-01-11 19:08:22.831 |   set mapreduce.job.reduces=<number>
+2026-01-11 19:08:23.825 | Job running in-process (local Hadoop)
+2026-01-11 19:08:24.922 | 2026-01-11 18:08:24,912 Stage-1 map = 100%,  reduce = 0%
+2026-01-11 19:08:25.962 | 2026-01-11 18:08:25,959 Stage-1 map = 100%,  reduce = 100%
+2026-01-11 19:08:25.981 | Ended Job = job_local791337484_0001
+2026-01-11 19:08:26.018 | Launching Job 2 out of 5
+2026-01-11 19:08:26.024 | Number of reduce tasks determined at compile time: 1
+2026-01-11 19:08:26.024 | In order to change the average load for a reducer (in bytes):
+2026-01-11 19:08:26.024 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-11 19:08:26.025 | In order to limit the maximum number of reducers:
+2026-01-11 19:08:26.025 |   set hive.exec.reducers.max=<number>
+2026-01-11 19:08:26.026 | In order to set a constant number of reducers:
+2026-01-11 19:08:26.026 |   set mapreduce.job.reduces=<number>
+2026-01-11 19:08:26.525 | Job running in-process (local Hadoop)
+2026-01-11 19:08:27.568 | 2026-01-11 18:08:27,565 Stage-3 map = 100%,  reduce = 100%
+2026-01-11 19:08:27.587 | Ended Job = job_local1748808172_0002
+2026-01-11 19:08:27.611 | Launching Job 3 out of 5
+2026-01-11 19:08:27.629 | Number of reduce tasks determined at compile time: 1
+2026-01-11 19:08:27.629 | In order to change the average load for a reducer (in bytes):
+2026-01-11 19:08:27.630 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-11 19:08:27.630 | In order to limit the maximum number of reducers:
+2026-01-11 19:08:27.630 |   set hive.exec.reducers.max=<number>
+2026-01-11 19:08:27.630 | In order to set a constant number of reducers:
+2026-01-11 19:08:27.631 |   set mapreduce.job.reduces=<number>
+2026-01-11 19:08:27.988 | Job running in-process (local Hadoop)
+2026-01-11 19:08:29.034 | 2026-01-11 18:08:29,031 Stage-4 map = 100%,  reduce = 100%
+2026-01-11 19:08:29.043 | Ended Job = job_local333653828_0003
+2026-01-11 19:08:29.067 | Launching Job 4 out of 5
+2026-01-11 19:08:29.084 | Number of reduce tasks determined at compile time: 1
+2026-01-11 19:08:29.085 | In order to change the average load for a reducer (in bytes):
+2026-01-11 19:08:29.085 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-11 19:08:29.086 | In order to limit the maximum number of reducers:
+2026-01-11 19:08:29.086 |   set hive.exec.reducers.max=<number>
+2026-01-11 19:08:29.086 | In order to set a constant number of reducers:
+2026-01-11 19:08:29.086 |   set mapreduce.job.reduces=<number>
+2026-01-11 19:08:29.442 | Job running in-process (local Hadoop)
+2026-01-11 19:08:30.475 | 2026-01-11 18:08:30,465 Stage-5 map = 0%,  reduce = 0%
+2026-01-11 19:08:31.497 | 2026-01-11 18:08:31,495 Stage-5 map = 100%,  reduce = 0%
+2026-01-11 19:08:32.518 | 2026-01-11 18:08:32,516 Stage-5 map = 100%,  reduce = 100%
+2026-01-11 19:08:32.542 | Ended Job = job_local494314831_0004
+2026-01-11 19:08:32.555 | Launching Job 5 out of 5
+2026-01-11 19:08:32.558 | Number of reduce tasks is set to 0 since there's no reduce operator
+2026-01-11 19:08:33.139 | Job running in-process (local Hadoop)
+2026-01-11 19:08:34.158 | 2026-01-11 18:08:34,157 Stage-2 map = 100%,  reduce = 0%
+2026-01-11 19:08:34.166 | Ended Job = job_local414816433_0005
+2026-01-11 19:08:34.185 | MapReduce Jobs Launched: 
+2026-01-11 19:08:34.185 | Stage-Stage-1:  HDFS Read: 7029756 HDFS Write: 652513580 SUCCESS
+2026-01-11 19:08:34.186 | Stage-Stage-3:  HDFS Read: 13768710 HDFS Write: 652513580 SUCCESS
+2026-01-11 19:08:34.186 | Stage-Stage-4:  HDFS Read: 14528966 HDFS Write: 652513580 SUCCESS
+2026-01-11 19:08:34.186 | Stage-Stage-5:  HDFS Read: 928238095 HDFS Write: 978770370 SUCCESS
+2026-01-11 19:08:34.186 | Stage-Stage-2:  HDFS Read: 1305059928 HDFS Write: 1305027160 SUCCESS
+2026-01-11 19:08:34.187 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-11 19:08:34.188 | OK
+2026-01-11 19:14:31.751 | OK
+2026-01-11 19:16:02.448 | FAILED: ParseException line 2:0 missing EOF at 'SELECT' near 'mbv_africa'
+2026-01-11 19:16:22.685 | FAILED: SemanticException [Error 10001]: Line 1:21 Table not found 'climate_data'
+2026-01-11 19:16:38.781 | FAILED: SemanticException [Error 10001]: Line 1:21 Table not found 'climate_data'
+2026-01-11 19:31:08.848 | OK
+2026-01-11 19:31:09.309 | OK
+2026-01-11 19:31:39.824 | OK
+2026-01-11 19:31:40.097 | OK
+2026-01-11 19:32:44.073 | OK
+2026-01-11 19:32:44.386 | OK
+2026-01-11 20:00:52.939 | OK
+2026-01-11 20:00:53.309 | OK
+2026-01-11 20:00:56.705 | OK
+2026-01-11 20:00:56.989 | OK
+2026-01-11 20:03:14.555 | OK
+2026-01-11 20:03:14.859 | OK
+2026-01-11 20:58:04.067 | OK
+2026-01-11 20:58:04.409 | OK
+2026-01-11 20:58:16.741 | OK
+2026-01-11 20:58:17.032 | OK
+2026-01-11 22:28:19.793 | OK
+2026-01-11 22:28:20.105 | OK
+2026-01-11 22:28:33.947 | OK
+2026-01-11 22:28:34.279 | OK
+2026-01-13 17:10:11.818 | Configuring core
+2026-01-13 17:10:11.946 |  - Setting fs.defaultFS=hdfs://ef0cd96e0979:8020
+2026-01-13 17:10:12.003 | Configuring hdfs
+2026-01-13 17:10:12.076 | Configuring yarn
+2026-01-13 17:10:12.132 | Configuring httpfs
+2026-01-13 17:10:12.189 | Configuring kms
+2026-01-13 17:10:12.244 | Configuring mapred
+2026-01-13 17:10:12.300 | Configuring hive
+2026-01-13 17:10:12.416 |  - Setting hive.metastore.uris=thrift://hive-metastore:9083
+2026-01-13 17:10:12.525 |  - Setting hive.server2.authentication=NOSASL
+2026-01-13 17:10:12.627 |  - Setting hive.server2.enable.doAs=false
+2026-01-13 17:10:12.675 | Configuring for multihomed network
+2026-01-13 17:10:13.225 | [1/100] hive-metastore:9083 is available.
+2026-01-13 17:10:13.462 | 2026-01-13 16:10:13: Starting HiveServer2
+2026-01-13 17:10:16.365 | SLF4J: Class path contains multiple SLF4J bindings.
+2026-01-13 17:10:16.365 | SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.6.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+2026-01-13 17:10:16.365 | SLF4J: Found binding in [jar:file:/opt/hadoop-2.7.4/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+2026-01-13 17:10:16.365 | SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+2026-01-13 17:10:16.367 | SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+2026-01-13 18:33:37.511 | OK
+2026-01-13 18:34:10.430 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 18:34:10.430 | Query ID = root_20260113173408_cb0524f5-7ebd-4a67-8421-fdb2cd1e1f01
+2026-01-13 18:34:10.430 | Total jobs = 5
+2026-01-13 18:34:10.458 | Launching Job 1 out of 5
+2026-01-13 18:34:10.469 | Number of reduce tasks determined at compile time: 1
+2026-01-13 18:34:10.469 | In order to change the average load for a reducer (in bytes):
+2026-01-13 18:34:10.469 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 18:34:10.469 | In order to limit the maximum number of reducers:
+2026-01-13 18:34:10.469 |   set hive.exec.reducers.max=<number>
+2026-01-13 18:34:10.469 | In order to set a constant number of reducers:
+2026-01-13 18:34:10.469 |   set mapreduce.job.reduces=<number>
+2026-01-13 18:34:11.499 | Job running in-process (local Hadoop)
+2026-01-13 18:34:12.540 | 2026-01-13 17:34:12,538 Stage-1 map = 0%,  reduce = 0%
+2026-01-13 18:34:14.602 | 2026-01-13 17:34:14,599 Stage-1 map = 100%,  reduce = 0%
+2026-01-13 18:34:15.630 | 2026-01-13 17:34:15,628 Stage-1 map = 100%,  reduce = 100%
+2026-01-13 18:34:15.668 | Ended Job = job_local1048190218_0001
+2026-01-13 18:34:15.702 | Launching Job 2 out of 5
+2026-01-13 18:34:15.708 | Number of reduce tasks determined at compile time: 1
+2026-01-13 18:34:15.708 | In order to change the average load for a reducer (in bytes):
+2026-01-13 18:34:15.708 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 18:34:15.708 | In order to limit the maximum number of reducers:
+2026-01-13 18:34:15.709 |   set hive.exec.reducers.max=<number>
+2026-01-13 18:34:15.709 | In order to set a constant number of reducers:
+2026-01-13 18:34:15.709 |   set mapreduce.job.reduces=<number>
+2026-01-13 18:34:16.154 | Job running in-process (local Hadoop)
+2026-01-13 18:34:17.178 | 2026-01-13 17:34:17,176 Stage-3 map = 100%,  reduce = 100%
+2026-01-13 18:34:17.190 | Ended Job = job_local323680802_0002
+2026-01-13 18:34:17.196 | Launching Job 3 out of 5
+2026-01-13 18:34:17.200 | Number of reduce tasks determined at compile time: 1
+2026-01-13 18:34:17.200 | In order to change the average load for a reducer (in bytes):
+2026-01-13 18:34:17.200 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 18:34:17.200 | In order to limit the maximum number of reducers:
+2026-01-13 18:34:17.200 |   set hive.exec.reducers.max=<number>
+2026-01-13 18:34:17.200 | In order to set a constant number of reducers:
+2026-01-13 18:34:17.200 |   set mapreduce.job.reduces=<number>
+2026-01-13 18:34:17.583 | Job running in-process (local Hadoop)
+2026-01-13 18:34:18.609 | 2026-01-13 17:34:18,606 Stage-4 map = 100%,  reduce = 100%
+2026-01-13 18:34:18.629 | Ended Job = job_local1144772133_0003
+2026-01-13 18:34:18.652 | Launching Job 4 out of 5
+2026-01-13 18:34:18.663 | Number of reduce tasks determined at compile time: 1
+2026-01-13 18:34:18.663 | In order to change the average load for a reducer (in bytes):
+2026-01-13 18:34:18.663 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 18:34:18.663 | In order to limit the maximum number of reducers:
+2026-01-13 18:34:18.664 |   set hive.exec.reducers.max=<number>
+2026-01-13 18:34:18.665 | In order to set a constant number of reducers:
+2026-01-13 18:34:18.667 |   set mapreduce.job.reduces=<number>
+2026-01-13 18:34:19.070 | Job running in-process (local Hadoop)
+2026-01-13 18:34:20.149 | 2026-01-13 17:34:20,099 Stage-5 map = 100%,  reduce = 100%
+2026-01-13 18:34:20.173 | Ended Job = job_local1100099996_0004
+2026-01-13 18:34:20.188 | Launching Job 5 out of 5
+2026-01-13 18:34:20.193 | Number of reduce tasks is set to 0 since there's no reduce operator
+2026-01-13 18:34:20.712 | Job running in-process (local Hadoop)
+2026-01-13 18:34:21.751 | 2026-01-13 17:34:21,749 Stage-2 map = 100%,  reduce = 0%
+2026-01-13 18:34:21.763 | Ended Job = job_local168640971_0005
+2026-01-13 18:34:21.778 | MapReduce Jobs Launched: 
+2026-01-13 18:34:21.779 | Stage-Stage-1:  HDFS Read: 906444646 HDFS Write: 0 SUCCESS
+2026-01-13 18:34:21.779 | Stage-Stage-3:  HDFS Read: 638761254 HDFS Write: 0 SUCCESS
+2026-01-13 18:34:21.779 | Stage-Stage-4:  HDFS Read: 645791010 HDFS Write: 0 SUCCESS
+2026-01-13 18:34:21.779 | Stage-Stage-5:  HDFS Read: 652529964 HDFS Write: 0 SUCCESS
+2026-01-13 18:34:21.779 | Stage-Stage-2:  HDFS Read: 1305059928 HDFS Write: 0 SUCCESS
+2026-01-13 18:34:21.779 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 18:34:21.780 | OK
+2026-01-13 18:35:43.917 | OK
+2026-01-13 18:36:53.676 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 18:36:53.676 | Query ID = root_20260113173652_5985853a-7122-466e-b015-8518246e46f3
+2026-01-13 18:36:53.677 | Total jobs = 1
+2026-01-13 18:36:53.678 | Launching Job 1 out of 1
+2026-01-13 18:36:53.715 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-13 18:36:53.715 | In order to change the average load for a reducer (in bytes):
+2026-01-13 18:36:53.715 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 18:36:53.715 | In order to limit the maximum number of reducers:
+2026-01-13 18:36:53.715 |   set hive.exec.reducers.max=<number>
+2026-01-13 18:36:53.715 | In order to set a constant number of reducers:
+2026-01-13 18:36:53.715 |   set mapreduce.job.reduces=<number>
+2026-01-13 18:36:54.135 | Job running in-process (local Hadoop)
+2026-01-13 18:36:55.181 | 2026-01-13 17:36:55,167 Stage-1 map = 0%,  reduce = 0%
+2026-01-13 18:36:58.252 | 2026-01-13 17:36:58,243 Stage-1 map = 100%,  reduce = 50%
+2026-01-13 18:36:59.264 | 2026-01-13 17:36:59,262 Stage-1 map = 100%,  reduce = 100%
+2026-01-13 18:36:59.277 | Ended Job = job_local203415352_0006
+2026-01-13 18:36:59.284 | MapReduce Jobs Launched: 
+2026-01-13 18:36:59.284 | Stage-Stage-1:  HDFS Read: 2530505073 HDFS Write: 0 SUCCESS
+2026-01-13 18:36:59.284 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 18:36:59.285 | OK
+2026-01-13 18:37:33.496 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 18:37:33.498 | Query ID = root_20260113173732_7a24359d-f882-456a-9b47-343473c4f1b3
+2026-01-13 18:37:33.498 | Total jobs = 2
+2026-01-13 18:37:33.501 | Launching Job 1 out of 2
+2026-01-13 18:37:33.522 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-13 18:37:33.522 | In order to change the average load for a reducer (in bytes):
+2026-01-13 18:37:33.522 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 18:37:33.522 | In order to limit the maximum number of reducers:
+2026-01-13 18:37:33.522 |   set hive.exec.reducers.max=<number>
+2026-01-13 18:37:33.522 | In order to set a constant number of reducers:
+2026-01-13 18:37:33.522 |   set mapreduce.job.reduces=<number>
+2026-01-13 18:37:33.865 | Job running in-process (local Hadoop)
+2026-01-13 18:37:34.920 | 2026-01-13 17:37:34,909 Stage-1 map = 0%,  reduce = 0%
+2026-01-13 18:37:39.966 | 2026-01-13 17:37:39,961 Stage-1 map = 100%,  reduce = 0%
+2026-01-13 18:37:40.995 | 2026-01-13 17:37:40,991 Stage-1 map = 100%,  reduce = 100%
+2026-01-13 18:37:40.999 | Ended Job = job_local410874876_0007
+2026-01-13 18:37:41.009 | Launching Job 2 out of 2
+2026-01-13 18:37:41.013 | Number of reduce tasks determined at compile time: 1
+2026-01-13 18:37:41.014 | In order to change the average load for a reducer (in bytes):
+2026-01-13 18:37:41.014 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 18:37:41.014 | In order to limit the maximum number of reducers:
+2026-01-13 18:37:41.014 |   set hive.exec.reducers.max=<number>
+2026-01-13 18:37:41.014 | In order to set a constant number of reducers:
+2026-01-13 18:37:41.014 |   set mapreduce.job.reduces=<number>
+2026-01-13 18:37:41.318 | Job running in-process (local Hadoop)
+2026-01-13 18:37:42.336 | 2026-01-13 17:37:42,334 Stage-2 map = 100%,  reduce = 100%
+2026-01-13 18:37:42.340 | Ended Job = job_local1586610139_0008
+2026-01-13 18:37:42.344 | MapReduce Jobs Launched: 
+2026-01-13 18:37:42.344 | Stage-Stage-1:  HDFS Read: 3806507069 HDFS Write: 0 SUCCESS
+2026-01-13 18:37:42.344 | Stage-Stage-2:  HDFS Read: 1928531960 HDFS Write: 0 SUCCESS
+2026-01-13 18:37:42.344 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 18:37:42.345 | OK
+2026-01-13 18:38:12.188 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 18:38:12.189 | Query ID = root_20260113173811_46077998-af09-4d3a-9691-4269f3c3ee6d
+2026-01-13 18:38:12.189 | Total jobs = 1
+2026-01-13 18:38:12.191 | Launching Job 1 out of 1
+2026-01-13 18:38:12.215 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-13 18:38:12.215 | In order to change the average load for a reducer (in bytes):
+2026-01-13 18:38:12.215 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 18:38:12.215 | In order to limit the maximum number of reducers:
+2026-01-13 18:38:12.215 |   set hive.exec.reducers.max=<number>
+2026-01-13 18:38:12.215 | In order to set a constant number of reducers:
+2026-01-13 18:38:12.215 |   set mapreduce.job.reduces=<number>
+2026-01-13 18:38:12.548 | Job running in-process (local Hadoop)
+2026-01-13 18:38:13.594 | 2026-01-13 17:38:13,586 Stage-1 map = 0%,  reduce = 0%
+2026-01-13 18:38:18.628 | 2026-01-13 17:38:18,625 Stage-1 map = 17%,  reduce = 0%
+2026-01-13 18:38:21.680 | 2026-01-13 17:38:21,674 Stage-1 map = 100%,  reduce = 0%
+2026-01-13 18:38:22.700 | 2026-01-13 17:38:22,694 Stage-1 map = 100%,  reduce = 100%
+2026-01-13 18:38:23.723 | Ended Job = job_local899952594_0009
+2026-01-13 18:38:23.733 | MapReduce Jobs Launched: 
+2026-01-13 18:38:23.733 | Stage-Stage-1:  HDFS Read: 5082509065 HDFS Write: 0 SUCCESS
+2026-01-13 18:38:23.733 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 18:38:23.734 | OK
+2026-01-13 18:38:59.533 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 18:38:59.534 | Query ID = root_20260113173859_4577afad-29db-40a9-b961-4d229cd80242
+2026-01-13 18:38:59.534 | Total jobs = 1
+2026-01-13 18:38:59.535 | Launching Job 1 out of 1
+2026-01-13 18:38:59.537 | Number of reduce tasks is set to 0 since there's no reduce operator
+2026-01-13 18:38:59.878 | Job running in-process (local Hadoop)
+2026-01-13 18:39:00.903 | 2026-01-13 17:39:00,898 Stage-0 map = 0%,  reduce = 0%
+2026-01-13 18:39:02.914 | 2026-01-13 17:39:02,913 Stage-0 map = 100%,  reduce = 0%
+2026-01-13 18:39:03.939 | Ended Job = job_local529738983_0010
+2026-01-13 18:39:05.797 | MapReduce Jobs Launched: 
+2026-01-13 18:39:05.797 | Stage-Stage-0:  HDFS Read: 3153977105 HDFS Write: 301 SUCCESS
+2026-01-13 18:39:05.797 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 18:39:05.798 | OK
+2026-01-13 18:39:06.204 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 18:39:06.204 | Query ID = root_20260113173905_51648071-7760-4c20-b567-3b90d3cbaa2f
+2026-01-13 18:39:06.204 | Total jobs = 1
+2026-01-13 18:39:06.207 | Launching Job 1 out of 1
+2026-01-13 18:39:06.208 | Number of reduce tasks is set to 0 since there's no reduce operator
+2026-01-13 18:39:06.438 | Job running in-process (local Hadoop)
+2026-01-13 18:39:07.458 | 2026-01-13 17:39:07,456 Stage-0 map = 100%,  reduce = 0%
+2026-01-13 18:39:07.461 | Ended Job = job_local761736924_0011
+2026-01-13 18:39:07.930 | MapReduce Jobs Launched: 
+2026-01-13 18:39:07.932 | Stage-Stage-0:  HDFS Read: 1602647306 HDFS Write: 291 SUCCESS
+2026-01-13 18:39:07.932 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 18:39:07.932 | OK
+2026-01-13 18:39:08.827 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 18:39:08.827 | Query ID = root_20260113173907_8357136e-0733-4f08-9688-3d1c0faec0ff
+2026-01-13 18:39:08.828 | Total jobs = 1
+2026-01-13 18:39:08.829 | Launching Job 1 out of 1
+2026-01-13 18:39:08.832 | Number of reduce tasks determined at compile time: 1
+2026-01-13 18:39:08.832 | In order to change the average load for a reducer (in bytes):
+2026-01-13 18:39:08.833 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 18:39:08.833 | In order to limit the maximum number of reducers:
+2026-01-13 18:39:08.833 |   set hive.exec.reducers.max=<number>
+2026-01-13 18:39:08.833 | In order to set a constant number of reducers:
+2026-01-13 18:39:08.834 |   set mapreduce.job.reduces=<number>
+2026-01-13 18:39:09.136 | Job running in-process (local Hadoop)
+2026-01-13 18:39:10.143 | 2026-01-13 17:39:10,143 Stage-0 map = 0%,  reduce = 0%
+2026-01-13 18:39:21.209 | 2026-01-13 17:39:21,204 Stage-0 map = 17%,  reduce = 0%
+2026-01-13 18:39:28.302 | 2026-01-13 17:39:28,297 Stage-0 map = 100%,  reduce = 0%
+2026-01-13 18:39:32.351 | 2026-01-13 17:39:32,346 Stage-0 map = 100%,  reduce = 100%
+2026-01-13 18:39:32.352 | Ended Job = job_local1554576814_0012
+2026-01-13 18:39:33.104 | MapReduce Jobs Launched: 
+2026-01-13 18:39:33.104 | Stage-Stage-0:  HDFS Read: 5714386837 HDFS Write: 873 SUCCESS
+2026-01-13 18:39:33.104 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 18:39:33.105 | OK
+2026-01-13 18:39:51.319 | OK
+2026-01-13 18:40:20.179 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 18:40:20.179 | Query ID = root_20260113174019_c262bdbe-21b2-4d94-b82e-28eae9e5479b
+2026-01-13 18:40:20.179 | Total jobs = 1
+2026-01-13 18:40:23.579 | SLF4J: Class path contains multiple SLF4J bindings.
+2026-01-13 18:40:23.582 | SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.6.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+2026-01-13 18:40:23.582 | SLF4J: Found binding in [jar:file:/opt/hadoop-2.7.4/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+2026-01-13 18:40:23.582 | SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+2026-01-13 18:40:23.583 | SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+2026-01-13 18:40:24.991 | Execution log at: /tmp/root/root_20260113174019_c262bdbe-21b2-4d94-b82e-28eae9e5479b.log
+2026-01-13 18:40:25.701 | 2026-01-13 17:40:25	Starting to launch local task to process map join;	maximum memory = 477626368
+2026-01-13 18:40:26.988 | 2026-01-13 17:40:26	Dump the side-table for tag: 1 with group count: 5000 into file: file:/tmp/root/11c7530c-fe66-472e-aad1-07266d5fef06/hive_2026-01-13_17-40-19_240_9176451615297434652-1/-local-10005/HashTable-Stage-2/MapJoin-mapfile11--.hashtable
+2026-01-13 18:40:27.139 | 2026-01-13 17:40:27	Uploaded 1 File to: file:/tmp/root/11c7530c-fe66-472e-aad1-07266d5fef06/hive_2026-01-13_17-40-19_240_9176451615297434652-1/-local-10005/HashTable-Stage-2/MapJoin-mapfile11--.hashtable (201237 bytes)
+2026-01-13 18:40:27.139 | 2026-01-13 17:40:27	End of local task; Time Taken: 1.439 sec.
+2026-01-13 18:40:27.661 | Execution completed successfully
+2026-01-13 18:40:27.662 | MapredLocal task succeeded
+2026-01-13 18:40:27.671 | Launching Job 1 out of 1
+2026-01-13 18:40:27.683 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-13 18:40:27.684 | In order to change the average load for a reducer (in bytes):
+2026-01-13 18:40:27.684 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 18:40:27.684 | In order to limit the maximum number of reducers:
+2026-01-13 18:40:27.684 |   set hive.exec.reducers.max=<number>
+2026-01-13 18:40:27.685 | In order to set a constant number of reducers:
+2026-01-13 18:40:27.685 |   set mapreduce.job.reduces=<number>
+2026-01-13 18:40:28.214 | Job running in-process (local Hadoop)
+2026-01-13 18:40:29.268 | 2026-01-13 17:40:29,256 Stage-2 map = 0%,  reduce = 0%
+2026-01-13 18:40:35.397 | 2026-01-13 17:40:35,384 Stage-2 map = 100%,  reduce = 0%
+2026-01-13 18:40:37.427 | 2026-01-13 17:40:37,423 Stage-2 map = 100%,  reduce = 100%
+2026-01-13 18:40:37.428 | Ended Job = job_local1054801299_0013
+2026-01-13 18:40:37.438 | MapReduce Jobs Launched: 
+2026-01-13 18:40:37.439 | Stage-Stage-2:  HDFS Read: 8912036729 HDFS Write: 1164 SUCCESS
+2026-01-13 18:40:37.439 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 18:40:37.439 | OK
+2026-01-13 18:40:49.349 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 18:40:49.349 | Query ID = root_20260113174048_741a1a3d-4f85-4927-9d8a-9476b8692fc1
+2026-01-13 18:40:49.349 | Total jobs = 2
+2026-01-13 18:40:49.351 | Launching Job 1 out of 2
+2026-01-13 18:40:49.372 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-13 18:40:49.372 | In order to change the average load for a reducer (in bytes):
+2026-01-13 18:40:49.372 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 18:40:49.373 | In order to limit the maximum number of reducers:
+2026-01-13 18:40:49.373 |   set hive.exec.reducers.max=<number>
+2026-01-13 18:40:49.373 | In order to set a constant number of reducers:
+2026-01-13 18:40:49.373 |   set mapreduce.job.reduces=<number>
+2026-01-13 18:40:49.652 | Job running in-process (local Hadoop)
+2026-01-13 18:40:50.710 | 2026-01-13 17:40:50,692 Stage-1 map = 0%,  reduce = 0%
+2026-01-13 18:40:55.740 | 2026-01-13 17:40:55,735 Stage-1 map = 11%,  reduce = 0%
+2026-01-13 18:40:58.757 | 2026-01-13 17:40:58,756 Stage-1 map = 22%,  reduce = 0%
+2026-01-13 18:41:01.792 | 2026-01-13 17:41:01,790 Stage-1 map = 100%,  reduce = 0%
+2026-01-13 18:41:07.918 | 2026-01-13 17:41:07,912 Stage-1 map = 100%,  reduce = 50%
+2026-01-13 18:41:10.967 | 2026-01-13 17:41:10,953 Stage-1 map = 100%,  reduce = 100%
+2026-01-13 18:41:10.969 | Ended Job = job_local1980729642_0014
+2026-01-13 18:41:10.978 | Launching Job 2 out of 2
+2026-01-13 18:41:10.984 | Number of reduce tasks not specified. Estimated from input data size: 1
+2026-01-13 18:41:10.984 | In order to change the average load for a reducer (in bytes):
+2026-01-13 18:41:10.984 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 18:41:10.984 | In order to limit the maximum number of reducers:
+2026-01-13 18:41:10.984 |   set hive.exec.reducers.max=<number>
+2026-01-13 18:41:10.984 | In order to set a constant number of reducers:
+2026-01-13 18:41:10.985 |   set mapreduce.job.reduces=<number>
+2026-01-13 18:41:11.405 | Job running in-process (local Hadoop)
+2026-01-13 18:41:12.422 | 2026-01-13 17:41:12,419 Stage-2 map = 100%,  reduce = 100%
+2026-01-13 18:41:12.424 | Ended Job = job_local1019185068_0015
+2026-01-13 18:41:12.427 | MapReduce Jobs Launched: 
+2026-01-13 18:41:12.428 | Stage-Stage-1:  HDFS Read: 12748828003 HDFS Write: 1455 SUCCESS
+2026-01-13 18:41:12.428 | Stage-Stage-2:  HDFS Read: 5120058044 HDFS Write: 582 SUCCESS
+2026-01-13 18:41:12.428 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 18:41:12.428 | OK
+2026-01-13 18:41:44.042 | FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. show Locks LockManager not specified
+2026-01-13 18:44:57.819 | OK
+2026-01-13 18:44:58.159 | OK
+2026-01-13 18:45:11.555 | OK
+2026-01-13 18:45:11.828 | OK
+2026-01-13 18:47:00.740 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 18:47:00.740 | Query ID = root_20260113174659_333dc17e-001f-4e2d-a28c-cfc4e4f02d74
+2026-01-13 18:47:00.741 | Total jobs = 2
+2026-01-13 18:47:00.742 | Launching Job 1 out of 2
+2026-01-13 18:47:00.762 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-13 18:47:00.762 | In order to change the average load for a reducer (in bytes):
+2026-01-13 18:47:00.762 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 18:47:00.762 | In order to limit the maximum number of reducers:
+2026-01-13 18:47:00.763 |   set hive.exec.reducers.max=<number>
+2026-01-13 18:47:00.763 | In order to set a constant number of reducers:
+2026-01-13 18:47:00.763 |   set mapreduce.job.reduces=<number>
+2026-01-13 18:47:01.184 | Job running in-process (local Hadoop)
+2026-01-13 18:47:02.231 | 2026-01-13 17:47:02,221 Stage-1 map = 0%,  reduce = 0%
+2026-01-13 18:47:07.275 | 2026-01-13 17:47:07,271 Stage-1 map = 17%,  reduce = 0%
+2026-01-13 18:47:09.298 | 2026-01-13 17:47:09,292 Stage-1 map = 100%,  reduce = 0%
+2026-01-13 18:47:11.326 | 2026-01-13 17:47:11,322 Stage-1 map = 100%,  reduce = 100%
+2026-01-13 18:47:11.329 | Ended Job = job_local593896194_0016
+2026-01-13 18:47:11.338 | Launching Job 2 out of 2
+2026-01-13 18:47:11.341 | Number of reduce tasks determined at compile time: 1
+2026-01-13 18:47:11.341 | In order to change the average load for a reducer (in bytes):
+2026-01-13 18:47:11.341 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 18:47:11.341 | In order to limit the maximum number of reducers:
+2026-01-13 18:47:11.341 |   set hive.exec.reducers.max=<number>
+2026-01-13 18:47:11.341 | In order to set a constant number of reducers:
+2026-01-13 18:47:11.341 |   set mapreduce.job.reduces=<number>
+2026-01-13 18:47:11.711 | Job running in-process (local Hadoop)
+2026-01-13 18:47:12.726 | 2026-01-13 17:47:12,722 Stage-2 map = 100%,  reduce = 100%
+2026-01-13 18:47:12.727 | Ended Job = job_local2000554575_0017
+2026-01-13 18:47:12.730 | MapReduce Jobs Launched: 
+2026-01-13 18:47:12.730 | Stage-Stage-1:  HDFS Read: 11465561233 HDFS Write: 1164 SUCCESS
+2026-01-13 18:47:12.730 | Stage-Stage-2:  HDFS Read: 5758059042 HDFS Write: 582 SUCCESS
+2026-01-13 18:47:12.731 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 18:47:12.732 | OK
+2026-01-13 18:49:22.285 | OK
+2026-01-13 18:49:22.681 | OK
+2026-01-13 18:49:36.164 | OK
+2026-01-13 18:49:36.474 | OK
+2026-01-13 18:53:16.252 | OK
+2026-01-13 18:54:16.907 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 18:54:16.907 | Query ID = root_20260113175416_6ded3e7f-096c-45c5-8248-8aed7e4c8f33
+2026-01-13 18:54:16.907 | Total jobs = 1
+2026-01-13 18:54:16.909 | Launching Job 1 out of 1
+2026-01-13 18:54:16.943 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-13 18:54:16.943 | In order to change the average load for a reducer (in bytes):
+2026-01-13 18:54:16.943 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 18:54:16.943 | In order to limit the maximum number of reducers:
+2026-01-13 18:54:16.943 |   set hive.exec.reducers.max=<number>
+2026-01-13 18:54:16.943 | In order to set a constant number of reducers:
+2026-01-13 18:54:16.943 |   set mapreduce.job.reduces=<number>
+2026-01-13 18:54:17.268 | Job running in-process (local Hadoop)
+2026-01-13 18:54:18.326 | 2026-01-13 17:54:18,308 Stage-1 map = 0%,  reduce = 0%
+2026-01-13 18:54:22.365 | 2026-01-13 17:54:22,357 Stage-1 map = 100%,  reduce = 0%
+2026-01-13 18:54:23.381 | 2026-01-13 17:54:23,379 Stage-1 map = 100%,  reduce = 100%
+2026-01-13 18:54:23.388 | Ended Job = job_local1940128607_0018
+2026-01-13 18:54:23.401 | MapReduce Jobs Launched: 
+2026-01-13 18:54:23.401 | Stage-Stage-1:  HDFS Read: 12741563229 HDFS Write: 1164 SUCCESS
+2026-01-13 18:54:23.401 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 18:54:23.401 | OK
+2026-01-13 19:00:03.483 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 19:00:03.483 | Query ID = root_20260113180002_42fa34bf-a316-4c35-86d0-1228ce2c9334
+2026-01-13 19:00:03.483 | Total jobs = 5
+2026-01-13 19:00:03.485 | Launching Job 1 out of 5
+2026-01-13 19:00:03.487 | Number of reduce tasks determined at compile time: 1
+2026-01-13 19:00:03.487 | In order to change the average load for a reducer (in bytes):
+2026-01-13 19:00:03.487 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 19:00:03.487 | In order to limit the maximum number of reducers:
+2026-01-13 19:00:03.487 |   set hive.exec.reducers.max=<number>
+2026-01-13 19:00:03.488 | In order to set a constant number of reducers:
+2026-01-13 19:00:03.488 |   set mapreduce.job.reduces=<number>
+2026-01-13 19:00:03.837 | Job running in-process (local Hadoop)
+2026-01-13 19:00:04.859 | 2026-01-13 18:00:04,856 Stage-1 map = 0%,  reduce = 0%
+2026-01-13 19:00:05.871 | 2026-01-13 18:00:05,868 Stage-1 map = 100%,  reduce = 0%
+2026-01-13 19:00:06.876 | 2026-01-13 18:00:06,876 Stage-1 map = 100%,  reduce = 100%
+2026-01-13 19:00:06.879 | Ended Job = job_local307461045_0019
+2026-01-13 19:00:06.888 | Launching Job 2 out of 5
+2026-01-13 19:00:06.895 | Number of reduce tasks determined at compile time: 1
+2026-01-13 19:00:06.895 | In order to change the average load for a reducer (in bytes):
+2026-01-13 19:00:06.895 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 19:00:06.895 | In order to limit the maximum number of reducers:
+2026-01-13 19:00:06.895 |   set hive.exec.reducers.max=<number>
+2026-01-13 19:00:06.895 | In order to set a constant number of reducers:
+2026-01-13 19:00:06.895 |   set mapreduce.job.reduces=<number>
+2026-01-13 19:00:07.118 | Job running in-process (local Hadoop)
+2026-01-13 19:00:08.140 | 2026-01-13 18:00:08,136 Stage-3 map = 100%,  reduce = 100%
+2026-01-13 19:00:08.143 | Ended Job = job_local822501551_0020
+2026-01-13 19:00:08.152 | Launching Job 3 out of 5
+2026-01-13 19:00:08.154 | Number of reduce tasks determined at compile time: 1
+2026-01-13 19:00:08.154 | In order to change the average load for a reducer (in bytes):
+2026-01-13 19:00:08.155 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 19:00:08.155 | In order to limit the maximum number of reducers:
+2026-01-13 19:00:08.155 |   set hive.exec.reducers.max=<number>
+2026-01-13 19:00:08.155 | In order to set a constant number of reducers:
+2026-01-13 19:00:08.155 |   set mapreduce.job.reduces=<number>
+2026-01-13 19:00:08.391 | Job running in-process (local Hadoop)
+2026-01-13 19:00:09.399 | 2026-01-13 18:00:09,398 Stage-4 map = 100%,  reduce = 100%
+2026-01-13 19:00:09.401 | Ended Job = job_local1408144189_0021
+2026-01-13 19:00:09.404 | Launching Job 4 out of 5
+2026-01-13 19:00:09.405 | Number of reduce tasks determined at compile time: 1
+2026-01-13 19:00:09.406 | In order to change the average load for a reducer (in bytes):
+2026-01-13 19:00:09.406 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 19:00:09.406 | In order to limit the maximum number of reducers:
+2026-01-13 19:00:09.406 |   set hive.exec.reducers.max=<number>
+2026-01-13 19:00:09.406 | In order to set a constant number of reducers:
+2026-01-13 19:00:09.406 |   set mapreduce.job.reduces=<number>
+2026-01-13 19:00:09.598 | Job running in-process (local Hadoop)
+2026-01-13 19:00:10.607 | 2026-01-13 18:00:10,605 Stage-5 map = 100%,  reduce = 100%
+2026-01-13 19:00:10.612 | Ended Job = job_local489508628_0022
+2026-01-13 19:00:10.620 | Launching Job 5 out of 5
+2026-01-13 19:00:10.621 | Number of reduce tasks is set to 0 since there's no reduce operator
+2026-01-13 19:00:11.091 | Job running in-process (local Hadoop)
+2026-01-13 19:00:12.108 | 2026-01-13 18:00:12,105 Stage-2 map = 100%,  reduce = 0%
+2026-01-13 19:00:12.110 | Ended Job = job_local1192015613_0023
+2026-01-13 19:00:12.113 | MapReduce Jobs Launched: 
+2026-01-13 19:00:12.113 | Stage-Stage-1:  HDFS Read: 10500534706 HDFS Write: 873 SUCCESS
+2026-01-13 19:00:12.114 | Stage-Stage-3:  HDFS Read: 7034821294 HDFS Write: 582 SUCCESS
+2026-01-13 19:00:12.114 | Stage-Stage-4:  HDFS Read: 7041851050 HDFS Write: 582 SUCCESS
+2026-01-13 19:00:12.114 | Stage-Stage-5:  HDFS Read: 7048590004 HDFS Write: 582 SUCCESS
+2026-01-13 19:00:12.114 | Stage-Stage-2:  HDFS Read: 14097180008 HDFS Write: 1164 SUCCESS
+2026-01-13 19:00:12.114 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 19:00:12.114 | OK
+2026-01-13 19:00:35.477 | OK
+2026-01-13 19:00:47.240 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 19:00:47.241 | Query ID = root_20260113180046_e7c3cb73-3070-4831-a913-e222992b1d9a
+2026-01-13 19:00:47.241 | Total jobs = 1
+2026-01-13 19:00:47.242 | Launching Job 1 out of 1
+2026-01-13 19:00:47.259 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-13 19:00:47.259 | In order to change the average load for a reducer (in bytes):
+2026-01-13 19:00:47.259 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 19:00:47.259 | In order to limit the maximum number of reducers:
+2026-01-13 19:00:47.259 |   set hive.exec.reducers.max=<number>
+2026-01-13 19:00:47.259 | In order to set a constant number of reducers:
+2026-01-13 19:00:47.259 |   set mapreduce.job.reduces=<number>
+2026-01-13 19:00:47.565 | Job running in-process (local Hadoop)
+2026-01-13 19:00:48.623 | 2026-01-13 18:00:48,606 Stage-1 map = 0%,  reduce = 0%
+2026-01-13 19:00:50.762 | 2026-01-13 18:00:50,754 Stage-1 map = 100%,  reduce = 0%
+2026-01-13 19:00:51.775 | 2026-01-13 18:00:51,773 Stage-1 map = 100%,  reduce = 100%
+2026-01-13 19:00:51.783 | Ended Job = job_local1767623320_0024
+2026-01-13 19:00:51.793 | MapReduce Jobs Launched: 
+2026-01-13 19:00:51.793 | Stage-Stage-1:  HDFS Read: 15322625153 HDFS Write: 1164 SUCCESS
+2026-01-13 19:00:51.794 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 19:00:51.794 | OK
+2026-01-13 19:01:05.528 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 19:01:05.529 | Query ID = root_20260113180104_a2e90a1c-ffd2-461b-849b-bb066b08c41d
+2026-01-13 19:01:05.530 | Total jobs = 2
+2026-01-13 19:01:05.531 | Launching Job 1 out of 2
+2026-01-13 19:01:05.546 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-13 19:01:05.546 | In order to change the average load for a reducer (in bytes):
+2026-01-13 19:01:05.546 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 19:01:05.546 | In order to limit the maximum number of reducers:
+2026-01-13 19:01:05.547 |   set hive.exec.reducers.max=<number>
+2026-01-13 19:01:05.547 | In order to set a constant number of reducers:
+2026-01-13 19:01:05.547 |   set mapreduce.job.reduces=<number>
+2026-01-13 19:01:05.874 | Job running in-process (local Hadoop)
+2026-01-13 19:01:06.918 | 2026-01-13 18:01:06,908 Stage-1 map = 0%,  reduce = 0%
+2026-01-13 19:01:11.958 | 2026-01-13 18:01:11,954 Stage-1 map = 100%,  reduce = 0%
+2026-01-13 19:01:13.992 | 2026-01-13 18:01:13,985 Stage-1 map = 100%,  reduce = 100%
+2026-01-13 19:01:13.993 | Ended Job = job_local1325383866_0025
+2026-01-13 19:01:14.000 | Launching Job 2 out of 2
+2026-01-13 19:01:14.004 | Number of reduce tasks determined at compile time: 1
+2026-01-13 19:01:14.004 | In order to change the average load for a reducer (in bytes):
+2026-01-13 19:01:14.004 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 19:01:14.004 | In order to limit the maximum number of reducers:
+2026-01-13 19:01:14.004 |   set hive.exec.reducers.max=<number>
+2026-01-13 19:01:14.004 | In order to set a constant number of reducers:
+2026-01-13 19:01:14.004 |   set mapreduce.job.reduces=<number>
+2026-01-13 19:01:14.353 | Job running in-process (local Hadoop)
+2026-01-13 19:01:15.366 | 2026-01-13 18:01:15,365 Stage-2 map = 100%,  reduce = 100%
+2026-01-13 19:01:15.368 | Ended Job = job_local90694353_0026
+2026-01-13 19:01:15.374 | MapReduce Jobs Launched: 
+2026-01-13 19:01:15.374 | Stage-Stage-1:  HDFS Read: 16598627149 HDFS Write: 1164 SUCCESS
+2026-01-13 19:01:15.374 | Stage-Stage-2:  HDFS Read: 8324592000 HDFS Write: 582 SUCCESS
+2026-01-13 19:01:15.374 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 19:01:15.374 | OK
+2026-01-13 19:01:28.371 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 19:01:28.371 | Query ID = root_20260113180127_6d15f7f0-7651-4214-92a9-385c2ecd13e9
+2026-01-13 19:01:28.371 | Total jobs = 1
+2026-01-13 19:01:28.373 | Launching Job 1 out of 1
+2026-01-13 19:01:28.390 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-13 19:01:28.390 | In order to change the average load for a reducer (in bytes):
+2026-01-13 19:01:28.390 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 19:01:28.390 | In order to limit the maximum number of reducers:
+2026-01-13 19:01:28.390 |   set hive.exec.reducers.max=<number>
+2026-01-13 19:01:28.390 | In order to set a constant number of reducers:
+2026-01-13 19:01:28.390 |   set mapreduce.job.reduces=<number>
+2026-01-13 19:01:28.694 | Job running in-process (local Hadoop)
+2026-01-13 19:01:29.737 | 2026-01-13 18:01:29,728 Stage-1 map = 0%,  reduce = 0%
+2026-01-13 19:01:34.763 | 2026-01-13 18:01:34,762 Stage-1 map = 17%,  reduce = 0%
+2026-01-13 19:01:37.778 | 2026-01-13 18:01:37,776 Stage-1 map = 100%,  reduce = 0%
+2026-01-13 19:01:39.795 | 2026-01-13 18:01:39,793 Stage-1 map = 100%,  reduce = 100%
+2026-01-13 19:01:39.797 | Ended Job = job_local1443323180_0027
+2026-01-13 19:01:39.804 | MapReduce Jobs Launched: 
+2026-01-13 19:01:39.804 | Stage-Stage-1:  HDFS Read: 17874629145 HDFS Write: 1164 SUCCESS
+2026-01-13 19:01:39.804 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 19:01:39.804 | OK
+2026-01-13 19:01:53.001 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 19:01:53.001 | Query ID = root_20260113180152_1c4c8a24-7c66-4af0-a10d-e424f7bd0482
+2026-01-13 19:01:53.002 | Total jobs = 1
+2026-01-13 19:01:55.994 | SLF4J: Class path contains multiple SLF4J bindings.
+2026-01-13 19:01:55.995 | SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.6.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+2026-01-13 19:01:55.995 | SLF4J: Found binding in [jar:file:/opt/hadoop-2.7.4/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+2026-01-13 19:01:55.995 | SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+2026-01-13 19:01:55.996 | SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+2026-01-13 19:01:57.301 | Execution log at: /tmp/root/root_20260113180152_1c4c8a24-7c66-4af0-a10d-e424f7bd0482.log
+2026-01-13 19:01:58.058 | 2026-01-13 18:01:58	Starting to launch local task to process map join;	maximum memory = 477626368
+2026-01-13 19:01:59.222 | 2026-01-13 18:01:59	Dump the side-table for tag: 1 with group count: 5000 into file: file:/tmp/root/c764f107-f977-4b57-a0ba-957f75ad3bd1/hive_2026-01-13_18-01-52_089_1803455924742266540-1/-local-10005/HashTable-Stage-2/MapJoin-mapfile21--.hashtable
+2026-01-13 19:01:59.356 | 2026-01-13 18:01:59	Uploaded 1 File to: file:/tmp/root/c764f107-f977-4b57-a0ba-957f75ad3bd1/hive_2026-01-13_18-01-52_089_1803455924742266540-1/-local-10005/HashTable-Stage-2/MapJoin-mapfile21--.hashtable (201237 bytes)
+2026-01-13 19:01:59.357 | 2026-01-13 18:01:59	End of local task; Time Taken: 1.301 sec.
+2026-01-13 19:01:59.879 | Execution completed successfully
+2026-01-13 19:01:59.881 | MapredLocal task succeeded
+2026-01-13 19:01:59.884 | Launching Job 1 out of 1
+2026-01-13 19:01:59.890 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-13 19:01:59.890 | In order to change the average load for a reducer (in bytes):
+2026-01-13 19:01:59.890 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 19:01:59.890 | In order to limit the maximum number of reducers:
+2026-01-13 19:01:59.890 |   set hive.exec.reducers.max=<number>
+2026-01-13 19:01:59.890 | In order to set a constant number of reducers:
+2026-01-13 19:01:59.890 |   set mapreduce.job.reduces=<number>
+2026-01-13 19:02:00.151 | Job running in-process (local Hadoop)
+2026-01-13 19:02:01.205 | 2026-01-13 18:02:01,193 Stage-2 map = 0%,  reduce = 0%
+2026-01-13 19:02:06.271 | 2026-01-13 18:02:06,268 Stage-2 map = 17%,  reduce = 0%
+2026-01-13 19:02:07.404 | 2026-01-13 18:02:07,388 Stage-2 map = 100%,  reduce = 0%
+2026-01-13 19:02:09.422 | 2026-01-13 18:02:09,420 Stage-2 map = 100%,  reduce = 100%
+2026-01-13 19:02:09.424 | Ended Job = job_local1800324600_0028
+2026-01-13 19:02:09.438 | MapReduce Jobs Launched: 
+2026-01-13 19:02:09.439 | Stage-Stage-2:  HDFS Read: 19150631141 HDFS Write: 1164 SUCCESS
+2026-01-13 19:02:09.439 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 19:02:09.439 | OK
+2026-01-13 19:02:22.327 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 19:02:22.327 | Query ID = root_20260113180221_08d99adb-363a-45d5-93de-3d063f0f5532
+2026-01-13 19:02:22.327 | Total jobs = 2
+2026-01-13 19:02:22.329 | Launching Job 1 out of 2
+2026-01-13 19:02:22.355 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-13 19:02:22.355 | In order to change the average load for a reducer (in bytes):
+2026-01-13 19:02:22.355 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 19:02:22.355 | In order to limit the maximum number of reducers:
+2026-01-13 19:02:22.355 |   set hive.exec.reducers.max=<number>
+2026-01-13 19:02:22.355 | In order to set a constant number of reducers:
+2026-01-13 19:02:22.355 |   set mapreduce.job.reduces=<number>
+2026-01-13 19:02:22.649 | Job running in-process (local Hadoop)
+2026-01-13 19:02:23.663 | 2026-01-13 18:02:23,662 Stage-1 map = 0%,  reduce = 0%
+2026-01-13 19:02:29.681 | 2026-01-13 18:02:29,680 Stage-1 map = 11%,  reduce = 0%
+2026-01-13 19:02:32.713 | 2026-01-13 18:02:32,708 Stage-1 map = 100%,  reduce = 0%
+2026-01-13 19:02:38.765 | 2026-01-13 18:02:38,759 Stage-1 map = 100%,  reduce = 50%
+2026-01-13 19:02:41.790 | 2026-01-13 18:02:41,788 Stage-1 map = 100%,  reduce = 100%
+2026-01-13 19:02:41.792 | Ended Job = job_local925753296_0029
+2026-01-13 19:02:41.802 | Launching Job 2 out of 2
+2026-01-13 19:02:41.807 | Number of reduce tasks not specified. Estimated from input data size: 1
+2026-01-13 19:02:41.807 | In order to change the average load for a reducer (in bytes):
+2026-01-13 19:02:41.807 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 19:02:41.808 | In order to limit the maximum number of reducers:
+2026-01-13 19:02:41.808 |   set hive.exec.reducers.max=<number>
+2026-01-13 19:02:41.808 | In order to set a constant number of reducers:
+2026-01-13 19:02:41.808 |   set mapreduce.job.reduces=<number>
+2026-01-13 19:02:42.141 | Job running in-process (local Hadoop)
+2026-01-13 19:02:43.155 | 2026-01-13 18:02:43,153 Stage-2 map = 100%,  reduce = 100%
+2026-01-13 19:02:43.159 | Ended Job = job_local1316888749_0030
+2026-01-13 19:02:43.166 | MapReduce Jobs Launched: 
+2026-01-13 19:02:43.166 | Stage-Stage-1:  HDFS Read: 25547071018 HDFS Write: 1455 SUCCESS
+2026-01-13 19:02:43.166 | Stage-Stage-2:  HDFS Read: 10239355250 HDFS Write: 582 SUCCESS
+2026-01-13 19:02:43.166 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 19:02:43.167 | OK
+2026-01-13 19:03:13.008 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 19:03:13.008 | Query ID = root_20260113180312_d54842a5-aad1-4692-a51e-b3c6beac1b15
+2026-01-13 19:03:13.009 | Total jobs = 2
+2026-01-13 19:03:13.012 | Launching Job 1 out of 2
+2026-01-13 19:03:13.038 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-13 19:03:13.039 | In order to change the average load for a reducer (in bytes):
+2026-01-13 19:03:13.039 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 19:03:13.039 | In order to limit the maximum number of reducers:
+2026-01-13 19:03:13.039 |   set hive.exec.reducers.max=<number>
+2026-01-13 19:03:13.039 | In order to set a constant number of reducers:
+2026-01-13 19:03:13.039 |   set mapreduce.job.reduces=<number>
+2026-01-13 19:03:13.384 | Job running in-process (local Hadoop)
+2026-01-13 19:03:14.402 | 2026-01-13 18:03:14,400 Stage-1 map = 0%,  reduce = 0%
+2026-01-13 19:03:19.566 | 2026-01-13 18:03:19,557 Stage-1 map = 100%,  reduce = 0%
+2026-01-13 19:03:21.603 | 2026-01-13 18:03:21,592 Stage-1 map = 100%,  reduce = 100%
+2026-01-13 19:03:21.609 | Ended Job = job_local547399869_0031
+2026-01-13 19:03:21.636 | Launching Job 2 out of 2
+2026-01-13 19:03:21.646 | Number of reduce tasks determined at compile time: 1
+2026-01-13 19:03:21.646 | In order to change the average load for a reducer (in bytes):
+2026-01-13 19:03:21.646 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 19:03:21.647 | In order to limit the maximum number of reducers:
+2026-01-13 19:03:21.647 |   set hive.exec.reducers.max=<number>
+2026-01-13 19:03:21.647 | In order to set a constant number of reducers:
+2026-01-13 19:03:21.647 |   set mapreduce.job.reduces=<number>
+2026-01-13 19:03:22.411 | Job running in-process (local Hadoop)
+2026-01-13 19:03:23.432 | 2026-01-13 18:03:23,429 Stage-2 map = 100%,  reduce = 100%
+2026-01-13 19:03:23.433 | Ended Job = job_local1799461291_0032
+2026-01-13 19:03:23.441 | MapReduce Jobs Launched: 
+2026-01-13 19:03:23.441 | Stage-Stage-1:  HDFS Read: 21704155645 HDFS Write: 1164 SUCCESS
+2026-01-13 19:03:23.441 | Stage-Stage-2:  HDFS Read: 10877356248 HDFS Write: 582 SUCCESS
+2026-01-13 19:03:23.441 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 19:03:23.442 | OK
+2026-01-13 19:03:39.644 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 19:03:39.644 | Query ID = root_20260113180338_dfbaf978-fd38-4227-9774-e3b0b6b9cf6e
+2026-01-13 19:03:39.644 | Total jobs = 2
+2026-01-13 19:03:39.646 | Launching Job 1 out of 2
+2026-01-13 19:03:39.662 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-13 19:03:39.663 | In order to change the average load for a reducer (in bytes):
+2026-01-13 19:03:39.663 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 19:03:39.663 | In order to limit the maximum number of reducers:
+2026-01-13 19:03:39.663 |   set hive.exec.reducers.max=<number>
+2026-01-13 19:03:39.663 | In order to set a constant number of reducers:
+2026-01-13 19:03:39.663 |   set mapreduce.job.reduces=<number>
+2026-01-13 19:03:39.995 | Job running in-process (local Hadoop)
+2026-01-13 19:03:41.060 | 2026-01-13 18:03:41,034 Stage-1 map = 0%,  reduce = 0%
+2026-01-13 19:03:46.092 | 2026-01-13 18:03:46,087 Stage-1 map = 100%,  reduce = 0%
+2026-01-13 19:03:47.100 | 2026-01-13 18:03:47,098 Stage-1 map = 100%,  reduce = 100%
+2026-01-13 19:03:47.102 | Ended Job = job_local1659094962_0033
+2026-01-13 19:03:47.115 | Launching Job 2 out of 2
+2026-01-13 19:03:47.118 | Number of reduce tasks determined at compile time: 1
+2026-01-13 19:03:47.118 | In order to change the average load for a reducer (in bytes):
+2026-01-13 19:03:47.118 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 19:03:47.118 | In order to limit the maximum number of reducers:
+2026-01-13 19:03:47.118 |   set hive.exec.reducers.max=<number>
+2026-01-13 19:03:47.118 | In order to set a constant number of reducers:
+2026-01-13 19:03:47.118 |   set mapreduce.job.reduces=<number>
+2026-01-13 19:03:47.586 | Job running in-process (local Hadoop)
+2026-01-13 19:03:48.611 | 2026-01-13 18:03:48,609 Stage-2 map = 100%,  reduce = 100%
+2026-01-13 19:03:48.612 | Ended Job = job_local517513003_0034
+2026-01-13 19:03:48.621 | MapReduce Jobs Launched: 
+2026-01-13 19:03:48.621 | Stage-Stage-1:  HDFS Read: 22980157641 HDFS Write: 1164 SUCCESS
+2026-01-13 19:03:48.621 | Stage-Stage-2:  HDFS Read: 11515357246 HDFS Write: 582 SUCCESS
+2026-01-13 19:03:48.621 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 19:03:48.622 | OK
+2026-01-13 19:03:59.299 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 19:03:59.299 | Query ID = root_20260113180358_53b8f246-ffb7-4fd9-bfd4-1a8c993a90c5
+2026-01-13 19:03:59.299 | Total jobs = 1
+2026-01-13 19:03:59.301 | Launching Job 1 out of 1
+2026-01-13 19:03:59.302 | Number of reduce tasks determined at compile time: 1
+2026-01-13 19:03:59.302 | In order to change the average load for a reducer (in bytes):
+2026-01-13 19:03:59.302 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 19:03:59.303 | In order to limit the maximum number of reducers:
+2026-01-13 19:03:59.303 |   set hive.exec.reducers.max=<number>
+2026-01-13 19:03:59.303 | In order to set a constant number of reducers:
+2026-01-13 19:03:59.303 |   set mapreduce.job.reduces=<number>
+2026-01-13 19:03:59.606 | Job running in-process (local Hadoop)
+2026-01-13 19:04:00.661 | 2026-01-13 18:04:00,643 Stage-1 map = 0%,  reduce = 0%
+2026-01-13 19:04:05.699 | 2026-01-13 18:04:05,693 Stage-1 map = 100%,  reduce = 0%
+2026-01-13 19:04:07.736 | 2026-01-13 18:04:07,729 Stage-1 map = 100%,  reduce = 100%
+2026-01-13 19:04:07.740 | Ended Job = job_local896815735_0035
+2026-01-13 19:04:07.751 | MapReduce Jobs Launched: 
+2026-01-13 19:04:07.751 | Stage-Stage-1:  HDFS Read: 18179480515 HDFS Write: 873 SUCCESS
+2026-01-13 19:04:07.751 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 19:04:07.752 | OK
+2026-01-13 19:04:17.673 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-13 19:04:17.673 | Query ID = root_20260113180416_176d8f1e-8766-4af2-a1c8-6ae08f362072
+2026-01-13 19:04:17.674 | Total jobs = 2
+2026-01-13 19:04:17.675 | Launching Job 1 out of 2
+2026-01-13 19:04:17.691 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-13 19:04:17.691 | In order to change the average load for a reducer (in bytes):
+2026-01-13 19:04:17.691 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 19:04:17.691 | In order to limit the maximum number of reducers:
+2026-01-13 19:04:17.691 |   set hive.exec.reducers.max=<number>
+2026-01-13 19:04:17.691 | In order to set a constant number of reducers:
+2026-01-13 19:04:17.691 |   set mapreduce.job.reduces=<number>
+2026-01-13 19:04:17.946 | Job running in-process (local Hadoop)
+2026-01-13 19:04:18.963 | 2026-01-13 18:04:18,961 Stage-1 map = 0%,  reduce = 0%
+2026-01-13 19:04:25.025 | 2026-01-13 18:04:25,014 Stage-1 map = 100%,  reduce = 0%
+2026-01-13 19:04:27.050 | 2026-01-13 18:04:27,046 Stage-1 map = 100%,  reduce = 100%
+2026-01-13 19:04:27.056 | Ended Job = job_local176295212_0036
+2026-01-13 19:04:27.071 | Launching Job 2 out of 2
+2026-01-13 19:04:27.076 | Number of reduce tasks determined at compile time: 1
+2026-01-13 19:04:27.076 | In order to change the average load for a reducer (in bytes):
+2026-01-13 19:04:27.076 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-13 19:04:27.076 | In order to limit the maximum number of reducers:
+2026-01-13 19:04:27.077 |   set hive.exec.reducers.max=<number>
+2026-01-13 19:04:27.077 | In order to set a constant number of reducers:
+2026-01-13 19:04:27.077 |   set mapreduce.job.reduces=<number>
+2026-01-13 19:04:27.434 | Job running in-process (local Hadoop)
+2026-01-13 19:04:28.447 | 2026-01-13 18:04:28,446 Stage-2 map = 100%,  reduce = 100%
+2026-01-13 19:04:28.448 | Ended Job = job_local1481946493_0037
+2026-01-13 19:04:28.454 | MapReduce Jobs Launched: 
+2026-01-13 19:04:28.455 | Stage-Stage-1:  HDFS Read: 25532161633 HDFS Write: 1164 SUCCESS
+2026-01-13 19:04:28.455 | Stage-Stage-2:  HDFS Read: 12791359242 HDFS Write: 582 SUCCESS
+2026-01-13 19:04:28.455 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-13 19:04:28.455 | OK
+2026-01-19 09:04:41.397 | Configuring core
+2026-01-19 09:04:41.517 |  - Setting fs.defaultFS=hdfs://ef0cd96e0979:8020
+2026-01-19 09:04:41.567 | Configuring hdfs
+2026-01-19 09:04:41.623 | Configuring yarn
+2026-01-19 09:04:41.677 | Configuring httpfs
+2026-01-19 09:04:41.733 | Configuring kms
+2026-01-19 09:04:41.789 | Configuring mapred
+2026-01-19 09:04:41.843 | Configuring hive
+2026-01-19 09:04:41.953 |  - Setting hive.metastore.uris=thrift://hive-metastore:9083
+2026-01-19 09:04:42.053 |  - Setting hive.server2.authentication=NOSASL
+2026-01-19 09:04:42.153 |  - Setting hive.server2.enable.doAs=false
+2026-01-19 09:04:42.199 | Configuring for multihomed network
+2026-01-19 09:04:42.727 | [1/100] hive-metastore:9083 is available.
+2026-01-19 09:04:42.970 | 2026-01-19 08:04:42: Starting HiveServer2
+2026-01-19 09:04:45.857 | SLF4J: Class path contains multiple SLF4J bindings.
+2026-01-19 09:04:45.857 | SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.6.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+2026-01-19 09:04:45.857 | SLF4J: Found binding in [jar:file:/opt/hadoop-2.7.4/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+2026-01-19 09:04:45.858 | SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+2026-01-19 09:04:45.860 | SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+2026-01-19 09:10:19.813 | OK
+2026-01-19 09:10:20.584 | OK
+2026-01-19 09:10:33.644 | OK
+2026-01-19 09:10:33.919 | OK
+2026-01-19 09:11:50.906 | OK
+2026-01-19 09:11:51.164 | OK
+2026-01-19 09:11:57.137 | OK
+2026-01-19 09:11:57.429 | OK
+2026-01-19 09:12:04.394 | OK
+2026-01-19 09:12:04.683 | OK
+2026-01-19 09:12:04.879 | OK
+2026-01-19 09:12:05.200 | OK
+2026-01-19 09:12:06.728 | OK
+2026-01-19 09:12:07.088 | OK
+2026-01-19 09:12:10.677 | OK
+2026-01-19 09:12:10.985 | OK
+2026-01-19 10:34:49.664 | OK
+2026-01-19 10:35:02.776 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-19 10:35:02.777 | Query ID = root_20260119093501_51a27963-c9fb-4a6e-b6b5-3bdd10c04b9a
+2026-01-19 10:35:02.777 | Total jobs = 5
+2026-01-19 10:35:02.794 | Launching Job 1 out of 5
+2026-01-19 10:35:02.796 | Number of reduce tasks determined at compile time: 1
+2026-01-19 10:35:02.796 | In order to change the average load for a reducer (in bytes):
+2026-01-19 10:35:02.796 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-19 10:35:02.796 | In order to limit the maximum number of reducers:
+2026-01-19 10:35:02.796 |   set hive.exec.reducers.max=<number>
+2026-01-19 10:35:02.796 | In order to set a constant number of reducers:
+2026-01-19 10:35:02.796 |   set mapreduce.job.reduces=<number>
+2026-01-19 10:35:03.917 | Job running in-process (local Hadoop)
+2026-01-19 10:35:04.965 | 2026-01-19 09:35:04,956 Stage-1 map = 0%,  reduce = 0%
+2026-01-19 10:35:06.995 | 2026-01-19 09:35:06,993 Stage-1 map = 100%,  reduce = 0%
+2026-01-19 10:35:09.083 | 2026-01-19 09:35:09,080 Stage-1 map = 100%,  reduce = 100%
+2026-01-19 10:35:09.097 | Ended Job = job_local709181413_0001
+2026-01-19 10:35:09.122 | Launching Job 2 out of 5
+2026-01-19 10:35:09.127 | Number of reduce tasks determined at compile time: 1
+2026-01-19 10:35:09.127 | In order to change the average load for a reducer (in bytes):
+2026-01-19 10:35:09.127 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-19 10:35:09.127 | In order to limit the maximum number of reducers:
+2026-01-19 10:35:09.127 |   set hive.exec.reducers.max=<number>
+2026-01-19 10:35:09.127 | In order to set a constant number of reducers:
+2026-01-19 10:35:09.127 |   set mapreduce.job.reduces=<number>
+2026-01-19 10:35:09.562 | Job running in-process (local Hadoop)
+2026-01-19 10:35:10.628 | 2026-01-19 09:35:10,622 Stage-3 map = 100%,  reduce = 100%
+2026-01-19 10:35:10.642 | Ended Job = job_local564931669_0002
+2026-01-19 10:35:10.673 | Launching Job 3 out of 5
+2026-01-19 10:35:10.679 | Number of reduce tasks determined at compile time: 1
+2026-01-19 10:35:10.679 | In order to change the average load for a reducer (in bytes):
+2026-01-19 10:35:10.679 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-19 10:35:10.679 | In order to limit the maximum number of reducers:
+2026-01-19 10:35:10.680 |   set hive.exec.reducers.max=<number>
+2026-01-19 10:35:10.680 | In order to set a constant number of reducers:
+2026-01-19 10:35:10.680 |   set mapreduce.job.reduces=<number>
+2026-01-19 10:35:11.247 | Job running in-process (local Hadoop)
+2026-01-19 10:35:12.296 | 2026-01-19 09:35:12,293 Stage-4 map = 100%,  reduce = 100%
+2026-01-19 10:35:12.301 | Ended Job = job_local1365827800_0003
+2026-01-19 10:35:12.310 | Launching Job 4 out of 5
+2026-01-19 10:35:12.312 | Number of reduce tasks determined at compile time: 1
+2026-01-19 10:35:12.313 | In order to change the average load for a reducer (in bytes):
+2026-01-19 10:35:12.313 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-19 10:35:12.313 | In order to limit the maximum number of reducers:
+2026-01-19 10:35:12.313 |   set hive.exec.reducers.max=<number>
+2026-01-19 10:35:12.313 | In order to set a constant number of reducers:
+2026-01-19 10:35:12.313 |   set mapreduce.job.reduces=<number>
+2026-01-19 10:35:12.699 | Job running in-process (local Hadoop)
+2026-01-19 10:35:13.743 | 2026-01-19 09:35:13,739 Stage-5 map = 100%,  reduce = 100%
+2026-01-19 10:35:13.752 | Ended Job = job_local909787985_0004
+2026-01-19 10:35:13.758 | Launching Job 5 out of 5
+2026-01-19 10:35:13.760 | Number of reduce tasks is set to 0 since there's no reduce operator
+2026-01-19 10:35:14.325 | Job running in-process (local Hadoop)
+2026-01-19 10:35:15.370 | 2026-01-19 09:35:15,364 Stage-2 map = 100%,  reduce = 0%
+2026-01-19 10:35:15.390 | Ended Job = job_local376078287_0005
+2026-01-19 10:35:15.410 | MapReduce Jobs Launched: 
+2026-01-19 10:35:15.411 | Stage-Stage-1:  HDFS Read: 906444646 HDFS Write: 0 SUCCESS
+2026-01-19 10:35:15.411 | Stage-Stage-3:  HDFS Read: 638761254 HDFS Write: 0 SUCCESS
+2026-01-19 10:35:15.411 | Stage-Stage-4:  HDFS Read: 645791010 HDFS Write: 0 SUCCESS
+2026-01-19 10:35:15.411 | Stage-Stage-5:  HDFS Read: 652529964 HDFS Write: 0 SUCCESS
+2026-01-19 10:35:15.411 | Stage-Stage-2:  HDFS Read: 1305059928 HDFS Write: 0 SUCCESS
+2026-01-19 10:35:15.411 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-19 10:35:15.412 | OK
+2026-01-19 10:36:04.498 | OK
+2026-01-19 10:37:15.955 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-19 10:37:15.955 | Query ID = root_20260119093715_2a1ad079-cffe-4348-83cc-d3328bc3f3fb
+2026-01-19 10:37:15.955 | Total jobs = 1
+2026-01-19 10:37:15.956 | Launching Job 1 out of 1
+2026-01-19 10:37:16.023 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-19 10:37:16.023 | In order to change the average load for a reducer (in bytes):
+2026-01-19 10:37:16.023 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-19 10:37:16.023 | In order to limit the maximum number of reducers:
+2026-01-19 10:37:16.023 |   set hive.exec.reducers.max=<number>
+2026-01-19 10:37:16.023 | In order to set a constant number of reducers:
+2026-01-19 10:37:16.023 |   set mapreduce.job.reduces=<number>
+2026-01-19 10:37:16.461 | Job running in-process (local Hadoop)
+2026-01-19 10:37:17.487 | 2026-01-19 09:37:17,482 Stage-1 map = 0%,  reduce = 0%
+2026-01-19 10:37:19.515 | 2026-01-19 09:37:19,514 Stage-1 map = 100%,  reduce = 0%
+2026-01-19 10:37:20.532 | 2026-01-19 09:37:20,528 Stage-1 map = 100%,  reduce = 100%
+2026-01-19 10:37:20.539 | Ended Job = job_local1554247987_0006
+2026-01-19 10:37:20.553 | MapReduce Jobs Launched: 
+2026-01-19 10:37:20.553 | Stage-Stage-1:  HDFS Read: 2530505073 HDFS Write: 0 SUCCESS
+2026-01-19 10:37:20.553 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-19 10:37:20.553 | OK
+2026-01-19 10:38:20.395 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-19 10:38:20.395 | Query ID = root_20260119093819_e57b697e-0576-4aad-ab9c-291c27745328
+2026-01-19 10:38:20.395 | Total jobs = 2
+2026-01-19 10:38:20.396 | Launching Job 1 out of 2
+2026-01-19 10:38:20.413 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-19 10:38:20.413 | In order to change the average load for a reducer (in bytes):
+2026-01-19 10:38:20.413 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-19 10:38:20.413 | In order to limit the maximum number of reducers:
+2026-01-19 10:38:20.413 |   set hive.exec.reducers.max=<number>
+2026-01-19 10:38:20.413 | In order to set a constant number of reducers:
+2026-01-19 10:38:20.413 |   set mapreduce.job.reduces=<number>
+2026-01-19 10:38:20.732 | Job running in-process (local Hadoop)
+2026-01-19 10:38:21.780 | 2026-01-19 09:38:21,771 Stage-1 map = 0%,  reduce = 0%
+2026-01-19 10:38:26.819 | 2026-01-19 09:38:26,816 Stage-1 map = 100%,  reduce = 0%
+2026-01-19 10:38:27.842 | 2026-01-19 09:38:27,833 Stage-1 map = 100%,  reduce = 100%
+2026-01-19 10:38:27.854 | Ended Job = job_local975900520_0007
+2026-01-19 10:38:27.882 | Launching Job 2 out of 2
+2026-01-19 10:38:27.890 | Number of reduce tasks determined at compile time: 1
+2026-01-19 10:38:27.890 | In order to change the average load for a reducer (in bytes):
+2026-01-19 10:38:27.890 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-19 10:38:27.891 | In order to limit the maximum number of reducers:
+2026-01-19 10:38:27.891 |   set hive.exec.reducers.max=<number>
+2026-01-19 10:38:27.891 | In order to set a constant number of reducers:
+2026-01-19 10:38:27.898 |   set mapreduce.job.reduces=<number>
+2026-01-19 10:38:28.338 | Job running in-process (local Hadoop)
+2026-01-19 10:38:29.355 | 2026-01-19 09:38:29,354 Stage-2 map = 100%,  reduce = 100%
+2026-01-19 10:38:29.358 | Ended Job = job_local1621586111_0008
+2026-01-19 10:38:29.364 | MapReduce Jobs Launched: 
+2026-01-19 10:38:29.364 | Stage-Stage-1:  HDFS Read: 3806507069 HDFS Write: 0 SUCCESS
+2026-01-19 10:38:29.365 | Stage-Stage-2:  HDFS Read: 1928531960 HDFS Write: 0 SUCCESS
+2026-01-19 10:38:29.365 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-19 10:38:29.365 | OK
+2026-01-19 10:38:44.564 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-19 10:38:44.565 | Query ID = root_20260119093843_6fa58f18-8ea1-4795-9fe3-1349d3c1d13e
+2026-01-19 10:38:44.565 | Total jobs = 1
+2026-01-19 10:38:44.566 | Launching Job 1 out of 1
+2026-01-19 10:38:44.575 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-19 10:38:44.575 | In order to change the average load for a reducer (in bytes):
+2026-01-19 10:38:44.575 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-19 10:38:44.575 | In order to limit the maximum number of reducers:
+2026-01-19 10:38:44.575 |   set hive.exec.reducers.max=<number>
+2026-01-19 10:38:44.575 | In order to set a constant number of reducers:
+2026-01-19 10:38:44.575 |   set mapreduce.job.reduces=<number>
+2026-01-19 10:38:44.906 | Job running in-process (local Hadoop)
+2026-01-19 10:38:45.960 | 2026-01-19 09:38:45,942 Stage-1 map = 0%,  reduce = 0%
+2026-01-19 10:38:51.004 | 2026-01-19 09:38:50,999 Stage-1 map = 17%,  reduce = 0%
+2026-01-19 10:38:54.033 | 2026-01-19 09:38:54,030 Stage-1 map = 100%,  reduce = 0%
+2026-01-19 10:38:56.080 | 2026-01-19 09:38:56,074 Stage-1 map = 100%,  reduce = 100%
+2026-01-19 10:38:56.084 | Ended Job = job_local1457502684_0009
+2026-01-19 10:38:56.090 | MapReduce Jobs Launched: 
+2026-01-19 10:38:56.091 | Stage-Stage-1:  HDFS Read: 5082509065 HDFS Write: 0 SUCCESS
+2026-01-19 10:38:56.091 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-19 10:38:56.091 | OK
+2026-01-19 10:39:07.189 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-19 10:39:07.190 | Query ID = root_20260119093906_10d23e39-3615-49ea-9ea3-7f30dcbb1bc6
+2026-01-19 10:39:07.190 | Total jobs = 1
+2026-01-19 10:39:07.191 | Launching Job 1 out of 1
+2026-01-19 10:39:07.193 | Number of reduce tasks is set to 0 since there's no reduce operator
+2026-01-19 10:39:07.566 | Job running in-process (local Hadoop)
+2026-01-19 10:39:08.577 | 2026-01-19 09:39:08,575 Stage-0 map = 0%,  reduce = 0%
+2026-01-19 10:39:10.594 | 2026-01-19 09:39:10,591 Stage-0 map = 100%,  reduce = 0%
+2026-01-19 10:39:11.611 | Ended Job = job_local707608136_0010
+2026-01-19 10:39:13.782 | MapReduce Jobs Launched: 
+2026-01-19 10:39:13.784 | Stage-Stage-0:  HDFS Read: 3153977105 HDFS Write: 301 SUCCESS
+2026-01-19 10:39:13.784 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-19 10:39:13.784 | OK
+2026-01-19 10:39:14.259 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-19 10:39:14.259 | Query ID = root_20260119093913_f5dbb3c9-829e-4233-bf7e-dd94ce67ee55
+2026-01-19 10:39:14.259 | Total jobs = 1
+2026-01-19 10:39:14.260 | Launching Job 1 out of 1
+2026-01-19 10:39:14.261 | Number of reduce tasks is set to 0 since there's no reduce operator
+2026-01-19 10:39:14.562 | Job running in-process (local Hadoop)
+2026-01-19 10:39:15.586 | 2026-01-19 09:39:15,582 Stage-0 map = 100%,  reduce = 0%
+2026-01-19 10:39:15.590 | Ended Job = job_local1355385033_0011
+2026-01-19 10:39:16.214 | MapReduce Jobs Launched: 
+2026-01-19 10:39:16.220 | Stage-Stage-0:  HDFS Read: 1602647306 HDFS Write: 291 SUCCESS
+2026-01-19 10:39:16.220 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-19 10:39:16.221 | OK
+2026-01-19 10:39:16.944 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-19 10:39:16.944 | Query ID = root_20260119093916_f045396f-9f20-444d-a22a-2e76f8dbc18a
+2026-01-19 10:39:16.945 | Total jobs = 1
+2026-01-19 10:39:16.945 | Launching Job 1 out of 1
+2026-01-19 10:39:16.947 | Number of reduce tasks determined at compile time: 1
+2026-01-19 10:39:16.947 | In order to change the average load for a reducer (in bytes):
+2026-01-19 10:39:16.947 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-19 10:39:16.947 | In order to limit the maximum number of reducers:
+2026-01-19 10:39:16.947 |   set hive.exec.reducers.max=<number>
+2026-01-19 10:39:16.947 | In order to set a constant number of reducers:
+2026-01-19 10:39:16.947 |   set mapreduce.job.reduces=<number>
+2026-01-19 10:39:17.191 | Job running in-process (local Hadoop)
+2026-01-19 10:39:18.218 | 2026-01-19 09:39:18,209 Stage-0 map = 0%,  reduce = 0%
+2026-01-19 10:39:29.292 | 2026-01-19 09:39:29,287 Stage-0 map = 17%,  reduce = 0%
+2026-01-19 10:39:35.368 | 2026-01-19 09:39:35,365 Stage-0 map = 100%,  reduce = 0%
+2026-01-19 10:39:39.409 | 2026-01-19 09:39:39,405 Stage-0 map = 100%,  reduce = 100%
+2026-01-19 10:39:39.411 | Ended Job = job_local2070226598_0012
+2026-01-19 10:39:40.003 | MapReduce Jobs Launched: 
+2026-01-19 10:39:40.004 | Stage-Stage-0:  HDFS Read: 5714386837 HDFS Write: 873 SUCCESS
+2026-01-19 10:39:40.004 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-19 10:39:40.004 | OK
+2026-01-19 10:39:57.940 | OK
+2026-01-19 10:40:14.702 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-19 10:40:14.702 | Query ID = root_20260119094014_cb31fbce-e46c-47b2-80f9-9a7cd924cae4
+2026-01-19 10:40:14.702 | Total jobs = 1
+2026-01-19 10:40:17.900 | SLF4J: Class path contains multiple SLF4J bindings.
+2026-01-19 10:40:17.902 | SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.6.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+2026-01-19 10:40:17.902 | SLF4J: Found binding in [jar:file:/opt/hadoop-2.7.4/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+2026-01-19 10:40:17.902 | SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+2026-01-19 10:40:17.903 | SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+2026-01-19 10:40:19.334 | Execution log at: /tmp/root/root_20260119094014_cb31fbce-e46c-47b2-80f9-9a7cd924cae4.log
+2026-01-19 10:40:20.165 | 2026-01-19 09:40:20	Starting to launch local task to process map join;	maximum memory = 477626368
+2026-01-19 10:40:21.525 | 2026-01-19 09:40:21	Dump the side-table for tag: 1 with group count: 5000 into file: file:/tmp/root/fff9287e-5da4-48de-b144-96bb13ad7fe8/hive_2026-01-19_09-40-14_014_4729822983099605899-2/-local-10005/HashTable-Stage-2/MapJoin-mapfile11--.hashtable
+2026-01-19 10:40:21.661 | 2026-01-19 09:40:21	Uploaded 1 File to: file:/tmp/root/fff9287e-5da4-48de-b144-96bb13ad7fe8/hive_2026-01-19_09-40-14_014_4729822983099605899-2/-local-10005/HashTable-Stage-2/MapJoin-mapfile11--.hashtable (201237 bytes)
+2026-01-19 10:40:21.662 | 2026-01-19 09:40:21	End of local task; Time Taken: 1.5 sec.
+2026-01-19 10:40:22.198 | Execution completed successfully
+2026-01-19 10:40:22.199 | MapredLocal task succeeded
+2026-01-19 10:40:22.204 | Launching Job 1 out of 1
+2026-01-19 10:40:22.218 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-19 10:40:22.219 | In order to change the average load for a reducer (in bytes):
+2026-01-19 10:40:22.219 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-19 10:40:22.219 | In order to limit the maximum number of reducers:
+2026-01-19 10:40:22.219 |   set hive.exec.reducers.max=<number>
+2026-01-19 10:40:22.219 | In order to set a constant number of reducers:
+2026-01-19 10:40:22.219 |   set mapreduce.job.reduces=<number>
+2026-01-19 10:40:22.708 | Job running in-process (local Hadoop)
+2026-01-19 10:40:23.755 | 2026-01-19 09:40:23,745 Stage-2 map = 0%,  reduce = 0%
+2026-01-19 10:40:28.786 | 2026-01-19 09:40:28,785 Stage-2 map = 17%,  reduce = 0%
+2026-01-19 10:40:29.807 | 2026-01-19 09:40:29,803 Stage-2 map = 100%,  reduce = 0%
+2026-01-19 10:40:30.839 | 2026-01-19 09:40:30,832 Stage-2 map = 100%,  reduce = 100%
+2026-01-19 10:40:30.846 | Ended Job = job_local1778064034_0013
+2026-01-19 10:40:30.861 | MapReduce Jobs Launched: 
+2026-01-19 10:40:30.865 | Stage-Stage-2:  HDFS Read: 8912036729 HDFS Write: 1164 SUCCESS
+2026-01-19 10:40:30.865 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-19 10:40:30.866 | OK
+2026-01-19 10:40:45.108 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-19 10:40:45.108 | Query ID = root_20260119094043_63b69a22-b1af-4c00-979d-7c82106c0149
+2026-01-19 10:40:45.108 | Total jobs = 2
+2026-01-19 10:40:45.110 | Launching Job 1 out of 2
+2026-01-19 10:40:45.125 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-19 10:40:45.125 | In order to change the average load for a reducer (in bytes):
+2026-01-19 10:40:45.125 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-19 10:40:45.125 | In order to limit the maximum number of reducers:
+2026-01-19 10:40:45.126 |   set hive.exec.reducers.max=<number>
+2026-01-19 10:40:45.126 | In order to set a constant number of reducers:
+2026-01-19 10:40:45.126 |   set mapreduce.job.reduces=<number>
+2026-01-19 10:40:45.476 | Job running in-process (local Hadoop)
+2026-01-19 10:40:46.544 | 2026-01-19 09:40:46,534 Stage-1 map = 0%,  reduce = 0%
+2026-01-19 10:40:51.587 | 2026-01-19 09:40:51,582 Stage-1 map = 11%,  reduce = 0%
+2026-01-19 10:40:54.605 | 2026-01-19 09:40:54,604 Stage-1 map = 22%,  reduce = 0%
+2026-01-19 10:40:57.761 | 2026-01-19 09:40:57,753 Stage-1 map = 100%,  reduce = 0%
+2026-01-19 10:40:58.774 | 2026-01-19 09:40:58,772 Stage-1 map = 33%,  reduce = 0%
+2026-01-19 10:40:59.794 | 2026-01-19 09:40:59,790 Stage-1 map = 100%,  reduce = 0%
+2026-01-19 10:41:03.844 | 2026-01-19 09:41:03,840 Stage-1 map = 100%,  reduce = 50%
+2026-01-19 10:41:06.872 | 2026-01-19 09:41:06,868 Stage-1 map = 100%,  reduce = 100%
+2026-01-19 10:41:06.874 | Ended Job = job_local417149448_0014
+2026-01-19 10:41:06.886 | Launching Job 2 out of 2
+2026-01-19 10:41:06.894 | Number of reduce tasks not specified. Estimated from input data size: 1
+2026-01-19 10:41:06.894 | In order to change the average load for a reducer (in bytes):
+2026-01-19 10:41:06.894 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-19 10:41:06.894 | In order to limit the maximum number of reducers:
+2026-01-19 10:41:06.894 |   set hive.exec.reducers.max=<number>
+2026-01-19 10:41:06.894 | In order to set a constant number of reducers:
+2026-01-19 10:41:06.894 |   set mapreduce.job.reduces=<number>
+2026-01-19 10:41:07.312 | Job running in-process (local Hadoop)
+2026-01-19 10:41:08.340 | 2026-01-19 09:41:08,335 Stage-2 map = 100%,  reduce = 100%
+2026-01-19 10:41:08.341 | Ended Job = job_local484553895_0015
+2026-01-19 10:41:08.346 | MapReduce Jobs Launched: 
+2026-01-19 10:41:08.346 | Stage-Stage-1:  HDFS Read: 12748828003 HDFS Write: 1455 SUCCESS
+2026-01-19 10:41:08.346 | Stage-Stage-2:  HDFS Read: 5120058044 HDFS Write: 582 SUCCESS
+2026-01-19 10:41:08.346 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-19 10:41:08.346 | OK
+2026-01-19 10:41:51.354 | FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. show Locks LockManager not specified
+2026-01-20 11:36:35.896 | Configuring core
+2026-01-20 11:36:36.021 |  - Setting fs.defaultFS=hdfs://ef0cd96e0979:8020
+2026-01-20 11:36:36.071 | Configuring hdfs
+2026-01-20 11:36:36.127 | Configuring yarn
+2026-01-20 11:36:36.183 | Configuring httpfs
+2026-01-20 11:36:36.237 | Configuring kms
+2026-01-20 11:36:36.293 | Configuring mapred
+2026-01-20 11:36:36.348 | Configuring hive
+2026-01-20 11:36:36.460 |  - Setting hive.metastore.uris=thrift://hive-metastore:9083
+2026-01-20 11:36:36.561 |  - Setting hive.server2.authentication=NOSASL
+2026-01-20 11:36:36.661 |  - Setting hive.server2.enable.doAs=false
+2026-01-20 11:36:36.709 | Configuring for multihomed network
+2026-01-20 11:36:37.240 | [1/100] hive-metastore:9083 is available.
+2026-01-20 11:36:37.488 | 2026-01-20 10:36:37: Starting HiveServer2
+2026-01-20 11:36:40.392 | SLF4J: Class path contains multiple SLF4J bindings.
+2026-01-20 11:36:40.392 | SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.6.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+2026-01-20 11:36:40.392 | SLF4J: Found binding in [jar:file:/opt/hadoop-2.7.4/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+2026-01-20 11:36:40.392 | SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+2026-01-20 11:36:40.394 | SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+2026-01-20 11:39:44.016 | OK
+2026-01-20 11:41:28.369 | OK
+2026-01-20 11:41:28.722 | OK
+2026-01-20 11:41:37.944 | OK
+2026-01-20 11:41:38.282 | OK
+2026-01-20 11:42:39.913 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-20 11:42:39.914 | Query ID = root_20260120104238_740852ab-cc4c-4385-b3cd-aee9357f2b55
+2026-01-20 11:42:39.916 | Total jobs = 5
+2026-01-20 11:42:39.942 | Launching Job 1 out of 5
+2026-01-20 11:42:39.966 | Number of reduce tasks determined at compile time: 1
+2026-01-20 11:42:39.967 | In order to change the average load for a reducer (in bytes):
+2026-01-20 11:42:39.967 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-20 11:42:39.967 | In order to limit the maximum number of reducers:
+2026-01-20 11:42:39.967 |   set hive.exec.reducers.max=<number>
+2026-01-20 11:42:39.967 | In order to set a constant number of reducers:
+2026-01-20 11:42:39.967 |   set mapreduce.job.reduces=<number>
+2026-01-20 11:42:41.125 | Job running in-process (local Hadoop)
+2026-01-20 11:42:42.164 | 2026-01-20 10:42:42,161 Stage-1 map = 0%,  reduce = 0%
+2026-01-20 11:42:44.202 | 2026-01-20 10:42:44,200 Stage-1 map = 100%,  reduce = 0%
+2026-01-20 11:42:45.234 | 2026-01-20 10:42:45,232 Stage-1 map = 100%,  reduce = 100%
+2026-01-20 11:42:45.263 | Ended Job = job_local1908700913_0001
+2026-01-20 11:42:45.284 | Launching Job 2 out of 5
+2026-01-20 11:42:45.293 | Number of reduce tasks determined at compile time: 1
+2026-01-20 11:42:45.293 | In order to change the average load for a reducer (in bytes):
+2026-01-20 11:42:45.293 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-20 11:42:45.294 | In order to limit the maximum number of reducers:
+2026-01-20 11:42:45.294 |   set hive.exec.reducers.max=<number>
+2026-01-20 11:42:45.294 | In order to set a constant number of reducers:
+2026-01-20 11:42:45.294 |   set mapreduce.job.reduces=<number>
+2026-01-20 11:42:45.655 | Job running in-process (local Hadoop)
+2026-01-20 11:42:46.677 | 2026-01-20 10:42:46,675 Stage-3 map = 100%,  reduce = 100%
+2026-01-20 11:42:46.681 | Ended Job = job_local31317729_0002
+2026-01-20 11:42:46.684 | Launching Job 3 out of 5
+2026-01-20 11:42:46.687 | Number of reduce tasks determined at compile time: 1
+2026-01-20 11:42:46.687 | In order to change the average load for a reducer (in bytes):
+2026-01-20 11:42:46.687 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-20 11:42:46.687 | In order to limit the maximum number of reducers:
+2026-01-20 11:42:46.687 |   set hive.exec.reducers.max=<number>
+2026-01-20 11:42:46.687 | In order to set a constant number of reducers:
+2026-01-20 11:42:46.687 |   set mapreduce.job.reduces=<number>
+2026-01-20 11:42:47.030 | Job running in-process (local Hadoop)
+2026-01-20 11:42:48.064 | 2026-01-20 10:42:48,062 Stage-4 map = 100%,  reduce = 100%
+2026-01-20 11:42:48.078 | Ended Job = job_local1901332890_0003
+2026-01-20 11:42:48.106 | Launching Job 4 out of 5
+2026-01-20 11:42:48.121 | Number of reduce tasks determined at compile time: 1
+2026-01-20 11:42:48.121 | In order to change the average load for a reducer (in bytes):
+2026-01-20 11:42:48.121 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-20 11:42:48.121 | In order to limit the maximum number of reducers:
+2026-01-20 11:42:48.121 |   set hive.exec.reducers.max=<number>
+2026-01-20 11:42:48.121 | In order to set a constant number of reducers:
+2026-01-20 11:42:48.121 |   set mapreduce.job.reduces=<number>
+2026-01-20 11:42:48.520 | Job running in-process (local Hadoop)
+2026-01-20 11:42:49.555 | 2026-01-20 10:42:49,553 Stage-5 map = 100%,  reduce = 100%
+2026-01-20 11:42:49.578 | Ended Job = job_local1979977296_0004
+2026-01-20 11:42:49.607 | Launching Job 5 out of 5
+2026-01-20 11:42:49.613 | Number of reduce tasks is set to 0 since there's no reduce operator
+2026-01-20 11:42:50.178 | Job running in-process (local Hadoop)
+2026-01-20 11:42:51.215 | 2026-01-20 10:42:51,213 Stage-2 map = 100%,  reduce = 0%
+2026-01-20 11:42:51.225 | Ended Job = job_local704271905_0005
+2026-01-20 11:42:51.245 | MapReduce Jobs Launched: 
+2026-01-20 11:42:51.247 | Stage-Stage-1:  HDFS Read: 906444646 HDFS Write: 0 SUCCESS
+2026-01-20 11:42:51.247 | Stage-Stage-3:  HDFS Read: 638761254 HDFS Write: 0 SUCCESS
+2026-01-20 11:42:51.247 | Stage-Stage-4:  HDFS Read: 645791010 HDFS Write: 0 SUCCESS
+2026-01-20 11:42:51.247 | Stage-Stage-5:  HDFS Read: 652529964 HDFS Write: 0 SUCCESS
+2026-01-20 11:42:51.247 | Stage-Stage-2:  HDFS Read: 1305059928 HDFS Write: 0 SUCCESS
+2026-01-20 11:42:51.247 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-20 11:42:51.248 | OK
+2026-01-20 11:43:32.480 | OK
+2026-01-20 11:45:03.713 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-20 11:45:03.714 | Query ID = root_20260120104502_43bf5fe0-244a-4281-a183-7276af35fc6d
+2026-01-20 11:45:03.714 | Total jobs = 1
+2026-01-20 11:45:03.715 | Launching Job 1 out of 1
+2026-01-20 11:45:03.753 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-20 11:45:03.753 | In order to change the average load for a reducer (in bytes):
+2026-01-20 11:45:03.753 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-20 11:45:03.753 | In order to limit the maximum number of reducers:
+2026-01-20 11:45:03.753 |   set hive.exec.reducers.max=<number>
+2026-01-20 11:45:03.753 | In order to set a constant number of reducers:
+2026-01-20 11:45:03.753 |   set mapreduce.job.reduces=<number>
+2026-01-20 11:45:04.144 | Job running in-process (local Hadoop)
+2026-01-20 11:45:05.209 | 2026-01-20 10:45:05,194 Stage-1 map = 0%,  reduce = 0%
+2026-01-20 11:45:07.245 | 2026-01-20 10:45:07,244 Stage-1 map = 100%,  reduce = 0%
+2026-01-20 11:45:08.265 | 2026-01-20 10:45:08,262 Stage-1 map = 100%,  reduce = 100%
+2026-01-20 11:45:08.276 | Ended Job = job_local1081888516_0006
+2026-01-20 11:45:08.281 | MapReduce Jobs Launched: 
+2026-01-20 11:45:08.281 | Stage-Stage-1:  HDFS Read: 2530505073 HDFS Write: 0 SUCCESS
+2026-01-20 11:45:08.281 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-20 11:45:08.282 | OK
+2026-01-20 11:45:59.875 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-20 11:45:59.875 | Query ID = root_20260120104558_daf5bd27-459f-4c1c-a0ef-724950e28975
+2026-01-20 11:45:59.876 | Total jobs = 2
+2026-01-20 11:45:59.877 | Launching Job 1 out of 2
+2026-01-20 11:45:59.897 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-20 11:45:59.897 | In order to change the average load for a reducer (in bytes):
+2026-01-20 11:45:59.898 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-20 11:45:59.898 | In order to limit the maximum number of reducers:
+2026-01-20 11:45:59.898 |   set hive.exec.reducers.max=<number>
+2026-01-20 11:45:59.898 | In order to set a constant number of reducers:
+2026-01-20 11:45:59.898 |   set mapreduce.job.reduces=<number>
+2026-01-20 11:46:00.289 | Job running in-process (local Hadoop)
+2026-01-20 11:46:01.337 | 2026-01-20 10:46:01,326 Stage-1 map = 0%,  reduce = 0%
+2026-01-20 11:46:06.377 | 2026-01-20 10:46:06,374 Stage-1 map = 100%,  reduce = 0%
+2026-01-20 11:46:07.395 | 2026-01-20 10:46:07,391 Stage-1 map = 100%,  reduce = 100%
+2026-01-20 11:46:07.400 | Ended Job = job_local204490873_0007
+2026-01-20 11:46:07.406 | Launching Job 2 out of 2
+2026-01-20 11:46:07.409 | Number of reduce tasks determined at compile time: 1
+2026-01-20 11:46:07.409 | In order to change the average load for a reducer (in bytes):
+2026-01-20 11:46:07.409 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-20 11:46:07.409 | In order to limit the maximum number of reducers:
+2026-01-20 11:46:07.409 |   set hive.exec.reducers.max=<number>
+2026-01-20 11:46:07.409 | In order to set a constant number of reducers:
+2026-01-20 11:46:07.409 |   set mapreduce.job.reduces=<number>
+2026-01-20 11:46:07.800 | Job running in-process (local Hadoop)
+2026-01-20 11:46:08.836 | 2026-01-20 10:46:08,835 Stage-2 map = 100%,  reduce = 100%
+2026-01-20 11:46:08.838 | Ended Job = job_local1414041673_0008
+2026-01-20 11:46:08.843 | MapReduce Jobs Launched: 
+2026-01-20 11:46:08.843 | Stage-Stage-1:  HDFS Read: 3806507069 HDFS Write: 0 SUCCESS
+2026-01-20 11:46:08.843 | Stage-Stage-2:  HDFS Read: 1928531960 HDFS Write: 0 SUCCESS
+2026-01-20 11:46:08.843 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-20 11:46:08.843 | OK
+2026-01-20 11:46:28.266 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-20 11:46:28.267 | Query ID = root_20260120104627_3a9092e3-627c-44a4-a22f-b0ec7fcba9a6
+2026-01-20 11:46:28.267 | Total jobs = 1
+2026-01-20 11:46:28.271 | Launching Job 1 out of 1
+2026-01-20 11:46:28.297 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-20 11:46:28.297 | In order to change the average load for a reducer (in bytes):
+2026-01-20 11:46:28.297 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-20 11:46:28.297 | In order to limit the maximum number of reducers:
+2026-01-20 11:46:28.297 |   set hive.exec.reducers.max=<number>
+2026-01-20 11:46:28.297 | In order to set a constant number of reducers:
+2026-01-20 11:46:28.297 |   set mapreduce.job.reduces=<number>
+2026-01-20 11:46:28.728 | Job running in-process (local Hadoop)
+2026-01-20 11:46:29.769 | 2026-01-20 10:46:29,759 Stage-1 map = 0%,  reduce = 0%
+2026-01-20 11:46:35.816 | 2026-01-20 10:46:35,812 Stage-1 map = 17%,  reduce = 0%
+2026-01-20 11:46:36.837 | 2026-01-20 10:46:36,833 Stage-1 map = 100%,  reduce = 0%
+2026-01-20 11:46:38.876 | 2026-01-20 10:46:38,873 Stage-1 map = 100%,  reduce = 100%
+2026-01-20 11:46:38.879 | Ended Job = job_local675018454_0009
+2026-01-20 11:46:38.884 | MapReduce Jobs Launched: 
+2026-01-20 11:46:38.884 | Stage-Stage-1:  HDFS Read: 5082509065 HDFS Write: 0 SUCCESS
+2026-01-20 11:46:38.884 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-20 11:46:38.885 | OK
+2026-01-20 11:47:01.589 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-20 11:47:01.590 | Query ID = root_20260120104701_95bb3977-151f-42a6-95a4-91621e3e2766
+2026-01-20 11:47:01.590 | Total jobs = 1
+2026-01-20 11:47:01.592 | Launching Job 1 out of 1
+2026-01-20 11:47:01.594 | Number of reduce tasks is set to 0 since there's no reduce operator
+2026-01-20 11:47:01.954 | Job running in-process (local Hadoop)
+2026-01-20 11:47:02.971 | 2026-01-20 10:47:02,968 Stage-0 map = 0%,  reduce = 0%
+2026-01-20 11:47:04.999 | 2026-01-20 10:47:04,996 Stage-0 map = 100%,  reduce = 0%
+2026-01-20 11:47:06.028 | Ended Job = job_local1590564563_0010
+2026-01-20 11:47:07.860 | MapReduce Jobs Launched: 
+2026-01-20 11:47:07.862 | Stage-Stage-0:  HDFS Read: 3153977105 HDFS Write: 301 SUCCESS
+2026-01-20 11:47:07.862 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-20 11:47:07.862 | OK
+2026-01-20 11:47:08.194 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-20 11:47:08.194 | Query ID = root_20260120104707_562c39f0-2756-4e4f-9c27-22004a45eeaf
+2026-01-20 11:47:08.194 | Total jobs = 1
+2026-01-20 11:47:08.195 | Launching Job 1 out of 1
+2026-01-20 11:47:08.196 | Number of reduce tasks is set to 0 since there's no reduce operator
+2026-01-20 11:47:08.404 | Job running in-process (local Hadoop)
+2026-01-20 11:47:09.420 | 2026-01-20 10:47:09,418 Stage-0 map = 100%,  reduce = 0%
+2026-01-20 11:47:09.426 | Ended Job = job_local894169387_0011
+2026-01-20 11:47:10.190 | MapReduce Jobs Launched: 
+2026-01-20 11:47:10.192 | Stage-Stage-0:  HDFS Read: 1602647306 HDFS Write: 291 SUCCESS
+2026-01-20 11:47:10.192 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-20 11:47:10.192 | OK
+2026-01-20 11:47:10.942 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-20 11:47:10.942 | Query ID = root_20260120104710_048309e1-1c17-4181-bf21-44bca311ee8b
+2026-01-20 11:47:10.942 | Total jobs = 1
+2026-01-20 11:47:10.945 | Launching Job 1 out of 1
+2026-01-20 11:47:10.950 | Number of reduce tasks determined at compile time: 1
+2026-01-20 11:47:10.950 | In order to change the average load for a reducer (in bytes):
+2026-01-20 11:47:10.950 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-20 11:47:10.950 | In order to limit the maximum number of reducers:
+2026-01-20 11:47:10.950 |   set hive.exec.reducers.max=<number>
+2026-01-20 11:47:10.951 | In order to set a constant number of reducers:
+2026-01-20 11:47:10.951 |   set mapreduce.job.reduces=<number>
+2026-01-20 11:47:11.279 | Job running in-process (local Hadoop)
+2026-01-20 11:47:12.326 | 2026-01-20 10:47:12,316 Stage-0 map = 0%,  reduce = 0%
+2026-01-20 11:47:23.415 | 2026-01-20 10:47:23,410 Stage-0 map = 17%,  reduce = 0%
+2026-01-20 11:47:30.469 | 2026-01-20 10:47:30,463 Stage-0 map = 100%,  reduce = 0%
+2026-01-20 11:47:34.503 | 2026-01-20 10:47:34,498 Stage-0 map = 100%,  reduce = 100%
+2026-01-20 11:47:34.504 | Ended Job = job_local670858416_0012
+2026-01-20 11:47:35.071 | MapReduce Jobs Launched: 
+2026-01-20 11:47:35.071 | Stage-Stage-0:  HDFS Read: 5714386837 HDFS Write: 873 SUCCESS
+2026-01-20 11:47:35.071 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-20 11:47:35.072 | OK
+2026-01-20 12:11:47.987 | OK
+2026-01-20 12:12:10.778 | WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+2026-01-20 12:12:10.778 | Query ID = root_20260120111209_b1327afb-7d58-48c3-8cd3-f5b06604fa95
+2026-01-20 12:12:10.778 | Total jobs = 1
+2026-01-20 12:12:13.998 | SLF4J: Class path contains multiple SLF4J bindings.
+2026-01-20 12:12:13.999 | SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.6.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+2026-01-20 12:12:13.999 | SLF4J: Found binding in [jar:file:/opt/hadoop-2.7.4/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+2026-01-20 12:12:13.999 | SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+2026-01-20 12:12:14.000 | SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+2026-01-20 12:12:15.386 | Execution log at: /tmp/root/root_20260120111209_b1327afb-7d58-48c3-8cd3-f5b06604fa95.log
+2026-01-20 12:12:16.213 | 2026-01-20 11:12:16	Starting to launch local task to process map join;	maximum memory = 477626368
+2026-01-20 12:12:17.694 | 2026-01-20 11:12:17	Dump the side-table for tag: 1 with group count: 5000 into file: file:/tmp/root/40430f49-771c-436f-9734-65430425cff0/hive_2026-01-20_11-12-09_927_7325164180419001146-1/-local-10005/HashTable-Stage-2/MapJoin-mapfile11--.hashtable
+2026-01-20 12:12:17.829 | 2026-01-20 11:12:17	Uploaded 1 File to: file:/tmp/root/40430f49-771c-436f-9734-65430425cff0/hive_2026-01-20_11-12-09_927_7325164180419001146-1/-local-10005/HashTable-Stage-2/MapJoin-mapfile11--.hashtable (201237 bytes)
+2026-01-20 12:12:17.829 | 2026-01-20 11:12:17	End of local task; Time Taken: 1.619 sec.
+2026-01-20 12:12:18.371 | Execution completed successfully
+2026-01-20 12:12:18.374 | MapredLocal task succeeded
+2026-01-20 12:12:18.380 | Launching Job 1 out of 1
+2026-01-20 12:12:18.391 | Number of reduce tasks not specified. Estimated from input data size: 2
+2026-01-20 12:12:18.391 | In order to change the average load for a reducer (in bytes):
+2026-01-20 12:12:18.391 |   set hive.exec.reducers.bytes.per.reducer=<number>
+2026-01-20 12:12:18.391 | In order to limit the maximum number of reducers:
+2026-01-20 12:12:18.391 |   set hive.exec.reducers.max=<number>
+2026-01-20 12:12:18.391 | In order to set a constant number of reducers:
+2026-01-20 12:12:18.392 |   set mapreduce.job.reduces=<number>
+2026-01-20 12:12:18.844 | Job running in-process (local Hadoop)
+2026-01-20 12:12:19.988 | 2026-01-20 11:12:19,956 Stage-2 map = 0%,  reduce = 0%
+2026-01-20 12:12:25.045 | 2026-01-20 11:12:25,041 Stage-2 map = 17%,  reduce = 0%
+2026-01-20 12:12:26.197 | 2026-01-20 11:12:26,176 Stage-2 map = 100%,  reduce = 0%
+2026-01-20 12:12:28.238 | 2026-01-20 11:12:28,232 Stage-2 map = 100%,  reduce = 100%
+2026-01-20 12:12:28.243 | Ended Job = job_local1983319737_0013
+2026-01-20 12:12:28.250 | MapReduce Jobs Launched: 
+2026-01-20 12:12:28.250 | Stage-Stage-2:  HDFS Read: 8912036729 HDFS Write: 1164 SUCCESS
+2026-01-20 12:12:28.250 | Total MapReduce CPU Time Spent: 0 msec
+2026-01-20 12:12:28.250 | OK

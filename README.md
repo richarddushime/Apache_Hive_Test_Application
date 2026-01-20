@@ -79,7 +79,7 @@ python mbv_africa/scripts/generate_data.py --size xlarge   # ~5M rows
 ### 4. Access Services
 | Service | URL |
 |---------|-----|
-| Django Dashboard | http://localhost:8000 |
+| Django Dashboard | http://localhost:8080 |
 | REST API | http://localhost:8080/api/ |
 | Swagger Docs | http://localhost:8080/api/docs/ |
 | HDFS Web UI | http://localhost:9870 |
