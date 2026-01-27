@@ -81,15 +81,13 @@
             {\large \emph{Course:} Databases For Big Data}\\[0.5cm]
             {\large \emph{Professor:} Iztok Savnik}\\[2cm]
             
-            \vfill
-            {\small Submitted in partial fulfillment of the requirements for the Master of Science in Data Science}\\[0.5cm]
             \today 
         \end{center}
     \end{titlepage}
 
     % --- Abstract ---
     \chapter*{Abstract}
-    This report provides a comprehensive architectural analysis and experimental validation of Apache Hive (v2.3.2), a localized data warehousing system built on the Hadoop ecosystem. Addressing the limitations of raw MapReduce programming, Hive introduces a SQL-like abstraction (HiveQL) and a Cost-Based Optimizer (Calcite) to democratize petabyte-scale analytics. 
+    This report provides a comprehensive architectural analysis and experimental validation of Apache Hive, a localized data warehousing system built on the Hadoop ecosystem. Addressing the limitations of raw MapReduce programming, Hive introduces a SQL-like abstraction (HiveQL) and a Cost-Based Optimizer (Calcite) to democratize petabyte-scale analytics. 
     
     We dissect Hive's core components: the Driver's orchestration, the Compiler's semantic analysis, the Metastore's schema-on-read paradigm, and the MapReduce execution engine. Special attention is given to the data storage overlays (Partitioning and Bucketing) that enable efficient I/O pruning.
     
@@ -161,11 +159,55 @@
     \subsection{2. Compiler}
     The Compiler transforms HiveQL strings into a Directed Acyclic Graph (DAG) of MapReduce tasks. The translation pipeline involves:
     \begin{itemize}
-        \item \textbf{Parsing}: Converting SQL to an Abstract Syntax Tree (AST) using ANTLR.
+        \item \textbf{Parsing}: Converting SQL to an Abstract Syntax Tree (AST) using ANTLR (Another Tool for Language Recognition)—a parser generator that acts as a "grammar engine" to translate raw text into a structured, hierarchical tree.
         \item \textbf{Semantic Analysis}: Checking the Metastore to ensure tables and columns exist.
         \item \textbf{Logical Planning}: Generating an operator tree (TableScan $\to$ Filter $\to$ Select).
         \item \textbf{Physical Planning}: Splitting the operator tree into executable MapReduce stages.
     \end{itemize}
+
+    
+    \section{Query Processing Lifecycle} The transformation of a HiveQL string into distributed tasks is a multi-phase process managed by the Compiler.Figure \ref{fig:query-pipeline} illustrates the internal pipeline that converts declarative SQL into an executable Directed Acyclic Graph (DAG).
+
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=1.5cm,
+        auto,
+        process/.style={rectangle, draw, fill=blue!10, text centered, rounded corners, minimum height=1.5em, minimum width=4cm, drop shadow},
+        decision/.style={diamond, draw, fill=green!20, text centered, aspect=2, minimum width=2cm, drop shadow},
+        io/.style={trapezium, trapezium left angle=70, trapezium right angle=110, draw, fill=orange!20, text centered, minimum height=1.5em, drop shadow},
+        line/.style={draw, -latex', thick}
+    ]
+    % Nodes
+    \node [io] (input) {HiveQL Query};
+    \node [process, below of=input] (parser) {\textbf{1. Parser} (ANTLR)};
+    \node [process, below of=parser] (semantic) {\textbf{2. Semantic Analyzer}};
+    \node [process, below of=semantic] (logical) {\textbf{3. Logical Plan Generation}};
+    \node [decision, below of=logical, yshift=-0.5cm] (optimizer) {\textbf{4. Optimizer} (Calcite)};
+    \node [process, below of=optimizer, yshift=-0.5cm] (physical) {\textbf{5. Physical Plan}};
+    \node [io, below of=physical] (execution) {Execution Engine};
+
+    % Connections
+    \path [line] (input) -- (parser);
+    \path [line] (parser) -- (semantic);
+    \path [line] (semantic) -- (logical);
+    \path [line] (logical) -- (optimizer);
+    \path [line] (optimizer) -- (physical);
+    \path [line] (physical) -- (execution);
+    \end{tikzpicture}
+    \caption{The Hive Compilation Pipeline: From SQL Text to Execution Tasks}
+    \label{fig:query-pipeline}
+\end{figure}
+
+\subsection{Pipeline Stages Detailed}
+\begin{enumerate}
+    \item \textbf{AST Generation}: The Parser (ANTLR) translates raw text into an Abstract Syntax Tree (AST).
+    \item \textbf{Semantic Analysis}: The compiler verifies table/column existence against the Metastore.
+    \item \textbf{Logical Planning}: An operator tree (Scan $\to$ Filter $\to$ Join) is generated.
+    \item \textbf{Optimization (CBO)}: Apache Calcite evaluates multiple execution paths and reorders joins to minimize the cost of CPU, I/O, and Network.
+    \item \textbf{Physical Planning}: The tree is split into executable MapReduce stages (Map $\to$ Shuffle $\to$ Reduce).
+\end{enumerate}
 
     \subsection{3. Metastore}
     The Metastore distinguishes Hive from a simple file system. It stores the \emph{schema} (table definitions, column types, partition keys) and the \emph{location} mappings.
@@ -195,13 +237,48 @@
         \item \textbf{Buckets}: Fixed-hash files within partitions. Crucial for \emph{Sort-Merge-Bucket (SMB) Joins}, as they guarantee data with the same hash resides in corresponding files.
     \end{enumerate}
 
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% HIVE STORAGE ARCHITECTURE SECTION
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Hive Storage Architecture and Schema Implementation}
+
+To validate Hive's architectural benefits, the \texttt{mbv\_africa} data warehouse utilizes specific storage primitives—Partitioning, Bucketing, and Columnar Formats—that directly interact with the HDFS layer.
+
+\subsection{Table Types: Managed vs. External}
+Hive distinguishes between tables where it manages the data lifecycle and those where it only manages metadata:
+
+\begin{itemize}
+    \item \textbf{Managed Table (\texttt{portfolio\_observations})}: Hive owns both the metadata in the Metastore and the physical data in HDFS. Dropping this table automatically deletes the raw files from the HDFS warehouse directory.
+    \item \textbf{External Table (\texttt{portfolio\_stations})}: Hive manages only the schema definition. This simulates real-world ETL pipelines where raw source data must persist in HDFS even if the Hive table is dropped.
+\end{itemize}
+
+\subsection{Partitioning and Physical Layout}
+The fact table utilizes \textbf{Directory-Based Partitioning} to address the I/O limitations of standard MapReduce by enabling data skipping at the file-system level.
+
+
+
+\begin{itemize}
+    \item \textbf{Schema Definition}: The table is organized using the \texttt{PARTITIONED BY (year INT, month INT)} clause.
+    \item \textbf{I/O Pruning}: During query execution, the engine identifies relevant sub-directories (e.g., \texttt{/year=2026/}) and skips scanning irrelevant folders, drastically reducing the volume of data read from disk.
+\end{itemize}
+
+\subsection{Bucketing and SMB Joins}
+The \texttt{portfolio\_stations} table is bucketed by \texttt{station\_id} into fixed-hash files. This architecture guarantees that data with the same hash value resides in the same physical file. This enables \textbf{Sort-Merge-Bucket (SMB) Joins}, which allow Hive to join large datasets by simply merging pre-sorted buckets, completely avoiding the expensive "Shuffle and Sort" phase of MapReduce.
+
+\subsection{Schema-on-Read Paradigm}
+Unlike traditional RDBMS "Schema-on-Write" systems, Hive applies structure only during query execution. 
+
+\begin{itemize}
+    \item \textbf{Metastore Role}: The Metastore stores the table definitions and column types (e.g., \texttt{temp\_mean} as \texttt{FLOAT}) independently of the data files.
+    \item \textbf{SerDe Layer}: A \textbf{SerDe} (Serializer/Deserializer) acts as the bridge, translating raw HDFS bytes into Java objects that the Mapper can process in real-time.
+\end{itemize}
     % ============================================================================
     % III. QUERY OPTIMIZATION AND ALGORITHMS
     % ============================================================================
     \chapter{Query Optimization}
 
     \section{Cost-Based Optimizer (CBO)}
-    Hive uses Apache Calcite for Cost-Based Optimization. Unlike rule-based systems, CBO calculates the "cost" of plans (CPU, I/O, Network) using table statistics (\texttt{numRows}, \texttt{rawDataSize}).
+    Hive uses Apache Calcite (an open-source framework that optimizes relational algebra by exploring multiple query execution paths) for Cost-Based Optimization. Unlike rule-based systems, CBO calculates the "cost" of plans (CPU, I/O, Network) using table statistics (\texttt{numRows}, \texttt{rawDataSize}).
     \[ Cost = Cost_{CPU} + Cost_{I/O} + Cost_{Network} \]
     Accurate stats (via \texttt{ANALYZE TABLE}) allow CBO to reorder joins (putting smaller tables first) and select efficient algorithms.
 
@@ -240,22 +317,39 @@
     \textbf{Dataset}: "MBV Climate" dataset containing 4.75 million observation records and 5,000 station records across Africa.
 
     \section{Execution Trace Analysis}
-    We verified Hive's internal mechanics by analyzing the execution logs (\texttt{logs.txt}).
+    We verified Hive's internal mechanics by analyzing the execution logs.
 
-    \subsection{Case Study: Complex Multi-Stage Query}
-    Query ID: \texttt{root\_20260102154301...} (Log lines 58-117).
-    This query triggered a \textbf{Sequence of 5 MapReduce Jobs}, illustrating how Hive chains MR tasks for complex logic (Joins $\to$ Aggregation $\to$ Sort).
+
+    \subsection{Case Study: Complex Multi-Stage Query Execution}
+    \textbf{Query Context:} A complex aggregation query involving \texttt{GROUP BY}, \texttt{AVG}, and \texttt{ORDER BY} clauses.
+    \\
+    \textbf{Query ID:} \texttt{root\_20260102154301\_570eeaf6-fa14-4c09-9085-12b9341c6842}
+    
+    This query triggered a \textbf{Sequence of 5 MapReduce Jobs}, illustrating how Hive decomposes SQL logic into discrete execution stages. The high number of stages is due to the distinct requirements of grouping, averaging (which requires \texttt{SUM} and \texttt{COUNT}), and global sorting.
 
     \begin{itemize}
-        \item \textbf{Job 1 (Stage-1)}: Map-Reduce. HDFS Read: 71KB, Write: 17MB. Likely the first Join or Filtering phase.
-        \item \textbf{Job 2 (Stage-2)}: Map-Reduce. Read: 34MB, Write: 34MB. Intermediate processing.
-        \item \textbf{Job 3, 4, 5}: Sequential stages handling Aggregation and Final Sorting.
+        \item \textbf{Job 1 (Stage-1): Scan \& Partial Aggregation}. 
+        \textit{HDFS Read: 71KB, Write: 17MB.} 
+        This stage performs the Table Scan and \textbf{Map-Side Aggregation}. The significant data expansion (71KB $\to$ 17MB) indicates the serialization of map-outputs and the creation of composite keys (Region + Month) required for the shuffle phase.
+        
+        \item \textbf{Job 2 (Stage-2): Shuffle \& Reduce}. 
+        \textit{Read: 34MB, Write: 34MB.} 
+        This is the primary \textbf{Aggregation Phase}. Data is shuffled to Reducers based on the grouping keys. The Reducers calculate the raw \texttt{SUM} and \texttt{COUNT} values for the groups. The input/output symmetry suggests the data volume remains stable during this transit.
+        
+        \item \textbf{Job 3 (Stage-3): Derived Computation}. 
+        This stage handles the \textbf{Arithmetic Logic} for the \texttt{AVG} function. It takes the \texttt{SUM} and \texttt{COUNT} produced in Stage-2 and performs the division ($Avg = Sum / Count$) to finalize the metric.
+        
+        \item \textbf{Job 4 (Stage-4): Global Sort}. 
+        To satisfy the \texttt{ORDER BY region, month} clause, the aggregated data is passed through a single Reducer (or TotalOrderPartitioner) to ensure global ordering of the final result set.
+        
+        \item \textbf{Job 5 (Stage-5): Result Materialization}. 
+        This is a \textbf{File Move Operation}. The final sorted data is moved from temporary scratch directories to the final HDFS output path for the driver to fetch and display.
     \end{itemize}
     
-    The logs confirm the \textbf{blocking nature} of MapReduce in Hive 2.3.2: Job 2 cannot start until Job 1 writes to HDFS, introducing I/O latency.
+    \textbf{Performance Note:} The logs confirm the \textbf{blocking nature} of the legacy MapReduce engine (Hive 2.3.2). Job 2 cannot commence until Job 1 has fully committed its 17MB payload to HDFS, creating significant disk I/O latency compared to modern engines like Tez or Spark, which would pipeline these stages in memory.
 
     \subsection{Case Study: Map-Side Join Optimization}
-    By analyzing Query ID \texttt{root\_20260113174019...} (Log lines 610-613), we observe the Map-Side Join in action:
+    By analyzing Query ID \texttt{root\_20260113174019...} (in the logs) we observed the Map-Side Join in action:
     
     \begin{lstlisting}
     Starting to launch local task to process map join; maximum memory = 477626368
@@ -295,7 +389,7 @@
     % V. CONCLUSION
     % ============================================================================
     \chapter{Conclusion}
-    This report dissected the architecture of Apache Hive 2.3.2. Through theoretical analysis and log-based verification, we established that:
+    This report dissected the architecture of Apache Hive. Through theoretical analysis and log-based verification, we established that:
     \begin{enumerate}
         \item Hive successfully abstracts MapReduce complexity, but inherits its high-latency characteristics due to disk-based intermediate storage.
         \item The "Schema-on-Read" architecture, driven by the Metastore, provides flexibility but requires careful partition planning to avoid full table scans.

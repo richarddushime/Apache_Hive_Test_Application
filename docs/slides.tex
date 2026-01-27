@@ -1,15 +1,12 @@
-% Apache Hive Seminar - Presentation Slides
-% MBV Climate and Ocean Intelligence Africa
-\documentclass[aspectratio=169,10pt]{beamer}
 
-% Theme and Colors
+% Apache Hive Seminar - Condensed 6-Slide Version
+\documentclass[aspectratio=169,10pt]{beamer}
 \usetheme{Madrid}
 \usecolortheme{whale}
 \definecolor{africanblue}{RGB}{0, 102, 153}
 \definecolor{earthgreen}{RGB}{34, 139, 34}
 \definecolor{oceanblue}{RGB}{0, 119, 182}
 \definecolor{sunsetorange}{RGB}{230, 126, 34}
-
 \setbeamercolor{structure}{fg=africanblue}
 \setbeamercolor{frametitle}{bg=africanblue!90,fg=white}
 \setbeamercolor{title}{fg=white,bg=africanblue}
@@ -20,8 +17,6 @@
 \setbeamercolor{block body example}{bg=earthgreen!10}
 \setbeamercolor{block title alerted}{bg=red!70,fg=white}
 \setbeamercolor{block body alerted}{bg=red!10}
-
-% Packages
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows,positioning,calc,fit,backgrounds}
 \usepackage{fontawesome5}
@@ -30,13 +25,9 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{hyperref}
-
-% Smaller fonts for itemize
 \setbeamerfont{itemize/enumerate body}{size=\small}
 \setbeamerfont{itemize/enumerate subbody}{size=\footnotesize}
 \setbeamerfont{block body}{size=\small}
-
-% Code Listing Style
 \lstset{
     basicstyle=\tiny\ttfamily,
     backgroundcolor=\color{gray!10},
@@ -46,402 +37,142 @@
     commentstyle=\color{earthgreen},
     stringstyle=\color{sunsetorange}
 }
-
-% Title Information
-\title[Apache Hive Seminar]{\textbf{Apache Hive: A Petabyte-Scale Data Warehouse System }\\\textbf{Over a MapReduce Framework}}
-\subtitle{Test Application: MBV Climate and Ocean Intelligence Africa}
+\title[Apache Hive Seminar]{\textbf{Apache Hive: Architecture, Optimization, and Experimental Validation}}
+\subtitle{MBV Climate and Ocean Intelligence Africa}
 \author{Dushime Mudahera Richard}
 \institute{Databases for Big Data Seminar -- Prof.\ Iztok Savnik}
 \date{January 2026}
-
-% Disable navigation symbols
 \setbeamertemplate{navigation symbols}{}
-
-% Add frame numbers
 \setbeamertemplate{footline}[frame number]
-
 \begin{document}
 
-%==============================================================================
-% SLIDE 1: TITLE SLIDE
-%==============================================================================
+% SLIDE 1: TITLE
 \begin{frame}[plain]
     \titlepage
     \begin{tikzpicture}[remember picture,overlay]
-        \node[opacity=0.1] at (current page.center) {
-            \scalebox{8}{\faCloud}
-        };
+        \node[opacity=0.1] at (current page.center) {\scalebox{8}{\faCloud}};
     \end{tikzpicture}
 \end{frame}
 
-%==============================================================================
-% SLIDE 2: AGENDA & EXECUTIVE SUMMARY
-%==============================================================================
-\section{Executive Summary}
+% SLIDE 2: OVERVIEW & OBJECTIVES
+\begin{frame}{Overview \& Objectives}
+    \begin{block}{Context}
+        \textbf{Apache Hive} is a data warehouse system built on Hadoop, providing SQL-like analytics at petabyte scale. This work analyzes its architecture, storage, optimization, and validates with real execution logs.
+    \end{block}
+    \vspace{0.2cm}
+    \begin{block}{Objectives}
+        \begin{enumerate}
+            \item Analyze Hive's architecture and core components
+            \item Explain query compilation and execution
+            \item Evaluate storage model: partitions, buckets, schema-on-read
+            \item Assess optimization: CBO, join strategies
+            \item Validate with log-based experimentation
+        \end{enumerate}
+    \end{block}
+\end{frame}
 
-\begin{frame}{Agenda \& Executive Summary}
+% SLIDE 3: ARCHITECTURE & PIPELINE
+\begin{frame}{System Architecture \& Query Pipeline}
     \begin{columns}[T]
-        \column{0.35\textwidth}
-        \begin{block}{Outline}
+        \column{0.55\textwidth}
+        \begin{block}{Core Components}
+            \begin{itemize}
+                \item \textbf{Driver}: Orchestrates session, submits queries
+                \item \textbf{Compiler}: Parses, plans, and optimizes queries
+                \item \textbf{Metastore}: Schema-on-read, stores table/partition metadata (PostgreSQL backend)
+                \item \textbf{Execution Engine}: MapReduce (MR) jobs
+                \item \textbf{HDFS}: Distributed storage
+            \end{itemize}
+        \end{block}
+        \vspace{0.2cm}
+        \begin{block}{Query Compilation Pipeline}
             \begin{enumerate}
-                \item System Architecture
-                \item Query Optimization
-                \item Experimental Results
-                \item Challenges \& Solutions
-                \item Conclusions
+                \item Parse (ANTLR $\to$ AST)
+                \item Semantic Analysis (Metastore lookup)
+                \item Logical Plan (operator tree)
+                \item Optimization (Calcite CBO)
+                \item Physical Plan (MR stages)
             \end{enumerate}
         \end{block}
-        \vspace{0.2cm}
-        \begin{exampleblock}{Test Data}
-            \begin{itemize}
-                \item 4.75 million climate records
-                \item 304 MB raw CSV data
-                \item 4 Hive tables (1980--2024)
-                \item 5 African regions, 44 countries
-            \end{itemize}
-        \end{exampleblock}
-        
-        \column{0.65\textwidth}
-        \begin{block}{Project Overview}
-            Production-grade \textbf{distributed big data ecosystem} simulating climate analytics
-        \end{block}
-        \begin{itemize}
-            \item \textcolor{africanblue}{\faDocker~7-Container Docker Stack} -- Hadoop 3 + Hive 2.3.2
-            \item \textcolor{earthgreen}{\faPython~Django REST API} -- Climate dashboard \& benchmarking
-            \item \textcolor{sunsetorange}{\faDatabase~3-Node HDFS Cluster} -- Distributed storage with replication
-        \end{itemize}
-        \vspace{0.1cm}
-        \centering
-        \fcolorbox{earthgreen}{earthgreen!10}{\parbox{0.9\textwidth}{
-            \centering\small \textbf{Goal:} Demonstrate Apache Hive's capability for petabyte-scale analytics on commodity hardware
-        }}
-    \end{columns}
-\end{frame}
-
-%==============================================================================
-% SLIDE 3: FULL SYSTEM ARCHITECTURE
-%==============================================================================
-\section{System Architecture}
-
-\begin{frame}{7-Container Stack Architecture}
-    \begin{columns}[T]
-        \column{0.48\textwidth}
+        \column{0.45\textwidth}
         \begin{center}
-            \begin{tikzpicture}[
-                container/.style={draw,rounded corners,minimum width=2cm,minimum height=0.55cm,font=\tiny,thick},
-                scale=0.72,transform shape
-            ]
-                % Application Layer
-                \node[container,fill=earthgreen!40] (django) at (0,4) {Django App:8080};
-                
-                % Hive Layer
-                \node[container,fill=oceanblue!40] (hs2) at (-1.8,2.8) {HiveServer2:10000};
-                \node[container,fill=oceanblue!40] (meta) at (1.8,2.8) {Metastore:9083};
-                
-                % Storage Layer
-                \node[container,fill=sunsetorange!40] (pg) at (3.5,1.6) {PostgreSQL:5432};
-                \node[container,fill=africanblue!40] (nn) at (0,1.6) {NameNode:9870};
-                
-                % Data Nodes
-                \node[container,fill=africanblue!25] (dn1) at (-1.8,0.4) {DataNode-1:9864};
-                \node[container,fill=africanblue!25] (dn2) at (1.8,0.4) {DataNode-2:9865};
-                
-                % Connections
-                \draw[->,thick] (django) -- (hs2);
-                \draw[->,thick] (hs2) -- (nn);
-                \draw[->,thick,dashed] (meta) -- (pg);
-                \draw[->,thick] (nn) -- (dn1);
-                \draw[->,thick] (nn) -- (dn2);
-                \draw[<->,thick,dashed,earthgreen] (dn1) -- (dn2);
-                
-                % Labels
-                \node[font=\tiny,text=gray] at (0,-0.2) {Replication Factor = 2};
+            \begin{tikzpicture}[node distance=1.1cm, scale=0.7, transform shape]
+                \node[draw,rounded corners,fill=green!20,minimum width=1.8cm] (client) {Client};
+                \node[draw,rounded corners,fill=blue!20,below=of client,minimum width=1.8cm] (driver) {Driver};
+                \node[draw,rounded corners,fill=blue!20,right=1.2cm of driver,minimum width=1.8cm] (compiler) {Compiler};
+                \node[draw,rounded corners,fill=orange!20,right=1.2cm of compiler,minimum width=1.8cm] (meta) {Metastore};
+                \node[draw,rounded corners,fill=purple!20,below=1.2cm of driver,minimum width=4cm] (engine) {Exec. Engine};
+                \node[draw,rounded corners,fill=yellow!20,below=of engine,minimum width=4cm] (hdfs) {HDFS};
+                \draw[->,thick] (client) -- (driver);
+                \draw[->,thick] (driver) -- (compiler);
+                \draw[->,thick] (compiler) -- (meta);
+                \draw[->,thick] (driver) -- (engine);
+                \draw[->,thick] (engine) -- (hdfs);
             \end{tikzpicture}
         \end{center}
-        
-        \column{0.52\textwidth}
-        \begin{block}{Container Services}
-            \begin{itemize}
-                \item \textcolor{earthgreen}{\textbf{Django}} -- REST API, Web Dashboard
-                \item \textcolor{oceanblue}{\textbf{HiveServer2}} -- JDBC/Thrift gateway
-                \item \textcolor{oceanblue}{\textbf{Metastore}} -- Schema catalog (decoupled)
-                \item \textcolor{africanblue}{\textbf{NameNode}} -- HDFS namespace manager
-                \item \textcolor{africanblue}{\textbf{DataNodes}} -- Distributed block storage
-                \item \textcolor{sunsetorange}{\textbf{PostgreSQL}} -- Persistent metadata DB
-            \end{itemize}
-        \end{block}
-        \begin{alertblock}{HDFS Cluster Stats}
-            \begin{itemize}
-                \item Configured Capacity: 416.56 GB
-                \item Live DataNodes: 2 (healthy)
-                \item Under-replicated blocks: 0
-            \end{itemize}
-        \end{alertblock}
     \end{columns}
 \end{frame}
 
-%==============================================================================
-% SLIDE 4: HIVE & DJANGO APPLICATION
-%==============================================================================
-\begin{frame}{Apache Hive \& Query Optimization}
+% SLIDE 4: STORAGE MODEL & OPTIMIZATIONS
+\begin{frame}{Storage Model \& Optimizations}
     \begin{columns}[T]
         \column{0.5\textwidth}
-        \begin{block}{Hive Architecture}
+        \begin{block}{Storage Model}
             \begin{itemize}
-                \item \textcolor{oceanblue}{\textbf{HiveServer2}} -- JDBC/ODBC gateway
-                \item \textcolor{sunsetorange}{\textbf{Metastore}} -- Centralized schema catalog
-                \item \textcolor{earthgreen}{\textbf{Execution Engine}} -- MapReduce backend
-                \item \textcolor{africanblue}{\textbf{HDFS Storage}} -- Distributed file system
+                \item \textbf{Databases, Tables}: Managed vs. External
+                \item \textbf{Partitions}: Directory-based, enables pruning
+                \item \textbf{Buckets}: Hash-based, enables SMB joins
+                \item \textbf{Schema-on-Read}: Structure applied at query time
+                \item \textbf{ORC+SNAPPY}: Columnar, compressed
             \end{itemize}
         \end{block}
-        \begin{exampleblock}{Cost-Based Optimizer (CBO)}
-            \begin{itemize}
-                \item Uses Apache Calcite for query planning
-                \item Estimates costs from table statistics
-                \item Selects optimal join algorithms
-                \item Requires \texttt{ANALYZE TABLE}
-            \end{itemize}
-        \end{exampleblock}
-        
         \column{0.5\textwidth}
-        \begin{block}{Join Algorithms}
-            \begin{itemize}
-                \item \textbf{Shuffle Join} (Reduce-Side)
-                \begin{itemize}
-                    \item Default, requires data shuffle
-                    \item High network I/O cost
-                \end{itemize}
-                \item \textbf{Broadcast Join} (Map-Side)
-                \begin{itemize}
-                    \item Small table broadcast to all mappers
-                    \item \textbf{3x faster} for asymmetric joins
-                \end{itemize}
-                \item \textbf{Sort-Merge-Bucket Join}
-                \begin{itemize}
-                    \item Most efficient for pre-bucketed data
-                \end{itemize}
-            \end{itemize}
-        \end{block}
-        \begin{alertblock}{Key Configuration}
-            \texttt{SET hive.auto.convert.join=true;}
-        \end{alertblock}
-    \end{columns}
-\end{frame}
-
-%==============================================================================
-% SLIDE 5: STORAGE OPTIMIZATIONS
-%==============================================================================
-\section{Data Engineering \& Optimizations}
-
-\begin{frame}{Storage Optimizations \& Performance}
-    \begin{columns}[T]
-        \column{0.42\textwidth}
-        \begin{center}
-            \begin{tikzpicture}[
-                box/.style={draw,rounded corners,minimum width=2cm,minimum height=0.75cm,align=center,font=\scriptsize,thick},
-                scale=0.8,transform shape
-            ]
-                \node[box,fill=oceanblue!35] (orc) at (-1.3,1.3) {\textbf{ORC}\\Columnar};
-                \node[box,fill=earthgreen!35] (snappy) at (1.3,1.3) {\textbf{SNAPPY}\\Compress};
-                \node[box,fill=sunsetorange!35] (part) at (-1.3,-0.3) {\textbf{Partition}\\year/region};
-                \node[box,fill=purple!35] (bucket) at (1.3,-0.3) {\textbf{Bucket}\\32 buckets};
-                \draw[->,thick] (orc) -- (snappy);
-                \draw[->,thick] (snappy) -- (bucket);
-                \draw[->,thick] (bucket) -- (part);
-                \draw[->,thick] (part) -- (orc);
-            \end{tikzpicture}
-        \end{center}
-        \vspace{0.2cm}
-        \begin{alertblock}{Compression Results}
-            \begin{itemize}
-                \item ORC: \textbf{88\%} size reduction
-                \item vs.\ raw CSV (304 MB $\rightarrow$ 36 MB)
-            \end{itemize}
-        \end{alertblock}
-        
-        \column{0.58\textwidth}
         \begin{block}{Optimization Techniques}
             \begin{itemize}
-                \item \textcolor{oceanblue}{\textbf{ORC Format}} -- Columnar storage, predicate pushdown, reduced I/O
-                \item \textcolor{earthgreen}{\textbf{SNAPPY}} -- Fast compression, CPU-efficient
-                \item \textcolor{sunsetorange}{\textbf{Partitioning}} -- Skip 90\%+ data via partition pruning
-                \item \textcolor{purple}{\textbf{Bucketing}} -- Enable Map-Side joins, faster GROUP BY
+                \item \textbf{Partition Pruning}: Skip irrelevant data
+                \item \textbf{Bucketing}: Enables efficient joins
+                \item \textbf{Vectorized Execution}: 1,024 rows/instruction
+                \item \textbf{CBO (Calcite)}: Cost-based plan selection
+                \item \textbf{Map-Side Join}: Broadcast small tables
             \end{itemize}
         \end{block}
-        \begin{exampleblock}{Vectorized Execution}
-            \begin{itemize}
-                \item Process 1,024 rows per CPU instruction
-                \item \texttt{SET hive.vectorized.execution.enabled=true;}
-                \item Significant speedup for STDDEV, CORR, AVG
-            \end{itemize}
-        \end{exampleblock}
     \end{columns}
 \end{frame}
 
-%==============================================================================
-% SLIDE 7: QUERY PERFORMANCE BENCHMARKS
-%==============================================================================
-\begin{frame}{Query Performance Benchmarks}
-    \begin{columns}[T]
-        \column{0.5\textwidth}
-        \begin{block}{Query Execution Times (4.75M rows)}
-            \small
-            \begin{tabular}{@{}lc@{}}
-                \toprule
-                \textbf{Query Type} & \textbf{Time (s)} \\
-                \midrule
-                Simple Regional Aggregation & \textbf{9.31} \\
-                Complex Monthly Aggregation & 14.88 \\
-                Statistical Analysis & 16.13 \\
-                Yearly Analysis & 15.24 \\
-                Map-Side Join & 15.30 \\
-                Reduce-Side Join & 42.70 \\
-                Data Coverage Query & 13.37 \\
-                \bottomrule
-            \end{tabular}
-        \end{block}
-        \begin{alertblock}{Join Algorithm Comparison}
-            \begin{itemize}
-                \item Map-Side: \textbf{15.30s} (2.8x faster)
-                \item Reduce-Side: 42.70s (baseline)
-            \end{itemize}
-        \end{alertblock}
-        
-        \column{0.5\textwidth}
-        \begin{block}{Regional Temperature Results}
-            \small
-            \begin{tabular}{@{}lcc@{}}
-                \toprule
-                \textbf{Region} & \textbf{Avg °C} & \textbf{σ} \\
-                \midrule
-                Central & 30.49 & 2.448 \\
-                West & 29.51 & 2.448 \\
-                East & 26.51 & 2.448 \\
-                North & 24.51 & 2.450 \\
-                South & 20.50 & 2.448 \\
-                \bottomrule
-            \end{tabular}
-        \end{block}
-        \begin{exampleblock}{Key Findings}
-            \begin{itemize}
-                \item 10°C gradient Central→South
-                \item Uniform variance (σ ≈ 2.45)
-                \item 2-stage MapReduce for ORDER BY
-                \item 28--35 GB HDFS reads per query
-            \end{itemize}
-        \end{exampleblock}
-    \end{columns}
+% SLIDE 5: EXPERIMENTAL VALIDATION (LOGS)
+\begin{frame}{Experimental Validation: Log Analysis}
+    \begin{block}{Setup}
+        7-container Docker stack: HiveServer2, Metastore (PostgreSQL), HDFS (1 NameNode, 2 DataNodes). Dataset: 4.75M climate records, 5,000 stations.
+    \end{block}
+    \vspace{0.2cm}
+    \begin{block}{Execution Trace: Multi-Stage Query}
+        \begin{itemize}
+            \item \textbf{5 MapReduce Jobs:} Scan/Partial Agg $\to$ Shuffle/Reduce $\to$ Derived Computation $\to$ Global Sort $\to$ Result Materialization
+            \item \textbf{Blocking:} Each stage waits for previous to finish (MR engine)
+            \item \textbf{Map-Side Join:} Small table broadcast, 0 reducers, no shuffle
+        \end{itemize}
+    \end{block}
+    \begin{block}{Performance}
+        Map-Side Join: \textbf{15.3s}, Reduce-Side Join: \textbf{42.7s} (2.8x speedup). ORC: \textbf{88\%} compression. Query latency: 9--26s.
+    \end{block}
 \end{frame}
 
-%==============================================================================
-% SLIDE 10: CHALLENGES & SOLUTIONS
-%==============================================================================
-\section{Challenges \& Solutions}
-
-\begin{frame}{Engineering Challenges \& Solutions}
-    \begin{columns}[T]
-        \column{0.5\textwidth}
-        \begin{alertblock}{Challenge 1: ARM Emulation}
-            \begin{itemize}
-                \item Apple Silicon runs x86 images
-                \item 10--20\% performance overhead
-                \item 60--120s container startup
-            \end{itemize}
-        \end{alertblock}
-        \begin{exampleblock}{Solution}
-            \begin{itemize}
-                \item Extended health check timeouts
-                \item Optimized JVM heap settings
-                \item Rosetta 2 emulation layer
-            \end{itemize}
-        \end{exampleblock}
-        
-        \column{0.5\textwidth}
-        \begin{alertblock}{Challenge 2: PostgreSQL Driver}
-            \begin{itemize}
-                \item Hive 2.3.2 JDBC compatibility
-                \item MD5 auth required (PG 9.6)
-                \item Metastore schema init
-            \end{itemize}
-        \end{alertblock}
-        \begin{exampleblock}{Solution}
-            \begin{itemize}
-                \item Manual JAR injection
-                \item \texttt{postgresql-42.7.2.jar}
-                \item Docker volume mounts
-            \end{itemize}
-        \end{exampleblock}
-    \end{columns}
-\end{frame}
-
-%==============================================================================
-% SLIDE 11: SUMMARY & KEY TAKEAWAYS
-%==============================================================================
-\section{Conclusion}
-
-\begin{frame}{Summary \& Key Takeaways}
-    \begin{columns}[T]
-        \column{0.5\textwidth}
-        \begin{block}{Achievements}
-            \begin{itemize}
-                \item \textcolor{africanblue}{\faServer~\textbf{Infrastructure}}
-                \begin{itemize}
-                    \item 7-container Docker stack
-                    \item Hive 2.3.2 + Hadoop 3
-                    \item 447 GB HDFS capacity
-                \end{itemize}
-                \item \textcolor{earthgreen}{\faDatabase~\textbf{Data Processing}}
-                \begin{itemize}
-                    \item 4.75M records (45 years)
-                    \item 44 countries, 5,000 stations
-                    \item Multi-stage MapReduce
-                \end{itemize}
-                \item \textcolor{sunsetorange}{\faChartLine~\textbf{Performance}}
-                \begin{itemize}
-                    \item 2.8x speedup with Map-Side joins
-                    \item 88\% compression with ORC
-                    \item 9--26s query latency
-                \end{itemize}
-            \end{itemize}
-        \end{block}
-        
-        \column{0.5\textwidth}
-        \begin{block}{Key Findings}
-            \begin{enumerate}
-                \item \faCheckCircle~CBO requires fresh statistics
-                \item \faCheckCircle~Join algorithm choice is critical
-                \item \faCheckCircle~ORC format essential for analytics
-            \end{enumerate}
-        \end{block}
-        \begin{exampleblock}{Conclusion}
-            Apache Hive provides cost-effective, petabyte-scale analytics on commodity hardware---validated by Netflix, Facebook, Airbnb processing 100+ PB daily.
-        \end{exampleblock}
-    \end{columns}
-\end{frame}
-
-%==============================================================================
-% SLIDE 12: THANK YOU
-%==============================================================================
-\begin{frame}[plain]
-    \begin{center}
-        \vspace{1.2cm}
-        {\Huge \textcolor{africanblue}{Thank You!}}
-        
-        \vspace{0.6cm}
-        {\Large Questions?}
-        
-        \vspace{0.8cm}
-        \begin{tikzpicture}
-            \node[opacity=0.25] {\scalebox{3.5}{\faGlobeAfrica}};
-        \end{tikzpicture}
-        
-        \vspace{0.4cm}
-        {\normalsize \textbf{Dushime Mudahera Richard}}\\
-        \vspace{0.2cm}
-        {\small \textit{MBV Climate and Ocean Intelligence Africa}}\\
-        {\footnotesize Databases for Big Data Seminar -- Prof.\ Iztok Savnik}\\
-        {\footnotesize University of Primorska | January 2026}
-    \end{center}
+% SLIDE 6: CONCLUSION & TAKEAWAYS
+\begin{frame}{Conclusion \& Takeaways}
+    \begin{block}{Key Points}
+        \begin{itemize}
+            \item Hive abstracts MapReduce, but inherits disk I/O latency
+            \item Schema-on-Read and partitioning enable scalable analytics
+            \item CBO and join selection are critical for performance
+            \item Log-based validation confirms theory: Map-Side Join, partition pruning, and ORC yield major speedups
+        \end{itemize}
+    \end{block}
+    \vspace{0.2cm}
+    \begin{block}{Future Work}
+        Migrate to Tez or Spark to reduce intermediate I/O bottlenecks and enable pipelined execution.
+    \end{block}
+    \vspace{0.2cm}
+    \centering{\small \textbf{Dushime Mudahera Richard} -- Databases for Big Data Seminar, January 2026}
 \end{frame}
 
 \end{document}
